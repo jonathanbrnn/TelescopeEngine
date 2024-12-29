@@ -9,16 +9,32 @@ using namespace std;
 
 class GameObject {
 public:
-    void InitializeGameObject(SDL_Renderer* renderer, float posX = 0.0f, float posY = 0.0f, float posZ = 0.0f, 
+/* DEPRECATED -> Moved to constructor!
+void InitializeGameObject(SDL_Renderer* renderer, float posX = 0.0f, float posY = 0.0f, float posZ = 0.0f, 
                               float scaleX = 100.0f, float scaleY = 100.0f, float rotation = 0.0f, 
-                              const string& img_filepath = "../media/sample_640x426.bmp");
-
+                              const string& texture_filepath = "/Users/jonathan/TelescopeEngine/media/sample_640×426.bmp");
+*/
+    string name; 
     float posX, posY, posZ;
     float scaleX, scaleY;
     float rotation;
 
+    //Filepath to image
+    string texture_filepath; 
+
+    //Velocity
+    float dx, dy; 
+
     SDL_Texture* texture;
     SDL_Rect rect;
+
+    void SetVelocity(float dx = 1, float dy = 1);
+
+    void UpdateVelocity(); 
+   
+    GameObject(SDL_Renderer* renderer, string name, float posX = 0.0f, float posY = 0.0f, float posZ = 0.0f, 
+                float scaleX = 100.0f, float scaleY = 100.0f, float rotation = 0.0f, 
+                string texture_filepath = "/Users/jonathan/TelescopeEngine/media/sample_640×426.bmp"); 
 };
 
 #endif

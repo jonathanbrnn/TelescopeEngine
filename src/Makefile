@@ -10,15 +10,21 @@ LDFLAGS = -L/opt/homebrew/Cellar/sdl2/2.30.10/lib \
 TARGET = sdl
 
 # Source files (relative paths from the Makefile location)
-SRCS = playground.cpp \
-       entities/GameObject.cpp \
-       entities/TextureManager.cpp \
-       rendering/Renderer.cpp
+SRCS = main.cpp \
+		core/EntityManager.cpp \
+		core/Runtime.cpp \
+       	entities/GameObject.cpp \
+       	entities/TextureManager.cpp \
+       	rendering/Renderer.cpp \
+	   	input/InputManager.cpp
 
-OBJS = playground.o \
+OBJS = main.o \
+		core/EntityManager.o \
+		core/Runtime.o \
 	   	entities/TextureManager.o \
        	entities/GameObject.o \
-       	rendering/Renderer.o
+       	rendering/Renderer.o \
+		input/InputManager.o
 
 # Default rule to build the target
 $(TARGET): $(OBJS)

@@ -49,7 +49,7 @@ TextureManager& TextureManager::GetInstance() {
     return instance; 
 }
 
-SDL_Texture* TextureManager::LoadTexture(const string filepath, SDL_Renderer*& renderer) {
+SDL_Texture* TextureManager::LoadTexture(string filepath, SDL_Renderer*& renderer) {
     if (textures.find(filepath) == textures.end()) {
         SDL_Texture* texture = IMG_LoadTexture(renderer, filepath.c_str()); 
 

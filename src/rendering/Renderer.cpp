@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include "Renderer.h"
 #include <vector>
+#include <map>
 #include "../entities/GameObject.h"
 
 using namespace std; 
@@ -30,7 +31,7 @@ SDL_Renderer* InitializeRenderer(SDL_Window* window) {
         printf("Window was not created properly!"); 
     } 
     else {
-        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); 
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC); 
 
         if (!renderer) {
             printf("Renderer could not not be created! SDL_Error: %s\n", SDL_GetError()); 
@@ -40,25 +41,39 @@ SDL_Renderer* InitializeRenderer(SDL_Window* window) {
     return renderer; 
 }
 
-void UpdateRenderer(SDL_Renderer* renderer, vector<GameObject> gameObjects, const int fps) {
+void UpdateRenderer(SDL_Renderer* renderer, map<int, vector<GameObject*>>& gameObjects, const int fps) {
     const int framedelay = 1000 / fps; 
 
-    bool quit = false; 
-    SDL_Event event; 
+    SDL_RenderClear(renderer);
 
-    while (!quit) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                quit = true; 
-            }
+    for (auto& [z, curr_gameObjects]: gameObjects) {
+        for (auto* gm: curr_gameObjects) {
+            gm->UpdateVelocity(); 
+            SDL_RenderCopy(renderer, gm->texture, nullptr, &gm->rect); 
         }
-
-        SDL_RenderClear(renderer);
-
-        for (auto& gameObject: gameObjects) {
-            SDL_RenderCopy(renderer, gameObject.texture, nullptr, &gameObject.rect);
-        }
-
-        SDL_Delay(framedelay); 
     }
+
+
+    SDL_RenderPresent(renderer); 
+    // SDL_Delay(framedelay); - Currently using VSYNC
 }
+
+/*
+This is the old code for the dvd logo example: 
+
+for (auto& gameObject: gameObjects) {
+        gameObject.rect.x += gameObject.dx; 
+        gameObject.rect.y += gameObject.dy; 
+
+        if (gameObject.rect.x <= 0 || gameObject.rect.x + gameObject.rect.w >= 1920) {
+            gameObject.dx = -gameObject.dx; // Reverse horizontal direction
+        }
+
+        if (gameObject.rect.y <= 0 || gameObject.rect.y + gameObject.rect.h >= 1080) {
+            gameObject.dy = -gameObject.dy; // Reverse vertical direction
+        }
+
+        SDL_RenderCopy(renderer, gameObject.texture, nullptr, &gameObject.rect);
+    }
+
+*/

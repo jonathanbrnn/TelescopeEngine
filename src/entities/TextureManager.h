@@ -15,7 +15,7 @@ public:
     static TextureManager& GetInstance();
 
     // Load a texture from a file, using the renderer. Returns the SDL_Texture pointer.
-    SDL_Texture* LoadTexture(const string filepath, SDL_Renderer*& renderer);
+    SDL_Texture* LoadTexture(string filepath, SDL_Renderer*& renderer);
 
     // Cleanup all loaded textures
     void Cleanup();
