@@ -11,24 +11,41 @@ EntityManager& EntityManager::GetInstance(SDL_Renderer* renderer) {
     return instance; 
 }
 
+//Pushes all hardcoded gameobjects created before runtime to gameObjects & active_gameObjects.
 void EntityManager::OnStart(vector<GameObject*> game_objects) {
      for (auto* gm: game_objects) { 
+        cout << gm->posZ << gm->name << endl; 
         this->active_gameObjects[gm->posZ].push_back(gm);
-        this->gameObjects[gm->name] = gm; 
+        if (this->gameObjects.find(gm->name) == this->gameObjects.end()) {
+            this->gameObjects[gm->name] = gm; 
+        }
+        else {
+            throw runtime_error("ENTITYMANAGER: Two separate game objects cannot share the same name. Choose a different name for '" + gm->name + "', or use Instantiate() to create a clone of the game object if they are the same.");
+        }
      }
 }
 
+//Creates a clone of an existing game object. Can be used during runtime. 
 void EntityManager::Instantiate(string original_name, float posX, float posY, float posZ, float dx, float dy) {
     GameObject* gm = new GameObject(renderer, original_name, posX, posY, posZ, 
                                 this->gameObjects[original_name]->scaleX, this->gameObjects[original_name]->scaleY, 
-                                this->gameObjects[original_name]->rotation, this->gameObjects[original_name]->texture_filepath); 
+                                this->gameObjects[original_name]->rotation, this->gameObjects[original_name]->texture_filepath, this->gameObjects[original_name]->hasCollider); 
 
     gm->SetVelocity(dx, dy); 
     this->active_gameObjects[gm->posZ].push_back(gm); 
 }
 
+void EntityManager::Delete() {}
+
+void EntityManager::OnEnd() {
+    for (auto& [name, gm]: gameObjects) {
+        delete gm; 
+    }
+    gameObjects.clear(); 
+}
+
 EntityManager::EntityManager (SDL_Renderer*& renderer) : renderer(renderer) {
     if (!renderer) {
-        throw runtime_error("Renderer cannot be null when initializing EntityManager!"); 
+        throw runtime_error("ENTITYMANAGER: Renderer cannot be null when initializing EntityManager!"); 
     }
 }

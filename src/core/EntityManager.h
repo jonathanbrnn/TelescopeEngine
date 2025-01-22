@@ -24,6 +24,8 @@ class EntityManager {
 
     void Delete(); 
 
+    void OnEnd(); 
+
     //all currently visible gm
     //passed to UpdateRenderer() 
     map<int, vector<GameObject*>> active_gameObjects; 

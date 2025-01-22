@@ -41,14 +41,14 @@ SDL_Renderer* InitializeRenderer(SDL_Window* window) {
     return renderer; 
 }
 
-void UpdateRenderer(SDL_Renderer* renderer, map<int, vector<GameObject*>>& gameObjects, const int fps) {
+void UpdateRenderer(SDL_Renderer* renderer, map<int, vector<GameObject*>>& gameObjects, float deltaTime, const int fps) {
     const int framedelay = 1000 / fps; 
 
     SDL_RenderClear(renderer);
 
     for (auto& [z, curr_gameObjects]: gameObjects) {
         for (auto* gm: curr_gameObjects) {
-            gm->UpdateVelocity(); 
+            gm->UpdatePosition(deltaTime); 
             SDL_RenderCopy(renderer, gm->texture, nullptr, &gm->rect); 
         }
     }

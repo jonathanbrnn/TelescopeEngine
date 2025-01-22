@@ -25,23 +25,24 @@ int main() {
 
     InitializeEngine(window, renderer); 
 
-    EntityManager em(renderer); 
+    EntityManager entityManager(renderer); 
 
-    GameObject gm1(renderer, "Player", 14.0f, 0.0f, 0.0f, 472 / 4, 268 / 4, 0, "../media/D5A7C13D-BA69-41D6-9BD7-B1DD66045837_4_5005_c Background Removed.png"); 
+    GameObject gm1(renderer, "Player", 20.0f, 50.0f, 0.0f, 472 / 4, 268 / 4, 0, "../media/D5A7C13D-BA69-41D6-9BD7-B1DD66045837_4_5005_c Background Removed.png"); 
+    GameObject gm2(renderer, "Enemy", 20.0f, 75.0f, -5.0f, 100.0f, 100.0f, 0.0f, "../media/sample_640×426.bmp"); 
 
     gm1.SetVelocity(0, 0); 
+    gm2.SetVelocity(0, 0); 
 
-    vector<GameObject*> gameObjects;
+    vector<GameObject*> gameObjects; 
 
     gameObjects.push_back(&gm1); 
+    gameObjects.push_back(&gm2); 
 
-    em.OnStart(gameObjects); 
+    entityManager.OnStart(gameObjects); 
 
-    em.Instantiate("Player", 20.0f, 20.0f, 20.0f);
+    Update(renderer, entityManager); 
 
-    Update(renderer, em.active_gameObjects);
-
-    closeEngine(window, renderer);
+    closeEngine(window, renderer); 
 
     return 0;
 }
