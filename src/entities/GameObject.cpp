@@ -16,22 +16,27 @@ Collider::Collider(tuple<float, float> a, tuple<float, float> b, tuple<float, fl
     this->d = d; 
 };
 
-GameObject::GameObject(SDL_Renderer* renderer, string name, float posX, float posY, float posZ, float scaleX, float scaleY, float rotation, string texture_filepath, bool hasCollider) {
+void Collider::OnCollision(Collision collison) {}
+
+
+//void Collider::OnCollisionExit() {}
+
+GameObject::GameObject(SDL_Renderer* renderer, string name, float posX, float posY, float posZ, float w, float h, float rotation, string texture_filepath, bool hasCollider) {
     this->name = name; 
     
     // Set transform parameters of this instance
     this->posX = posX;
     this->posY = posY;
     this->posZ = posZ; 
-    this->scaleX = scaleX;
-    this->scaleY = scaleY;
+    this->w = w;
+    this->h = h;
     this->rotation = rotation;
 
     // Set the rectangle for rendering
     this->rect.x = static_cast<int>(posX);
     this->rect.y = static_cast<int>(posY);
-    this->rect.w = static_cast<int>(scaleX);
-    this->rect.h = static_cast<int>(scaleY);
+    this->rect.w = static_cast<int>(w);
+    this->rect.h = static_cast<int>(h);
 
     this->texture_filepath = texture_filepath; 
 
@@ -40,9 +45,9 @@ GameObject::GameObject(SDL_Renderer* renderer, string name, float posX, float po
 
     if (this->hasCollider) {
         this->collider.a = {posX, posY}; 
-        this->collider.b = {posX, posY + scaleY}; 
-        this->collider.c = {posX + scaleX, posY + scaleY};
-        this->collider.d = {posX + scaleX, posY};   
+        this->collider.b = {posX, posY + h}; 
+        this->collider.c = {posX + w, posY + h};
+        this->collider.d = {posX + w, posY};   
     }
 
     // Set texture of this instance
@@ -61,6 +66,12 @@ void GameObject::SetVelocity(float dx, float dy) {
 void GameObject::UpdatePosition(float deltaTime) {
     this->rect.x += this->dx * deltaTime * 100; 
     this->rect.y += this->dy * deltaTime * 100; 
+    this->posX = this->rect.x;
+    this->posY = this->rect.y;
+    this->collider.a = {this->posX, this->posY};
+    this->collider.b = {this->posX, this->posY + this->h};
+    this->collider.c = {this->posX + this->w, this->posY + this->h};
+    this->collider.d = {this->posX + this->w, this->posY};
 }
 
 /*

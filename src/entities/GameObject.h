@@ -4,25 +4,32 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "TextureManager.h"
+#include "CollisionManager.h"
 
 #include <tuple>
 
 using namespace std;
 
-struct Collider {
+struct Collision; 
+
+class Collider {
+    public: 
     tuple<float, float> a; 
     tuple<float, float> b; 
     tuple<float, float> c; 
     tuple<float, float> d; 
 
-    Collider(tuple<float, float> a = {1.0f, 1.0f}, tuple<float, float> b = {1.0f, 1.0f}, tuple<float, float> c = {1.0f, 1.0f}, tuple<float, float> d = {1.0f, 1.0f});     
+    Collider(tuple<float, float> a = {1.0f, 1.0f}, tuple<float, float> b = {1.0f, 1.0f}, tuple<float, float> c = {1.0f, 1.0f}, tuple<float, float> d = {1.0f, 1.0f});   
+
+    void OnCollision(Collision collison); 
+    //void OnCollisionExit();   
 }; 
 
 class GameObject {
 public:
     string name; 
     float posX, posY, posZ;
-    float scaleX, scaleY;
+    float w, h;
     float rotation;
 
     //Filepath to image

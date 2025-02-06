@@ -11,6 +11,7 @@ KeyPress HandleKeyPress(SDL_Keycode key) {
         case SDLK_LEFT: return KEY_PRESS_LEFT; 
         case SDLK_d:
         case SDLK_RIGHT: return KEY_PRESS_RIGHT; 
+        case SDLK_SPACE: return KEY_PRESS_SPACE; 
         default: return KEY_PRESS_DEFAULT;  
     }
 }

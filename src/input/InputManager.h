@@ -7,7 +7,8 @@ enum KeyPress {
     KEY_PRESS_LEFT,
     KEY_PRESS_RIGHT, 
     KEY_PRESS_UP, 
-    KEY_PRESS_DOWN
+    KEY_PRESS_DOWN,
+    KEY_PRESS_SPACE
 }; 
 
 KeyPress HandleKeyPress(SDL_Keycode key); 

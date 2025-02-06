@@ -7,17 +7,20 @@
 #include "../input/InputManager.h"
 #include "../rendering/Renderer.h"
 #include "../entities/GameObject.h"
+#include "../entities/CollisionManager.h"
 
 using namespace std; 
 
 
-void Update(SDL_Renderer* renderer, EntityManager& entityManager) {
+void Update(SDL_Renderer* renderer, EntityManager& entityManager, CollisionManager& collisionManager) {
     auto originalTime = chrono::high_resolution_clock::now(); 
     
     bool quit = false; 
     SDL_Event event; 
 
-    GameObject* player = new GameObject(renderer, "A", 0, 0, 1000, 100, 100, 0, "../media/D5A7C13D-BA69-41D6-9BD7-B1DD66045837_4_5005_c Background Removed.png"); 
+    GameObject* player = entityManager.FindGameObjectByName("Enemy");
+    // GameObject* player = new GameObject(renderer, "A", 100, 0, 1000, 100, 100, 0, "../media/D5A7C13D-BA69-41D6-9BD7-B1DD66045837_4_5005_c Background Removed.png"); 
+    
     entityManager.active_gameObjects[1000].push_back(player); 
     player->SetVelocity(0, 0);
 
@@ -32,12 +35,17 @@ void Update(SDL_Renderer* renderer, EntityManager& entityManager) {
                 quit = true; 
             }
             else if (ListenForInput(event)) {
-                MovePlayer(player, HandleKeyPress(event.key.keysym.sym));
-                cout << player->dx << " " << player->dy << endl; 
+                KeyPress keyPress = HandleKeyPress(event.key.keysym.sym);
+                MovePlayer(player, keyPress);
+
+                if (keyPress == KEY_PRESS_SPACE) {
+                    entityManager.Instantiate("Enemy", player->rect.x + (player->w / 2), player->rect.y + (player->h / 2), player->posZ, player->dx * 10.0f + 10.0f, player->dy * 10.0f + 10.0f); 
+                }
                 break; 
             }
         }
 
+        collisionManager.ProcessCollisions(); 
         UpdateRenderer(renderer, entityManager.active_gameObjects, deltaTime); 
     }
 }
@@ -45,18 +53,20 @@ void Update(SDL_Renderer* renderer, EntityManager& entityManager) {
 void MovePlayer(GameObject* player, KeyPress key) { 
     switch(key) {
         case KEY_PRESS_LEFT: 
-            player->dx = -10; 
+            player->dx = -3; 
             break; 
         case KEY_PRESS_RIGHT: 
-            player->dx = 10; 
+            player->dx = 3; 
             break; 
         case KEY_PRESS_UP: 
-            player->dy = -10; 
+            player->dy = -3; 
             break; 
         case KEY_PRESS_DOWN: 
-            player->dy = 10; 
+            player->dy = 3; 
             break; 
-        case KEY_PRESS_DEFAULT: 
+        case KEY_PRESS_SPACE: 
+            break; 
+        default: 
             player->SetVelocity(0, 0); 
             break; 
     }    

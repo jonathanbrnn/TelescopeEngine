@@ -15,14 +15,16 @@ SRCS = main.cpp \
 		core/Runtime.cpp \
        	entities/GameObject.cpp \
        	entities/TextureManager.cpp \
+		entities/CollisionManager.cpp \
        	rendering/Renderer.cpp \
 	   	input/InputManager.cpp
 
 OBJS = main.o \
 		core/EntityManager.o \
 		core/Runtime.o \
+	    entities/GameObject.o \
 	   	entities/TextureManager.o \
-       	entities/GameObject.o \
+		entities/CollisionManager.o \
        	rendering/Renderer.o \
 		input/InputManager.o
 
