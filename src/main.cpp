@@ -28,8 +28,8 @@ int main() {
 
     EntityManager entityManager(renderer); 
 
-    GameObject gm1(renderer, "Player", 200.0f, 50.0f, 0.0f, 472 / 4, 268 / 4, 0, "../media/D5A7C13D-BA69-41D6-9BD7-B1DD66045837_4_5005_c Background Removed.png"); 
-    GameObject gm2(renderer, "Enemy", 20.0f, 75.0f, -5.0f, 10.0f, 10.0f, 0.0f, "../media/sample_640×426.bmp"); 
+    GameObject gm1(renderer, "Player", 500.0f, 500.0f, 0.0f, 472 / 4, 268 / 4, 0, "../media/D5A7C13D-BA69-41D6-9BD7-B1DD66045837_4_5005_c Background Removed.png"); 
+    GameObject gm2(renderer, "Enemy", 240.0f, 300.0f, -5.0f, 10.0f, 10.0f, 0.0f, "../media/sample_640×426.bmp"); 
 
     gm1.SetVelocity(0, 0); 
     gm2.SetVelocity(0, 0); 

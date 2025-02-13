@@ -74,6 +74,18 @@ void GameObject::UpdatePosition(float deltaTime) {
     this->collider.d = {this->posX + this->w, this->posY};
 }
 
+// Function to set the position of the gameobject.
+void GameObject::SetPosition(float x, float y) {
+    this->rect.x = static_cast<int>(x);
+    this->rect.y = static_cast<int>(y);
+    this->posX = x;
+    this->posY = y;
+    this->collider.a = {this->posX, this->posY};
+    this->collider.b = {this->posX, this->posY + this->h};
+    this->collider.c = {this->posX + this->w, this->posY + this->h};
+    this->collider.d = {this->posX + this->w, this->posY};
+}
+
 /*
 void GameObject::UpdateVelocity() {
     this->rect.x += this->dx; 

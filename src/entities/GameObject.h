@@ -52,9 +52,11 @@ public:
     void UpdateVelocity();
     */
 
-   void UpdatePosition(float deltaTime); 
+    void UpdatePosition(float deltaTime); 
 
-   
+    void SetPosition(float x, float y); 
+
+    //Constructor
     GameObject(SDL_Renderer* renderer, string name, float posX = 0.0f, float posY = 0.0f, float posZ = 0.0f, 
                 float scaleX = 100.0f, float scaleY = 100.0f, float rotation = 0.0f, 
                 string texture_filepath = "/Users/jonathan/TelescopeEngine/media/sample_640×426.bmp", bool hasCollider = true); 
