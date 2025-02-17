@@ -18,10 +18,47 @@ Collider::Collider(tuple<float, float> a, tuple<float, float> b, tuple<float, fl
 
 void Collider::OnCollision(Collision collison) {}
 
+Force::Force(float force, float duration, ForceMode updateMode) {
+    this->initialForce = force;  
+
+    this->duration = duration; 
+
+    this->updateMode = updateMode; 
+}
+
+void Force::UpdateForce(float deltaTime) {
+    this->last_frame_force = this->currentForce;
+
+    this->elapsed_time += deltaTime;
+    this->elapsed_time = min(this->elapsed_time, this->duration);
+
+    switch (this->updateMode) {
+        case LINEAR:
+            this->currentForce = this->initialForce * (1 - (this->elapsed_time / this->duration)); 
+            break;
+
+        case QUADRATIC_EASE_IN: 
+            this->currentForce = this->initialForce * pow(this->elapsed_time / this->duration, 2); 
+            break; 
+
+        case QUADRATIC_EASE_OUT: 
+            this->currentForce = this->initialForce * (1 - pow(this->elapsed_time / this->duration, 2));  
+            break;
+
+        default:
+            this->currentForce = 0.0f; 
+            break;
+    }
+
+    if (this->elapsed_time >= this->duration) {
+        this->currentForce = 0.0f;
+    }
+}
+
 
 //void Collider::OnCollisionExit() {}
 
-GameObject::GameObject(SDL_Renderer* renderer, string name, float posX, float posY, float posZ, float w, float h, float rotation, string texture_filepath, bool hasCollider) {
+GameObject::GameObject(SDL_Renderer* renderer, string name, float posX, float posY, float posZ, float w, float h, float rotation, string texture_filepath, bool hasBody) {
     this->name = name; 
     
     // Set transform parameters of this instance
@@ -35,15 +72,15 @@ GameObject::GameObject(SDL_Renderer* renderer, string name, float posX, float po
     // Set the rectangle for rendering
     this->rect.x = static_cast<int>(posX);
     this->rect.y = static_cast<int>(posY);
-    this->rect.w = static_cast<int>(w);
+    this->rect.w = static_cast<int>(w); 
     this->rect.h = static_cast<int>(h);
 
     this->texture_filepath = texture_filepath; 
 
     // Set the collider if the object is supposed to have one 
-    this->hasCollider = hasCollider; 
+    this->hasBody = hasBody; 
 
-    if (this->hasCollider) {
+    if (this->hasBody) {
         this->collider.a = {posX, posY}; 
         this->collider.b = {posX, posY + h}; 
         this->collider.c = {posX + w, posY + h};
@@ -57,9 +94,43 @@ GameObject::GameObject(SDL_Renderer* renderer, string name, float posX, float po
     }
 }
 
+// VELOCITY - Set and update velocity and corresponding forces: 
+
 void GameObject::SetVelocity(float dx, float dy) {
     this->dx = dx; 
     this->dy = dy; 
+
+}
+
+// currently a force is applied to both .dx and .dy equally  
+void GameObject::UpdateVelocity(float deltaTime) {
+    vector<int> toDelete; 
+
+    for(int i = 0; i < this->forces.size(); i++) {
+        this->forces[i].UpdateForce(deltaTime);
+        if (this->forces[i].elapsed_time <= this->forces[i].duration) {
+            this->dx += this->forces[i].currentForce - this->forces[i].last_frame_force; 
+            this->dy += this->forces[i].currentForce - this->forces[i].last_frame_force; 
+        }
+        else {
+            toDelete.push_back(i);
+        }
+    }
+
+    for (int i = toDelete.size() - 1; i >= 0; i--) {
+        this->forces.erase(this->forces.begin() + toDelete[i]);
+    }
+
+    this->dy += this->gravity_force;
+}
+
+void GameObject::SetGravity(float gravity_force) {
+    this->gravity_force = gravity_force; 
+}
+
+void GameObject::ApplyForce(float initialForce, float duration, ForceMode updateMode) {
+    Force force(initialForce, duration, updateMode); 
+    this->forces.push_back(force); 
 }
 
 // Function to move the gameobject. Can only be used from Update() in RUNTIME, since it uses deltaTime. 

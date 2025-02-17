@@ -66,6 +66,15 @@ void MovePlayer(GameObject* player, KeyPress key) {
             break; 
         case KEY_PRESS_SPACE: 
             break; 
+        case KEY_PRESS_ONE: 
+            player->forces.clear();
+            player->ApplyForce(1, 5, LINEAR);  
+        case KEY_PRESS_TWO:
+            player->forces.clear(); 
+            player->ApplyForce(-1, 3, QUADRATIC_EASE_IN); 
+        case KEY_PRESS_THREE: 
+            player->forces.clear(); 
+            player->ApplyForce(1, 3, QUADRATIC_EASE_OUT);
         default: 
             player->SetVelocity(0, 0); 
             break; 

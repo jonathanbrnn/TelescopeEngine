@@ -49,7 +49,7 @@ void UpdateRenderer(SDL_Renderer* renderer, map<int, vector<GameObject*>>& gameO
 
     for (auto& [z, curr_gameObjects]: gameObjects) {
         for (auto* gm: curr_gameObjects) {
-            cout << gm->posX << endl;
+            gm->UpdateVelocity(deltaTime);
             gm->UpdatePosition(deltaTime); 
             SDL_RenderCopy(renderer, gm->texture, nullptr, &gm->rect); 
         }

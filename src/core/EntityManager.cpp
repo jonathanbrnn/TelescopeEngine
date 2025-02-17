@@ -18,7 +18,7 @@ void EntityManager::OnStart(vector<GameObject*>& game_objects) {
         cout << gm->posZ << gm->name << endl; 
         this->active_gameObjects[gm->posZ].push_back(gm);
 
-        if (gm->hasCollider) {
+        if (gm->hasBody) {
             this->collision_objects.push_back(gm); 
         }
 
@@ -35,12 +35,12 @@ void EntityManager::OnStart(vector<GameObject*>& game_objects) {
 void EntityManager::Instantiate(string original_name, float posX, float posY, float posZ, float dx, float dy) {
     GameObject* gm = new GameObject(renderer, original_name, posX, posY, posZ, 
                                 this->gameObjects[original_name]->w, this->gameObjects[original_name]->h, 
-                                this->gameObjects[original_name]->rotation, this->gameObjects[original_name]->texture_filepath, this->gameObjects[original_name]->hasCollider); 
+                                this->gameObjects[original_name]->rotation, this->gameObjects[original_name]->texture_filepath, this->gameObjects[original_name]->hasBody); 
 
     gm->SetVelocity(dx, dy); 
     this->active_gameObjects[gm->posZ].push_back(gm); 
 
-    if (gm->hasCollider) {
+    if (gm->hasBody) {
         this->collision_objects.push_back(gm); 
     }
 }

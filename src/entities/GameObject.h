@@ -25,6 +25,30 @@ class Collider {
     //void OnCollisionExit();   
 }; 
 
+enum ForceMode {
+    // constant force 
+    LINEAR, 
+    // start weak and increase or start strong and decrease 
+    QUADRATIC_EASE_IN, 
+    QUADRATIC_EASE_OUT,
+}; 
+
+class Force {
+    public: 
+    float initialForce; 
+    float currentForce = 0; 
+    float last_frame_force; 
+
+    float elapsed_time = 0; 
+    float duration; 
+
+    ForceMode updateMode; 
+
+    Force(float inititalForce, float duration, ForceMode updateMode); 
+
+    void UpdateForce(float deltaTime); 
+}; 
+
 class GameObject {
 public:
     string name; 
@@ -43,23 +67,32 @@ public:
 
     //Collisions 
     Collider collider; 
-    bool hasCollider; 
+    bool hasBody; 
+    
+    // dynamic forces
+    vector<Force> forces; 
 
+    // constant forces 
+    // Gravity
+    float gravity_force = 0;  
+
+    // VELOCITY - Set and update velocity and corresponding forces:
 
     void SetVelocity(float dx = 1, float dy = 1);
+    void UpdateVelocity(float deltaTime);
+    void SetGravity(float gravity_force); 
+    void ApplyForce(float initialForce, float duration, ForceMode updateMode); 
 
-    /*
-    void UpdateVelocity();
-    */
+
+    // Set and Update position directly (.posX, .posY)
 
     void UpdatePosition(float deltaTime); 
-
     void SetPosition(float x, float y); 
 
     //Constructor
     GameObject(SDL_Renderer* renderer, string name, float posX = 0.0f, float posY = 0.0f, float posZ = 0.0f, 
                 float scaleX = 100.0f, float scaleY = 100.0f, float rotation = 0.0f, 
-                string texture_filepath = "/Users/jonathan/TelescopeEngine/media/sample_640×426.bmp", bool hasCollider = true); 
+                string texture_filepath = "/Users/jonathan/TelescopeEngine/media/sample_640×426.bmp", bool hasBody = true); 
 };
 
 #endif
