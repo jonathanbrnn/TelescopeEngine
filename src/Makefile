@@ -20,6 +20,8 @@ SRCS = main.cpp \
 	   	input/InputManager.cpp
 
 OBJS = main.o \
+		core/ManagerHub.o \
+		core/TimeManager.o \
 		core/EntityManager.o \
 		core/Runtime.o \
 	    entities/GameObject.o \

@@ -12,42 +12,55 @@
 using namespace std; 
 
 class GameObject;
+struct Collider; 
+class Body; 
+enum ForceMode;
+enum ForceAxis; 
+class Force; 
 
 class EntityManager {
     public: 
     explicit EntityManager(SDL_Renderer*& renderer); 
 
+    // Returns the EntityManager. 
+    // EntityManager is implemented using the singleton pattern.
     static EntityManager& GetInstance(SDL_Renderer* renderer = nullptr); 
     
-    void OnStart(vector<GameObject*>& gameObjects); 
+    // Called before the first frame to collect all game objects.
+    void OnStart(vector<GameObject*>& prefabs); 
 
-    void Instantiate(string original_name, float posX = 0.0f, float posY = 0.0f, 
-                    float posZ = 0.0f, float dx = 1.0f, float dy = 1.0f);
+    // Used to instantiate new objects based on prefabs during runtime. 
+    void Instantiate(string prefab_name, float pos_x = NULL, float pos_y = NULL, 
+                    float pos_z = NULL, float base_dx = NULL, float base_dy = NULL);
 
     void Delete(); 
 
     void OnEnd(); 
 
-    void ProcessCollisions();
-
     GameObject* FindGameObjectByName(string name); 
 
-    //all currently visible gm
-    //passed to UpdateRenderer() 
-    map<int, vector<GameObject*>> active_gameObjects; 
+    // All objects in the game. 
+    vector<GameObject*> total_objects; 
+
+    // All objects that are visible. 
+    // Passed to the renderer. Sorted by their z-coordinate. 
+    map<int, vector<GameObject*>> visible_objects; 
 
     // all objects that hold a collider
     vector<GameObject*> collision_objects; 
 
+    // all objects that have a body
+    vector<GameObject*> body_objects; 
+ 
     private: 
 
     EntityManager(const EntityManager&) = delete; 
     EntityManager& operator=(const EntityManager&) = delete; 
 
-    //Lookup table for gm by name 
-    unordered_map<string, GameObject*> gameObjects;
-
     SDL_Renderer* renderer = renderer; 
+    
+    //Lookup table for all game objects by name, only used for prefabs and lookup by name.  
+    unordered_map<string, GameObject*> name_objects;
 };
 
 #endif

@@ -9,183 +9,161 @@
 
 using namespace std;
 
+// GAME OBJECT: 
+
+GameObject::GameObject(SDL_Renderer* renderer, string name, float pos_x, float pos_y, float pos_z, float width, float height, float rotation, string texture_filepath) {
+    this->name = name; 
+    
+    this->pos_x = pos_x; 
+    this->pos_y = pos_y; 
+    this->pos_z = pos_z;
+
+    this->width = width; 
+    this->height = height; 
+    
+    this->rotation = rotation;
+    
+    // Set SDL_Rect's parameters
+    rect.x = static_cast<int>(pos_x);
+    rect.y = static_cast<int>(pos_y);
+    rect.w = static_cast<int>(width);
+    rect.h = static_cast<int>(height);
+    
+    if (texture_filepath != "") {
+        // Set texture of this instance
+        texture = TextureManager::GetInstance().LoadTexture(texture_filepath, renderer);
+        if (!texture) {
+            printf("GAMEOBJECT: Could not load associated texture! SDL_Error: %s\n", SDL_GetError());
+        }
+    }
+    else {
+        texture = nullptr; 
+    }
+}
+
+void GameObject::SetPosition(float pos_x, float pos_y, float pos_z) {
+    rect.x = static_cast<int>(pos_x);
+    rect.y = static_cast<int>(pos_y);
+    
+    this->pos_x = pos_x; 
+    this->pos_y = pos_y; 
+    if (pos_z != NULL) {
+        this->pos_z = pos_z;
+    }
+
+    if (collider != nullptr) {
+        collider->a = {pos_x, pos_x};
+        collider->b = {pos_x, pos_y + height};
+        collider->c = {pos_x + width, pos_y + height};
+        collider->d = {pos_x + width, pos_y};
+    }
+}
+
+void GameObject::UpdatePosition(float delta_time) {
+    if (body != nullptr) {
+        rect.x += body->dx * delta_time * 100; 
+        rect.y += body->dy * delta_time * 100; 
+
+        pos_x = rect.x; 
+        pos_y = rect.y; 
+
+        if (collider != nullptr) {
+            collider->a = {pos_x, pos_y};
+            collider->b = {pos_x, pos_y + height};
+            collider->c = {pos_x + width, pos_y + height};
+            collider->d = {pos_x + width, pos_y};
+        }
+    }
+}
+
+void GameObject::AddCollider() {
+    if (collider == nullptr) {
+        collider = new Collider({pos_x, pos_y}, {pos_x, pos_x + height}, {pos_x + width, pos_y + height}, {pos_x + width, pos_y}); 
+    }
+    else {
+        cout << "GAMEOBJECT: The object " << name << " already has a collider attached to it!" << endl; 
+    }
+}
+
+void GameObject::AddBody(float mass, bool use_gravity) {
+    if (body != nullptr) {
+        body = new Body(mass, use_gravity);
+    }
+    else {
+        cout << "GAMEOBJECT: The object " << name << "already has a body attached to it!" << endl;
+    }
+}
+
+// COLLIDER: 
+
 Collider::Collider(tuple<float, float> a, tuple<float, float> b, tuple<float, float> c, tuple<float, float> d) {
     this->a = a; 
     this->b = b; 
     this->c = c; 
     this->d = d; 
-};
+}
 
-void Collider::OnCollision(Collision collison) {}
+void Collider::OnCollision(Collision collision) {}
 
-Force::Force(float force, float duration, ForceMode updateMode) {
-    this->initialForce = force;  
+// COLLISION: 
 
+Collision::Collision(string contact_name, float contact_dx, float contact_dy, float this_dx, float this_dy, tuple<int, int> collision_point) 
+    : contact_id(contact_name), contact_dx(contact_dx), contact_dy(contact_dy),
+      this_dx(this_dx), this_dy(this_dy), collision_point(collision_point) {}
+
+// BODY: 
+
+Body::Body(float mass, bool use_gravity) {
+    this->mass = mass; 
+    this->use_gravity = use_gravity;
+    
+    if (this->use_gravity) {
+        // gravity_force = mass * storage.gravity_constant; 
+    }
+}
+
+void Body::SetVelocity(float dx, float dy) {
+    if (dx != NULL) {
+        base_dx = dx; 
+        this->dx = dy; 
+    }
+    if (dy != NULL) {
+        base_dy = dy; 
+        this->dy = dy; 
+    }
+}
+
+void Body::UpdateVelocity(float delta_time) {
+    dx = base_dx; 
+    dy = base_dy; 
+
+    for (auto force : forces) {
+        force.UpdateForce(delta_time);
+
+        if (force.axis == AXIS_X || force.axis == AXIS_BOTH) {
+            dx += force.current_force; 
+        }
+        if (force.axis == AXIS_Y || force.axis == AXIS_BOTH) {
+            dy += force.current_force; 
+        }
+    }
+
+    if (use_gravity) {
+        dy += gravity_force;
+    }
+}
+
+void Body::ApplyForce(float initial_force, float duration, ForceMode update_mode, ForceAxis axis) {
+    forces.emplace_back(initial_force, duration, update_mode, axis); 
+}
+
+// FORCE: 
+
+Force::Force(float initial_force, float duration, ForceMode update_mode, ForceAxis axis) {
+    this->initial_force = initial_force; 
+    
     this->duration = duration; 
 
-    this->updateMode = updateMode; 
+    this->update_mode = update_mode; 
+    this->axis = axis; 
 }
-
-void Force::UpdateForce(float deltaTime) {
-    this->last_frame_force = this->currentForce;
-
-    this->elapsed_time += deltaTime;
-    this->elapsed_time = min(this->elapsed_time, this->duration);
-
-    switch (this->updateMode) {
-        case LINEAR:
-            this->currentForce = this->initialForce * (1 - (this->elapsed_time / this->duration)); 
-            break;
-
-        case QUADRATIC_EASE_IN: 
-            this->currentForce = this->initialForce * pow(this->elapsed_time / this->duration, 2); 
-            break; 
-
-        case QUADRATIC_EASE_OUT: 
-            this->currentForce = this->initialForce * (1 - pow(this->elapsed_time / this->duration, 2));  
-            break;
-
-        default:
-            this->currentForce = 0.0f; 
-            break;
-    }
-
-    if (this->elapsed_time >= this->duration) {
-        this->currentForce = 0.0f;
-    }
-}
-
-
-//void Collider::OnCollisionExit() {}
-
-GameObject::GameObject(SDL_Renderer* renderer, string name, float posX, float posY, float posZ, float w, float h, float rotation, string texture_filepath, bool hasBody) {
-    this->name = name; 
-    
-    // Set transform parameters of this instance
-    this->posX = posX;
-    this->posY = posY;
-    this->posZ = posZ; 
-    this->w = w;
-    this->h = h;
-    this->rotation = rotation;
-
-    // Set the rectangle for rendering
-    this->rect.x = static_cast<int>(posX);
-    this->rect.y = static_cast<int>(posY);
-    this->rect.w = static_cast<int>(w); 
-    this->rect.h = static_cast<int>(h);
-
-    this->texture_filepath = texture_filepath; 
-
-    // Set the collider if the object is supposed to have one 
-    this->hasBody = hasBody; 
-
-    if (this->hasBody) {
-        this->collider.a = {posX, posY}; 
-        this->collider.b = {posX, posY + h}; 
-        this->collider.c = {posX + w, posY + h};
-        this->collider.d = {posX + w, posY};   
-    }
-
-    // Set texture of this instance
-    this->texture = TextureManager::GetInstance().LoadTexture(texture_filepath, renderer);
-    if (!texture) {
-        printf("GAMEOBJECT: Could not load associated texture! SDL_Error: %s\n", SDL_GetError());
-    }
-}
-
-// VELOCITY - Set and update velocity and corresponding forces: 
-
-void GameObject::SetVelocity(float dx, float dy) {
-    this->dx = dx; 
-    this->dy = dy; 
-
-}
-
-// currently a force is applied to both .dx and .dy equally  
-void GameObject::UpdateVelocity(float deltaTime) {
-    vector<int> toDelete; 
-
-    for(int i = 0; i < this->forces.size(); i++) {
-        this->forces[i].UpdateForce(deltaTime);
-        if (this->forces[i].elapsed_time <= this->forces[i].duration) {
-            this->dx += this->forces[i].currentForce - this->forces[i].last_frame_force; 
-            this->dy += this->forces[i].currentForce - this->forces[i].last_frame_force; 
-        }
-        else {
-            toDelete.push_back(i);
-        }
-    }
-
-    for (int i = toDelete.size() - 1; i >= 0; i--) {
-        this->forces.erase(this->forces.begin() + toDelete[i]);
-    }
-
-    this->dy += this->gravity_force;
-}
-
-void GameObject::SetGravity(float gravity_force) {
-    this->gravity_force = gravity_force; 
-}
-
-void GameObject::ApplyForce(float initialForce, float duration, ForceMode updateMode) {
-    Force force(initialForce, duration, updateMode); 
-    this->forces.push_back(force); 
-}
-
-// Function to move the gameobject. Can only be used from Update() in RUNTIME, since it uses deltaTime. 
-void GameObject::UpdatePosition(float deltaTime) {
-    this->rect.x += this->dx * deltaTime * 100; 
-    this->rect.y += this->dy * deltaTime * 100; 
-    this->posX = this->rect.x;
-    this->posY = this->rect.y;
-    this->collider.a = {this->posX, this->posY};
-    this->collider.b = {this->posX, this->posY + this->h};
-    this->collider.c = {this->posX + this->w, this->posY + this->h};
-    this->collider.d = {this->posX + this->w, this->posY};
-}
-
-// Function to set the position of the gameobject.
-void GameObject::SetPosition(float x, float y) {
-    this->rect.x = static_cast<int>(x);
-    this->rect.y = static_cast<int>(y);
-    this->posX = x;
-    this->posY = y;
-    this->collider.a = {this->posX, this->posY};
-    this->collider.b = {this->posX, this->posY + this->h};
-    this->collider.c = {this->posX + this->w, this->posY + this->h};
-    this->collider.d = {this->posX + this->w, this->posY};
-}
-
-/*
-void GameObject::UpdateVelocity() {
-    this->rect.x += this->dx; 
-    this->rect.y += this->dy; 
-}
-*/
-
-//posX, etc. are redundant since all the positional data is stored in rect anyway!
-
-/* DEPRECATED -> Moved to constructor!
-void GameObject::InitializeGameObject(SDL_Renderer* renderer, float posX, float posY, float posZ, 
-                                       float scaleX, float scaleY, float rotation, const string& texture_filepath) {
-    // Set transform parameters of this instance
-    this->posX = posX;
-    this->posY = posY;
-    this->scaleX = scaleX;
-    this->scaleY = scaleY;
-    this->rotation = rotation;
-
-    // Set the rectangle for rendering
-    this->rect.x = static_cast<int>(posX);
-    this->rect.y = static_cast<int>(posY);
-    this->rect.w = static_cast<int>(scaleX);
-    this->rect.h = static_cast<int>(scaleY);
-
-    // Set texture of this instance
-    this->texture = TextureManager::GetInstance().LoadTexture(texture_filepath, renderer);
-    if (!texture) {
-        printf("GAMEOBJECT: Could not load associated texture! SDL_Error: %s\n", SDL_GetError());
-    }
-}; 
-*/

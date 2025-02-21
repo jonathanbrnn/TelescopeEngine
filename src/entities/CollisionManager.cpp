@@ -1,4 +1,4 @@
-#include "../core/EntityManager.h"
+#include "core/ManagerHub.h"
 #include "CollisionManager.h"
 #include "GameObject.h"
 #include <tuple>
@@ -6,98 +6,86 @@
 
 using namespace std; 
 
-Collision::Collision(string contact_name, float contact_dx, float contact_dy, float this_dx, float this_dy, tuple<int, int> collision_point) 
-    : contact_id(contact_name), contact_dx(contact_dx), contact_dy(contact_dy),
-      this_dx(this_dx), this_dy(this_dy), collision_point(collision_point) {}
-
-
 void CollisionManager::ProcessCollisions() { 
-    for(int i = 0; i < this->entityManager.collision_objects.size(); i++) {
-        for(int j = i + 1; j < this->entityManager.collision_objects.size(); j++) {
-            GameObject* a = this->entityManager.collision_objects[i]; 
-            GameObject* b = this->entityManager.collision_objects[j]; 
+    for(int i = 0; i < this->managerHub.entityManager->collision_objects.size(); i++) {
+        for(int j = i + 1; j < this->managerHub.entityManager->collision_objects.size(); j++) {
+            GameObject* a = this->managerHub.entityManager->collision_objects[i]; 
+            GameObject* b = this->managerHub.entityManager->collision_objects[j]; 
 
-            if (a->posX < b->posX + b->w && a->posX + a->w > b->posX &&
-                 a->posY < b->posY + b->h && a->posY + a->h > b->posY) {
+            if (a->pos_x < b->pos_x + b->width && a->pos_x + a->width > b->pos_x &&
+                 a->pos_y < b->pos_y + b->height && a->pos_y + a->height > b->pos_y) {
                 
-                float overlapX = min(a->posX + a->w - b->posX, b->posX + b->w - a->posX);
-                float overlapY = min(a->posY + a->h - b->posY, b->posY + b->h - a->posY); 
+                float overlapX = min(a->pos_x + a->width - b->pos_x, b->pos_x + b->width - a->pos_x);
+                float overlapY = min(a->pos_y + a->height - b->pos_y, b->pos_y + b->height - a->pos_y); 
                 
                 if (overlapX < overlapY) {
-                    if (a->dx != 0 && b->dx == 0) {  
-                        // Only move 'a' if 'b' is static
-                        if (a->posX < b->posX) {
-                            a->SetPosition(a->posX - overlapX, a->posY);
+                    if (a->body->dx != 0 && b->body->dx == 0) {  
+                        if (a->pos_x < b->pos_x) {
+                            a->SetPosition(a->pos_x - overlapX, a->pos_y);
                         } else {
-                            a->SetPosition(a->posX + overlapX, a->posY);
+                            a->SetPosition(a->pos_x + overlapX, a->pos_y);
                         }
-                    } else if (b->dx != 0 && a->dx == 0) {  
-                        // Only move 'b' if 'a' is static
-                        if (b->posX < a->posX) {
-                            b->SetPosition(b->posX - overlapX, b->posY);
+                    } else if (b->body->dx != 0 && a->body->dx == 0) {  
+                        if (b->pos_x < a->pos_x) {
+                            b->SetPosition(b->pos_x - overlapX, b->pos_y);
                         } else {
-                            b->SetPosition(b->posX + overlapX, b->posY);
+                            b->SetPosition(b->pos_x + overlapX, b->pos_y);
                         }
                     } else {  
-                        // Both moveable, split adjustment
-                        if (a->posX < b->posX) {
-                            a->SetPosition(a->posX - overlapX / 2, a->posY);
-                            b->SetPosition(b->posX + overlapX / 2, b->posY);
+                        if (a->pos_x < b->pos_x) {
+                            a->SetPosition(a->pos_x - overlapX / 2, a->pos_y);
+                            b->SetPosition(b->pos_x + overlapX / 2, b->pos_y);
                         } else {
-                            a->SetPosition(a->posX + overlapX / 2, a->posY);
-                            b->SetPosition(b->posX - overlapX / 2, b->posY);
+                            a->SetPosition(a->pos_x + overlapX / 2, a->pos_y);
+                            b->SetPosition(b->pos_x - overlapX / 2, b->pos_y);
                         }
                     }
-                    a->dx = 0;
-                    b->dx = 0;
+                    a->body->dx = 0;
+                    b->body->dx = 0;
                 } else {
-                    if (a->dy != 0 && b->dy == 0) {  
-                        if (a->posY < b->posY) {
-                            a->SetPosition(a->posX, a->posY - overlapY);
+                    if (a->body->dy != 0 && b->body->dy == 0) {  
+                        if (a->pos_y < b->pos_y) {
+                            a->SetPosition(a->pos_x, a->pos_y - overlapY);
                         } else {
-                            a->SetPosition(a->posX, a->posY + overlapY);
+                            a->SetPosition(a->pos_x, a->pos_y + overlapY);
                         }
-                    } else if (b->dy != 0 && a->dy == 0) {  
-                        if (b->posY < a->posY) {
-                            b->SetPosition(b->posX, b->posY - overlapY);
+                    } else if (b->body->dy != 0 && a->body->dy == 0) {  
+                        if (b->pos_y < a->pos_y) {
+                            b->SetPosition(b->pos_x, b->pos_y - overlapY);
                         } else {
-                            b->SetPosition(b->posX, b->posY + overlapY);
+                            b->SetPosition(b->pos_x, b->pos_y + overlapY);
                         }
                     } else {  
-                        if (a->posY < b->posY) {
-                            a->SetPosition(a->posX, a->posY - overlapY / 2);
-                            b->SetPosition(b->posX, b->posY + overlapY / 2);
+                        if (a->pos_y < b->pos_y) {
+                            a->SetPosition(a->pos_x, a->pos_y - overlapY / 2);
+                            b->SetPosition(b->pos_x, b->pos_y + overlapY / 2);
                         } else {
-                            a->SetPosition(a->posX, a->posY + overlapY / 2);
-                            b->SetPosition(b->posX, b->posY - overlapY / 2);
+                            a->SetPosition(a->pos_x, a->pos_y + overlapY / 2);
+                            b->SetPosition(b->pos_x, b->pos_y - overlapY / 2);
                         }
                     }
-                    a->dy = 0;
-                    b->dy = 0;
+                    a->body->dy = 0;
+                    b->body->dy = 0;
                 }    
                 
                 tuple<int, int> collision_point;
 
-                // Calculate the collision point
-                if (a->posX < b->posX) {
-                    collision_point = {a->posX + a->w, a->posY + a->h}; 
+                if (a->pos_x < b->pos_x) {
+                    collision_point = {a->pos_x + a->width, a->pos_y + a->height}; 
                 }
-                else if (a->posX > b->posX) {
-                    collision_point = {a->posX, a->posY + a->h}; 
+                else if (a->pos_x > b->pos_x) {
+                    collision_point = {a->pos_x, a->pos_y + a->height}; 
                 }
-                else if (a->posY < b->posY) {
-                    collision_point = {a->posX + a->w, a->posY}; 
+                else if (a->pos_y < b->pos_y) {
+                    collision_point = {a->pos_x + a->width, a->pos_y}; 
                 }
-                else if (a->posY > b->posY) {
-                    collision_point = {a->posX, a->posY}; 
+                else if (a->pos_y > b->pos_y) {
+                    collision_point = {a->pos_x, a->pos_y}; 
                 }
 
-                // Notify the objects of the collision
-                a->collider.OnCollision(Collision(b->name, b->dx, b->dy, a->dx, a->dy, collision_point)); 
-                b->collider.OnCollision(Collision(a->name, a->dx, a->dy, b->dx, b->dy, collision_point));
+                a->collider->OnCollision(Collision(b->name, b->body->dx, b->body->dy, a->body->dx, a->body->dy, collision_point)); 
+                b->collider->OnCollision(Collision(a->name, a->body->dx, a->body->dy, b->body->dx, b->body->dy, collision_point));
             }
         }        
     }
 }
-
-CollisionManager::CollisionManager(EntityManager &entityManager) : entityManager(entityManager) {}

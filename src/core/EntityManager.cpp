@@ -12,78 +12,103 @@ EntityManager& EntityManager::GetInstance(SDL_Renderer* renderer) {
     return instance; 
 }
 
-//Pushes all hardcoded gameobjects created before runtime to gameObjects & active_gameObjects.
-void EntityManager::OnStart(vector<GameObject*>& game_objects) {
-     for (auto* gm: game_objects) { 
-        cout << gm->posZ << gm->name << endl; 
-        this->active_gameObjects[gm->posZ].push_back(gm);
+void EntityManager::OnStart(vector<GameObject*>& prefabs) {
+    for (auto* game_object: prefabs) {
+        total_objects.push_back(game_object);
 
-        if (gm->hasBody) {
-            this->collision_objects.push_back(gm); 
+        if (game_object->texture != nullptr) {
+            visible_objects[game_object->pos_z].push_back(game_object);
         }
 
-        if (this->gameObjects.find(gm->name) == this->gameObjects.end()) {
-            this->gameObjects[gm->name] = gm; 
+        
+        if (game_object->collider != nullptr) {
+            collision_objects.push_back(game_object);
+        }
+
+        if (game_object->body != nullptr) {
+            body_objects.push_back(game_object);
+        }
+
+        if (name_objects.find(game_object->name) == name_objects.end()) {
+            name_objects[game_object->name] = game_object;
         }
         else {
-            throw runtime_error("ENTITYMANAGER: Two separate game objects cannot share the same name. Choose a different name for '" + gm->name + "', or use Instantiate() to create a clone of the game object if they are the same.");
+            cout << "ENTITYMANAGER: Two separate game objects cannot share the same name. Choose a different name for '" + game_object->name + "', or use Instantiate() to create a clone of the game object if they are the same." << endl;
         }
-     }
+    }
 }
 
-//Creates a clone of an existing game object. Can be used during runtime. 
-void EntityManager::Instantiate(string original_name, float posX, float posY, float posZ, float dx, float dy) {
-    GameObject* gm = new GameObject(renderer, original_name, posX, posY, posZ, 
-                                this->gameObjects[original_name]->w, this->gameObjects[original_name]->h, 
-                                this->gameObjects[original_name]->rotation, this->gameObjects[original_name]->texture_filepath, this->gameObjects[original_name]->hasBody); 
+void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, float pos_z, float base_dx, float base_dy) {
+    if (name_objects.find(prefab_name) == name_objects.end()) {
+        cout << "ENTITYMANAGER: Prefab with name: " << prefab_name << " was not found!" << endl;
+        return; 
+    }
 
-    gm->SetVelocity(dx, dy); 
-    this->active_gameObjects[gm->posZ].push_back(gm); 
+    bool has_collider = name_objects[prefab_name]->collider != nullptr;
 
-    if (gm->hasBody) {
-        this->collision_objects.push_back(gm); 
+    bool has_body = name_objects[prefab_name]->body != nullptr; 
+
+    if (pos_x == NULL) { pos_x = name_objects[prefab_name]->pos_x; }
+    if (pos_y == NULL) { pos_y = name_objects[prefab_name]->pos_y; }
+    if (pos_z == NULL) { pos_z = name_objects[prefab_name]->pos_z; }
+
+    GameObject* clone = new GameObject(renderer, prefab_name, pos_x, pos_y, pos_z, name_objects[prefab_name]->width, name_objects[prefab_name]->height, 
+                                    name_objects[prefab_name]->rotation, name_objects[prefab_name]->texture_filepath);
+    
+    if (has_collider) {
+        clone->AddCollider();
+    }
+
+    if (has_body) {
+        if (base_dx == NULL) { base_dx == name_objects[prefab_name]->body->base_dx; }
+        if (base_dy == NULL) { base_dy == name_objects[prefab_name]->body->base_dy; }
+    }
+                        
+    if (has_body) {
+        clone->AddBody(name_objects[prefab_name]->body->mass, name_objects[prefab_name]->body->use_gravity);
+    }
+
+    total_objects.push_back(clone);
+
+    if (clone->texture_filepath != "") {
+        visible_objects[pos_z].push_back(clone);
+    }
+
+    if (has_collider) {
+        collision_objects.push_back(clone);
+    }
+
+    if (has_body) {
+        body_objects.push_back(clone);
     }
 }
 
 void EntityManager::Delete() {}
 
 void EntityManager::OnEnd() {
-    for (auto& [name, gm]: this->gameObjects) {
-        delete gm; 
-    }
-    this->gameObjects.clear(); 
+    for (auto& game_object : total_objects) { delete game_object; }
+    total_objects.clear();
 
-    for (auto& [posZ, gameObjects]: this->active_gameObjects) {
-        for (int i = 0; i < gameObjects.size(); i++) {
-            delete gameObjects[i]; 
+    for (auto& [pos_z, game_object_vector] : visible_objects) { 
+        for (auto& game_object : game_object_vector) {
+            delete game_object;
         }
+        game_object_vector.clear();
     }
-    this->active_gameObjects.clear(); 
+    visible_objects.clear();
 
-    for (int i = 0; i < this->collision_objects.size(); i++) {
-        delete this->collision_objects[i]; 
-    }
-    this->collision_objects.clear(); 
-}
+    for (auto& game_object : collision_objects) { delete game_object; }
+    collision_objects.clear();
 
-void EntityManager::ProcessCollisions() {
-    /*
-    vector<GameObject*> toProcess; 
+    for (auto& game_object : body_objects) { delete game_object; }
+    body_objects.clear();
 
-    for (auto i = active_gameObjects.begin(); i != active_gameObjects.end(); i++) {
-        for (auto j = 0; j < i->second.size(); j++) {
-            if (i->second[j]->hasCollider) {
-                toProcess.push_back(i->second[j]); 
-            }
-        }
-    } 
-    */
-
-   
+    for (auto& [name, game_object] : name_objects) { delete game_object; }
+    name_objects.clear();
 }
 
 GameObject* EntityManager::FindGameObjectByName(string name) {
-    return this->gameObjects[name]; 
+    return name_objects[name]; 
 }
 
 EntityManager::EntityManager (SDL_Renderer*& renderer) : renderer(renderer) {

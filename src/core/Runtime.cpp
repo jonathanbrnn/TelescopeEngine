@@ -3,26 +3,27 @@
 #include <map>
 #include <chrono>
 #include "Runtime.h"
-#include "EntityManager.h"
+#include "ManagerHub.h"
 #include "../input/InputManager.h"
 #include "../rendering/Renderer.h"
 #include "../entities/GameObject.h"
-#include "../entities/CollisionManager.h"
 
 using namespace std; 
 
 
-void Update(SDL_Renderer* renderer, EntityManager& entityManager, CollisionManager& collisionManager) {
+void Update(SDL_Renderer* renderer) {
     auto originalTime = chrono::high_resolution_clock::now(); 
     
     bool quit = false; 
     SDL_Event event; 
 
-    GameObject* player = entityManager.FindGameObjectByName("Enemy");
+    ManagerHub& managerHub = ManagerHub::GetInstance(); 
+
+    GameObject* player = managerHub.entityManager->FindGameObjectByName("Enemy");
     // GameObject* player = new GameObject(renderer, "A", 100, 0, 1000, 100, 100, 0, "../media/D5A7C13D-BA69-41D6-9BD7-B1DD66045837_4_5005_c Background Removed.png"); 
     
-    entityManager.active_gameObjects[1000].push_back(player); 
-    player->SetVelocity(0, 0);
+    managerHub.entityManager->visible_objects[1000].push_back(player); 
+    player->body->SetVelocity(0, 0);
 
     while (!quit) {
         auto currentTime = chrono::high_resolution_clock::now(); 
@@ -39,44 +40,44 @@ void Update(SDL_Renderer* renderer, EntityManager& entityManager, CollisionManag
                 MovePlayer(player, keyPress);
 
                 if (keyPress == KEY_PRESS_SPACE) {
-                    entityManager.Instantiate("Enemy", player->rect.x + (player->w / 2), player->rect.y + (player->h / 2), player->posZ, player->dx * 10.0f + 10.0f, player->dy * 10.0f + 10.0f); 
+                    managerHub.entityManager->Instantiate("Enemy", player->rect.x + (player->width / 2), player->rect.y + (player->height / 2), player->pos_z, player->body->dx * 10.0f + 10.0f, player->body->dy * 10.0f + 10.0f); 
                 }
                 break; 
             }
         }
 
-        collisionManager.ProcessCollisions(); 
-        UpdateRenderer(renderer, entityManager.active_gameObjects, deltaTime); 
+        managerHub.collisionManager->ProcessCollisions(); 
+        UpdateRenderer(renderer, managerHub.entityManager->visible_objects, deltaTime); 
     }
 }
 
 void MovePlayer(GameObject* player, KeyPress key) { 
     switch(key) {
         case KEY_PRESS_LEFT: 
-            player->dx = -3; 
+            player->body->base_dx = -3; 
             break; 
         case KEY_PRESS_RIGHT: 
-            player->dx = 3; 
+            player->body->base_dx = 3; 
             break; 
         case KEY_PRESS_UP: 
-            player->dy = -3; 
+            player->body->base_dy = -3; 
             break; 
         case KEY_PRESS_DOWN: 
-            player->dy = 3; 
+            player->body->base_dy = 3; 
             break; 
         case KEY_PRESS_SPACE: 
             break; 
         case KEY_PRESS_ONE: 
-            player->forces.clear();
-            player->ApplyForce(1, 5, LINEAR);  
+            player->body->forces.clear();
+            player->body->ApplyForce(1, 50, LINEAR);  
         case KEY_PRESS_TWO:
-            player->forces.clear(); 
-            player->ApplyForce(-1, 3, QUADRATIC_EASE_IN); 
+            player->body->forces.clear(); 
+            player->body->ApplyForce(-1, 3, QUADRATIC_EASE_IN); 
         case KEY_PRESS_THREE: 
-            player->forces.clear(); 
-            player->ApplyForce(1, 3, QUADRATIC_EASE_OUT);
+            player->body->forces.clear(); 
+            player->body->ApplyForce(1, 3, QUADRATIC_EASE_OUT);
         default: 
-            player->SetVelocity(0, 0); 
+            player->body->SetVelocity(0, 0); 
             break; 
     }    
 }

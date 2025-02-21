@@ -3,13 +3,12 @@
 
 #include <SDL.h>
 #include <vector>
-#include "EntityManager.h"
+#include "ManagerHub.h"
 #include "../input/InputManager.h"
 #include "../rendering/Renderer.h"
 #include "../entities/GameObject.h"
-#include "../entities/CollisionManager.h"
 
-void Update(SDL_Renderer* renderer, EntityManager& entityManager, CollisionManager& collisionManager); 
+void Update(SDL_Renderer* renderer); 
 void MovePlayer(GameObject* player, KeyPress key); 
 
 #endif
