@@ -4,12 +4,13 @@
 #include <chrono>
 #include "Runtime.h"
 #include "ManagerHub.h"
+#include "EntityManager.h"
 #include "../input/InputManager.h"
 #include "../rendering/Renderer.h"
 #include "../entities/GameObject.h"
+#include "../entities/CollisionManager.h"
 
 using namespace std; 
-
 
 void Update(SDL_Renderer* renderer) {
     auto originalTime = chrono::high_resolution_clock::now(); 

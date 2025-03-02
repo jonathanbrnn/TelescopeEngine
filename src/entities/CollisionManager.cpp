@@ -1,4 +1,4 @@
-#include "core/ManagerHub.h"
+#include "../core/ManagerHub.h"
 #include "CollisionManager.h"
 #include "GameObject.h"
 #include <tuple>
@@ -6,11 +6,13 @@
 
 using namespace std; 
 
+CollisionManager::CollisionManager() : managerHub(&ManagerHub::GetInstance()) {}
+
 void CollisionManager::ProcessCollisions() { 
-    for(int i = 0; i < this->managerHub.entityManager->collision_objects.size(); i++) {
-        for(int j = i + 1; j < this->managerHub.entityManager->collision_objects.size(); j++) {
-            GameObject* a = this->managerHub.entityManager->collision_objects[i]; 
-            GameObject* b = this->managerHub.entityManager->collision_objects[j]; 
+    for(int i = 0; i < managerHub->entityManager->collision_objects.size(); i++) {
+        for(int j = i + 1; j < this->managerHub->entityManager->collision_objects.size(); j++) {
+            GameObject* a = managerHub->entityManager->collision_objects[i]; 
+            GameObject* b = managerHub->entityManager->collision_objects[j]; 
 
             if (a->pos_x < b->pos_x + b->width && a->pos_x + a->width > b->pos_x &&
                  a->pos_y < b->pos_y + b->height && a->pos_y + a->height > b->pos_y) {

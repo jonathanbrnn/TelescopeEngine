@@ -1,13 +1,12 @@
 #ifndef COLLISIONMANAGER_H
 #define COLLISIONMANAGER_H
 
-#include <vector>
 #include "../core/ManagerHub.h"
+#include "GameObject.h"
+#include <tuple>
+#include <vector>
 
 using namespace std; 
-
-class GameObject;
-class EntityManager; 
 
 class CollisionManager {
     public: 
@@ -22,8 +21,8 @@ class CollisionManager {
     void ProcessCollisions(); 
 
     private: 
-    explicit CollisionManager() {}
-    ManagerHub& managerHub = ManagerHub::GetInstance(); 
+    explicit CollisionManager();
+    ManagerHub* managerHub;
 };
 
-#endif 
+#endif

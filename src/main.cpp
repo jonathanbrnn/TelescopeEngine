@@ -15,13 +15,13 @@ void InitializeEngine(SDL_Window*& window, SDL_Renderer*& renderer) {
     window = InitializeWindow(1000, 1000); 
     renderer = InitializeRenderer(window); 
 
-    EntityManager::GetInstance(renderer); 
+    EntityManager* entityManager = &EntityManager::GetInstance(renderer); 
     
-    TimeManager::GetInstance(); 
+    TimeManager* timeManager = &TimeManager::GetInstance(); 
 
-    CollisionManager::GetInstance(); 
+    CollisionManager* collisionManager = &CollisionManager::GetInstance(); 
 
-    ManagerHub::GetInstance();
+    ManagerHub::GetInstance(entityManager, timeManager, collisionManager);
 }
 
 void closeEngine(SDL_Window* window, SDL_Renderer* renderer) {
@@ -34,7 +34,7 @@ int main() {
     SDL_Window* window = NULL; 
     SDL_Renderer* renderer = NULL; 
 
-    ManagerHub& managerHub = ManagerHub::GetInstance(); 
+    ManagerHub* managerHub = &ManagerHub::GetInstance(); 
 
     InitializeEngine(window, renderer);  
 
@@ -50,7 +50,7 @@ int main() {
     gameObjects.push_back(&gm1); 
     gameObjects.push_back(&gm2);   
 
-    managerHub.entityManager->OnStart(gameObjects);
+    managerHub->entityManager->OnStart(gameObjects);
 
     Update(renderer); 
 
