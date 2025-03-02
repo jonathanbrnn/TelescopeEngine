@@ -113,12 +113,8 @@ void CollisionManager::ProcessCollisions() {
                     collision_point = {a->pos_x, a->pos_y};
                 }
 
-                if (a->collider != nullptr) {
-                    a->collider->OnCollision(Collision(b->name, b->body != nullptr ? b->body->dx : 0, b->body != nullptr ? b->body->dy : 0, a->body != nullptr ? a->body->dx : 0, a->body != nullptr ? a->body->dy : 0, a_collision_side, collision_point));
-                }
-                if (b->collider != nullptr) {
-                    b->collider->OnCollision(Collision(a->name, a->body != nullptr ? a->body->dx : 0, a->body != nullptr ? a->body->dy : 0, b->body != nullptr ? b->body->dx : 0, b->body != nullptr ? b->body->dy : 0, b_collision_side, collision_point));
-                }
+                a->OnCollision(Collision(b->name, b->body != nullptr ? b->body->dx : 0, b->body != nullptr ? b->body->dy : 0, a->body != nullptr ? a->body->dx : 0, a->body != nullptr ? a->body->dy : 0, a_collision_side, collision_point));
+                b->OnCollision(Collision(a->name, a->body != nullptr ? a->body->dx : 0, a->body != nullptr ? a->body->dy : 0, b->body != nullptr ? b->body->dx : 0, b->body != nullptr ? b->body->dy : 0, b_collision_side, collision_point));
             }
         }
     }

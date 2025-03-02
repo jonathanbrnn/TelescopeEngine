@@ -48,9 +48,6 @@ struct Collider {
     tuple<float, float> d;  
 
     Collider(tuple<float, float> a = {1.0f, 1.0f}, tuple<float, float> b = {1.0f, 1.0f}, tuple<float, float> c = {1.0f, 1.0f}, tuple<float, float> d = {1.0f, 1.0f});   
-
-    void OnCollision(Collision collison); 
-    //void OnCollisionExit();   
 }; 
 
 #endif

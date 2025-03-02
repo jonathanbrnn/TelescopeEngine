@@ -14,9 +14,11 @@ TARGET = sdl
 
 # Source files (relative paths from the Makefile location)
 SRCS = main.cpp \
+		demo/Player.cpp \
 		core/EntityManager.cpp \
 		core/ManagerHub.cpp \
 		core/Runtime.cpp \
+		core/TimeManager.cpp \
 		entities/Body.cpp \
 		entities/Collider.cpp \
 		entities/Force.cpp \
@@ -27,9 +29,11 @@ SRCS = main.cpp \
 	   	input/InputManager.cpp
 
 OBJS = main.o \
+		demo/Player.o \
 		core/EntityManager.o \
 		core/ManagerHub.o \
 		core/Runtime.o \
+		core/TimeManager.o \
 		entities/Body.o \
 		entities/Collider.o \
 		entities/CollisionManager.o \

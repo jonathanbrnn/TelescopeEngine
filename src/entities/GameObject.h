@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+#include "../core/ManagerHub.h"
 #include "Force.h"
 #include "Body.h"
 #include "Collider.h"
@@ -63,8 +64,24 @@ class GameObject {
 
         // CONSTRUCTOR: 
         // Set texture_filepath to "" to make it invisible.
-        GameObject(SDL_Renderer* renderer, string name, float pos_x = 0, float pos_y = 0, float pos_z = 0, float width = 0, 
-            float height = 0, float rotation = 0, string texture_filepath = "Users/Jonathan/TelescopeEngine/media/sample_640x426.bmp");
+        GameObject(SDL_Renderer* renderer, string name, float pos_x = 0, float pos_y = 0, float pos_z = 0, float width = 1, 
+            float height = 1, float rotation = 0, string texture_filepath = "/Users/jonathan/TelescopeEngine/media/sample_640×426.bmp");
+        
+        // Calls all relevant functions that need to be updated each frame. 
+        void UpdateGameObject();
+
+        virtual ~GameObject() {}
+        
+        // Called before the first frame update. 
+        virtual void Start() {}
+
+        // Called during every frame update. 
+        virtual void Update() {}
+
+        // Called when the game object collides. 
+        // Provides a collision object that contains information about: the contacts name, its impact velocity, the impact velocity of this object,
+        // the side the contact is located at (TOP, BOTTOM, LEFT, RIGHT) and an approximation of the collision point. 
+        virtual void OnCollision(Collision collison) {}
 };  
 
 #endif

@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <iostream>
 
+#include "../core/ManagerHub.h"
 #include "GameObject.h"
 #include "Force.h"
 #include "Body.h"
@@ -39,6 +40,17 @@ GameObject::GameObject(SDL_Renderer* renderer, string name, float pos_x, float p
     else {
         texture = nullptr; 
     }
+}
+
+void GameObject::UpdateGameObject() {
+    float delta_time = ManagerHub::GetInstance().timeManager->GetDeltaTime();
+    
+    if (body != nullptr) {
+        body->UpdateVelocity(delta_time);
+    }
+
+    UpdatePosition(delta_time);
+    this->Update();
 }
 
 void GameObject::SetPosition(float pos_x, float pos_y, float pos_z) {

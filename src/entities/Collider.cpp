@@ -21,5 +21,3 @@ Collider::Collider(tuple<float, float> a, tuple<float, float> b, tuple<float, fl
     this->d = d; 
 }
 
-void Collider::OnCollision(Collision collision) {}
-

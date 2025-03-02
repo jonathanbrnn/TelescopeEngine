@@ -6,6 +6,9 @@
 #include <SDL_image.h>
 #include <unordered_map>
 #include "../entities/GameObject.h"
+#include "../entities/Force.h"
+#include "../entities/Body.h"
+#include "../entities/Collider.h"
 #include <tuple>
 #include <map>
 

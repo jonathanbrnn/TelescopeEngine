@@ -14,6 +14,7 @@ EntityManager& EntityManager::GetInstance(SDL_Renderer* renderer) {
 
 void EntityManager::OnStart(vector<GameObject*>& prefabs) {
     for (auto* game_object: prefabs) {
+        game_object->Start();
         total_objects.push_back(game_object);
 
         if (game_object->texture != nullptr) {
@@ -108,7 +109,12 @@ void EntityManager::OnEnd() {
 }
 
 GameObject* EntityManager::FindGameObjectByName(string name) {
-    return name_objects[name]; 
+    if (name_objects.find(name) != name_objects.end()) {
+        return name_objects[name]; 
+    }
+    else {
+        cout << "ENTITYMANAGER: Warning game object with the name: '" << name << "' could not be found!" << endl;
+    }
 }
 
 EntityManager::EntityManager (SDL_Renderer*& renderer) : renderer(renderer) {

@@ -12,9 +12,7 @@
 
 using namespace std; 
 
-void Update(SDL_Renderer* renderer) {
-    auto originalTime = chrono::high_resolution_clock::now(); 
-    
+void UpdateAll(SDL_Renderer* renderer) {
     bool quit = false; 
     SDL_Event event; 
 
@@ -23,14 +21,9 @@ void Update(SDL_Renderer* renderer) {
     GameObject* player = managerHub.entityManager->FindGameObjectByName("Enemy");
     // GameObject* player = new GameObject(renderer, "A", 100, 0, 1000, 100, 100, 0, "../media/D5A7C13D-BA69-41D6-9BD7-B1DD66045837_4_5005_c Background Removed.png"); 
     
-    player->body->SetVelocity(0, 0);
+    player->body->SetVelocity(1, 1);
 
     while (!quit) {
-        auto currentTime = chrono::high_resolution_clock::now(); 
-        chrono::duration<float> elapsedTime = currentTime - originalTime; 
-        float deltaTime = elapsedTime.count(); 
-        originalTime = currentTime;
-
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 quit = true; 
@@ -39,15 +32,17 @@ void Update(SDL_Renderer* renderer) {
                 KeyPress keyPress = HandleKeyPress(event.key.keysym.sym);
                 MovePlayer(player, keyPress);
 
+                /*
                 if (keyPress == KEY_PRESS_SPACE) {
                     managerHub.entityManager->Instantiate("Enemy", player->rect.x + (player->width / 2), player->rect.y + (player->height / 2), player->pos_z, player->body->dx * 10.0f + 10.0f, player->body->dy * 10.0f + 10.0f); 
                 }
+                */
                 break; 
             }
         }
-
+        managerHub.timeManager->UpdateTime();
         managerHub.collisionManager->ProcessCollisions(); 
-        UpdateRenderer(renderer, deltaTime); 
+        UpdateRenderer(renderer); 
     }
 }
 

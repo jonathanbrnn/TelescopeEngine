@@ -42,18 +42,18 @@ SDL_Renderer* InitializeRenderer(SDL_Window* window) {
     return renderer; 
 }
 
-void UpdateRenderer(SDL_Renderer* renderer, float deltaTime, const int fps) {
+void UpdateRenderer(SDL_Renderer* renderer, const int fps) {
     //Move to InitializeRenderer() to avoid unnecessary calculations 
     const int framedelay = 1000 / fps; 
 
+    ManagerHub* managerHub = &ManagerHub::GetInstance();
+    float delta_time = managerHub->timeManager->GetDeltaTime();
+
     SDL_RenderClear(renderer);
 
-    for (auto& [pos_z, gameObjects]: ManagerHub::GetInstance().entityManager->visible_objects) {
+    for (auto& [pos_z, gameObjects]: managerHub->entityManager->visible_objects) {
         for (auto* gameObject: gameObjects) {
-            if (gameObject->body != nullptr) {
-                gameObject->body->UpdateVelocity(deltaTime); 
-                gameObject->UpdatePosition(deltaTime);
-            }
+            gameObject->UpdateGameObject();
             SDL_RenderCopy(renderer, gameObject->texture, nullptr, &gameObject->rect);
         }
     }
