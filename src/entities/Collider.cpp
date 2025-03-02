@@ -2,12 +2,13 @@
 
 // COLLISION: 
 
-Collision::Collision(string contact_name, float contact_dx, float contact_dy, float this_dx, float this_dy, tuple<int, int> collision_point) {
+Collision::Collision(string contact_name, float contact_dx, float contact_dy, float this_dx, float this_dy, CollisionSide collision_side, tuple<int, int> collision_point) {
     this->contact_name = contact_name; 
     this->contact_dx = contact_dx; 
     this->contact_dy = contact_dy; 
     this->this_dx = this_dx; 
     this->this_dy = this_dy;
+    this->collision_side = collision_side;
     this->collision_point = collision_point;
 }
 

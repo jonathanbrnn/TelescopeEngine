@@ -8,6 +8,8 @@
 
 using namespace std; 
 
+class ManagerHub;
+
 class CollisionManager {
     public: 
     CollisionManager(const CollisionManager&) = delete;
@@ -18,6 +20,8 @@ class CollisionManager {
         return instance; 
     }
     
+    void OnStart(ManagerHub* managerHub);
+
     void ProcessCollisions(); 
 
     private: 

@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include "../entities/GameObject.h"
+#include "../core/ManagerHub.h"
 
 using namespace std; 
 
@@ -41,20 +42,21 @@ SDL_Renderer* InitializeRenderer(SDL_Window* window) {
     return renderer; 
 }
 
-void UpdateRenderer(SDL_Renderer* renderer, map<int, vector<GameObject*>>& gameObjects, float deltaTime, const int fps) {
+void UpdateRenderer(SDL_Renderer* renderer, float deltaTime, const int fps) {
     //Move to InitializeRenderer() to avoid unnecessary calculations 
     const int framedelay = 1000 / fps; 
 
     SDL_RenderClear(renderer);
 
-    for (auto& [z, curr_gameObjects]: gameObjects) {
-        for (auto* gm: curr_gameObjects) {
-            gm->UpdateVelocity(deltaTime);
-            gm->UpdatePosition(deltaTime); 
-            SDL_RenderCopy(renderer, gm->texture, nullptr, &gm->rect); 
+    for (auto& [pos_z, gameObjects]: ManagerHub::GetInstance().entityManager->visible_objects) {
+        for (auto* gameObject: gameObjects) {
+            if (gameObject->body != nullptr) {
+                gameObject->body->UpdateVelocity(deltaTime); 
+                gameObject->UpdatePosition(deltaTime);
+            }
+            SDL_RenderCopy(renderer, gameObject->texture, nullptr, &gameObject->rect);
         }
     }
-
 
     SDL_RenderPresent(renderer); 
     // SDL_Delay(framedelay); - Currently using VSYNC

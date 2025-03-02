@@ -33,7 +33,7 @@ OBJS = main.o \
 		entities/Body.o \
 		entities/Collider.o \
 		entities/CollisionManager.o \
-		entities/Force \
+		entities/Force.o \
 	    entities/GameObject.o \
 	   	entities/TextureManager.o \
 		input/InputManager.o \

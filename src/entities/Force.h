@@ -1,6 +1,10 @@
 #ifndef FORCE_H 
 #define FORCE_H 
 
+#include <iostream>
+
+using namespace std;
+
 enum ForceMode {
     // constant force 
     LINEAR, 

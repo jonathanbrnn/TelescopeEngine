@@ -1,4 +1,5 @@
 #include "Body.h"
+#include "Force.h"
 
 Body::Body(float mass, bool use_gravity) {
     this->mass = mass; 

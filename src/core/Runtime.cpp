@@ -23,7 +23,6 @@ void Update(SDL_Renderer* renderer) {
     GameObject* player = managerHub.entityManager->FindGameObjectByName("Enemy");
     // GameObject* player = new GameObject(renderer, "A", 100, 0, 1000, 100, 100, 0, "../media/D5A7C13D-BA69-41D6-9BD7-B1DD66045837_4_5005_c Background Removed.png"); 
     
-    managerHub.entityManager->visible_objects[1000].push_back(player); 
     player->body->SetVelocity(0, 0);
 
     while (!quit) {
@@ -48,7 +47,7 @@ void Update(SDL_Renderer* renderer) {
         }
 
         managerHub.collisionManager->ProcessCollisions(); 
-        UpdateRenderer(renderer, managerHub.entityManager->visible_objects, deltaTime); 
+        UpdateRenderer(renderer, deltaTime); 
     }
 }
 

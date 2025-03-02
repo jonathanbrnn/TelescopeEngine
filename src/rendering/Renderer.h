@@ -10,6 +10,6 @@ using namespace std;
 
 SDL_Window* InitializeWindow(int screenWidth = 600, int screenHeight = 400, int windowPositionX = 0, int windowPositionY = 0, const string& windowTitle = "Telescope Engine");
 SDL_Renderer* InitializeRenderer(SDL_Window* window);
-void UpdateRenderer(SDL_Renderer* renderer,  map<int, vector<GameObject*>>&  gameObjects, float deltaTime, const int fps = 60); 
+void UpdateRenderer(SDL_Renderer* renderer, float deltaTime, const int fps = 60); 
 
 #endif

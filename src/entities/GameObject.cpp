@@ -86,10 +86,10 @@ void GameObject::AddCollider() {
 }
 
 void GameObject::AddBody(float mass, bool use_gravity) {
-    if (body != nullptr) {
+    if (body == nullptr) {
         body = new Body(mass, use_gravity);
     }
     else {
-        cout << "GAMEOBJECT: The object " << name << "already has a body attached to it!" << endl;
+        cout << "GAMEOBJECT: The object " << name << " already has a body attached to it!" << endl;
     }
 }
