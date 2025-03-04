@@ -1,13 +1,13 @@
 # Compiler and flags
 CXX = clang++
 CXXFLAGS = -std=c++17 -Wall \
-    -I/opt/homebrew/Cellar/sdl2/2.30.10/include/SDL2 \
-    -I/opt/homebrew/Cellar/sdl2_image/2.8.2_2/include/SDL2
+    -I/opt/homebrew/Cellar/sdl2/2.32.2/include/SDL2 \
+    -I/opt/homebrew/Cellar/sdl2_image/2.8.8/include/SDL2
 CFLAGS = -Wall \
-	-I/opt/homebrew/Cellar/sdl2/2.30.10/include/SDL2 \
-    -I/opt/homebrew/Cellar/sdl2_image/2.8.2_2/include/SDL2
-LDFLAGS = -L/opt/homebrew/Cellar/sdl2/2.30.10/lib \
-    -L/opt/homebrew/Cellar/sdl2_image/2.8.2_2/lib -lSDL2 -lSDL2_image
+	-I/opt/homebrew/Cellar/sdl2/2.32.2/include/SDL2 \
+    -I/opt/homebrew/Cellar/sdl2_image/2.8.8/include/SDL2
+LDFLAGS = -L/opt/homebrew/Cellar/sdl2/2.32.2/lib \
+    -L/opt/homebrew/Cellar/sdl2_image/2.8.8/lib -lSDL2 -lSDL2_image
 
 # Target executable
 TARGET = sdl
