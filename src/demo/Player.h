@@ -2,6 +2,11 @@
 #define PLAYER_H
 
 #include "../entities/GameObject.h"
+#include "../core/ManagerHub.h"
+#include "Heart.h"
+#include <iostream> 
+
+using namespace std;
 
 class Player : public GameObject {
     public:
@@ -11,6 +16,17 @@ class Player : public GameObject {
         void Start() override; 
         void Update() override;
         void OnCollision(Collision collision) override;
+        void Whisper(int code) override; 
+
+        void Animate();
+        void CreateHeart(); 
+        void ResetPosition();
+    
+    private: 
+    int frame_delay = 0;
+    int current_frame = -1; 
+    vector<string> frames = {"/Users/jonathan/TelescopeEngine/media/images/PlayerRun1.png", "/Users/jonathan/TelescopeEngine/media/images/PlayerRun2.png", "/Users/jonathan/TelescopeEngine/media/images/PlayerRun3.png", "/Users/jonathan/TelescopeEngine/media/images/PlayerRun4.png",
+                            "/Users/jonathan/TelescopeEngine/media/images/PlayerRun5.png", "/Users/jonathan/TelescopeEngine/media/images/PlayerRun6.png", "/Users/jonathan/TelescopeEngine/media/images/PlayerRun7.png", "/Users/jonathan/TelescopeEngine/media/images/PlayerRun8.png", "/Users/jonathan/TelescopeEngine/media/images/PlayerRun9.png", "/Users/jonathan/TelescopeEngine/media/images/PlayerRun10.png"}; 
 };
 
 #endif

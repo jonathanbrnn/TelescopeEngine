@@ -2,6 +2,20 @@
 #define INPUTMANAGER_H
 #include <SDL.h>
 
+/*
+class InputManager {
+    public: 
+    explicit InputManager(); 
+
+    static InputManager& GetInstance();
+
+    private: 
+    InputManager(const InputManager&) = delete; 
+    InputManager& operator=(const InputManager&) = delete; 
+};
+*/
+
+
 enum KeyPress {
     KEY_PRESS_DEFAULT, 
     KEY_PRESS_LEFT,

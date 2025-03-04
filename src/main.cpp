@@ -2,6 +2,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "demo/Player.h"
+#include "demo/Heart.h"
+#include "demo/Celestine.h"
 #include "core/ManagerHub.h"
 #include "core/EntityManager.h"
 #include "core/TimeManager.h"
@@ -15,7 +17,7 @@
 
 
 void InitializeEngine(SDL_Window*& window, SDL_Renderer*& renderer) {
-    window = InitializeWindow(1000, 1000); 
+    window = InitializeWindow(1920, 1080); 
     renderer = InitializeRenderer(window); 
 
     EntityManager* entityManager = &EntityManager::GetInstance(renderer); 
@@ -44,26 +46,25 @@ int main() {
 
     InitializeEngine(window, renderer);  
 
-    Player player(renderer, "Jonathan");
-    GameObject gm1(renderer, "obj", 500.0f, 500.0f, 0.0f, 472 / 4, 268 / 4, 0, "../media/D5A7C13D-BA69-41D6-9BD7-B1DD66045837_4_5005_c Background Removed.png"); 
-    GameObject gm2(renderer, "Enemy", 520.0f, 300.0f, -5.0f, 10.0f, 10.0f, 0.0f, "../media/sample_640×426.bmp"); 
+    Player player(renderer, "Jonathan", 200, 0, 0, 128, 128, 0, "/Users/jonathan/TelescopeEngine/media/images/PlayerRun-export.png");
+    GameObject ground(renderer, "Ground", 100, 984, -1, 2688, 96, 0, "/Users/jonathan/TelescopeEngine/media/images/ground.png");
+    Heart heart(renderer, "Heart", 3000, 3000, 2, 100, 100, 0, "/Users/jonathan/TelescopeEngine/media/images/Heart-1.png");
+    Celestine celestine(renderer, "Celestine", 700, 760, -2, 400, 266, 0, "/Users/jonathan/TelescopeEngine/media/images/Celestine.JPG");
 
-    gm1.AddCollider(); 
-    gm2.AddBody(1, false);
+    ground.AddCollider();
 
-    gm2.AddCollider(); 
+    vector<GameObject*> prefabs;  
 
-    vector<GameObject*> gameObjects; 
-
-    gameObjects.push_back(&player);  
-    gameObjects.push_back(&gm1); 
-    gameObjects.push_back(&gm2);  
+    prefabs.push_back(&player);
+    prefabs.push_back(&ground);
+    prefabs.push_back(&heart);
+    prefabs.push_back(&celestine);
 
     if (managerHub->entityManager != nullptr) {
         cout << "WOOOHOOO!" << endl;
     }
 
-    managerHub->entityManager->OnStart(gameObjects);
+    managerHub->entityManager->OnStart(prefabs);
 
     cout << "ENTERING UPDATE!" << endl;
     UpdateAll(renderer); 

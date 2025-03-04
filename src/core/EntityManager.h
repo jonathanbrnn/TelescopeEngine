@@ -2,6 +2,7 @@
 #define ENTITYMANAGER_H
 
 #include <iostream>
+#include <functional>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <unordered_map>

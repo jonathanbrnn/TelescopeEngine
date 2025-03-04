@@ -23,6 +23,10 @@ GameObject::GameObject(SDL_Renderer* renderer, string name, float pos_x, float p
     this->height = height; 
     
     this->rotation = rotation;
+
+    this->texture_filepath = texture_filepath;
+
+    this->renderer = renderer; 
     
     // Set SDL_Rect's parameters
     rect.x = static_cast<int>(pos_x);

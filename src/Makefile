@@ -15,6 +15,8 @@ TARGET = sdl
 # Source files (relative paths from the Makefile location)
 SRCS = main.cpp \
 		demo/Player.cpp \
+		demo/Heart.cpp \
+		demo/Celestine.cpp \
 		core/EntityManager.cpp \
 		core/ManagerHub.cpp \
 		core/Runtime.cpp \
@@ -30,6 +32,8 @@ SRCS = main.cpp \
 
 OBJS = main.o \
 		demo/Player.o \
+		demo/Heart.o \
+		demo/Celestine.o \
 		core/EntityManager.o \
 		core/ManagerHub.o \
 		core/Runtime.o \

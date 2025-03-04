@@ -4,6 +4,14 @@
 
 using namespace std; 
 
+/*
+
+InputManager& InputManager::GetInstance() {
+    static InputManager instance(); 
+    return instance;
+}
+*/
+
 KeyPress HandleKeyPress(SDL_Keycode key) {
     switch (key) {
         case SDLK_w:

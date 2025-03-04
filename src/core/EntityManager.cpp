@@ -41,46 +41,32 @@ void EntityManager::OnStart(vector<GameObject*>& prefabs) {
 
 void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, float pos_z, float base_dx, float base_dy) {
     if (name_objects.find(prefab_name) == name_objects.end()) {
-        cout << "ENTITYMANAGER: Prefab with name: " << prefab_name << " was not found!" << endl;
-        return; 
+        cout << "ENTITYMANAGER: No prefab with the name: " << prefab_name << " could be found!" << endl;
+        return;
     }
 
-    bool has_collider = name_objects[prefab_name]->collider != nullptr;
-
-    bool has_body = name_objects[prefab_name]->body != nullptr; 
-
-    if (pos_x == NULL) { pos_x = name_objects[prefab_name]->pos_x; }
-    if (pos_y == NULL) { pos_y = name_objects[prefab_name]->pos_y; }
-    if (pos_z == NULL) { pos_z = name_objects[prefab_name]->pos_z; }
-
-    GameObject* clone = new GameObject(renderer, prefab_name, pos_x, pos_y, pos_z, name_objects[prefab_name]->width, name_objects[prefab_name]->height, 
-                                    name_objects[prefab_name]->rotation, name_objects[prefab_name]->texture_filepath);
+    GameObject* clone = new GameObject(renderer, prefab_name, pos_x, pos_y, pos_z, name_objects[prefab_name]->width, name_objects[prefab_name]->height, name_objects[prefab_name]->rotation, name_objects[prefab_name]->texture_filepath);
     
-    if (has_collider) {
-        clone->AddCollider();
+    clone->Start();
+
+    // Handle colliders and body
+    if (clone->collider != nullptr) clone->AddCollider();
+    if (clone->body != nullptr) {
+        if (base_dx == NULL) { base_dx = clone->body->base_dx; }
+        if (base_dy == NULL) { base_dy = clone->body->base_dy; }
+        clone->body->SetVelocity(base_dx, base_dy);
     }
 
-    if (has_body) {
-        if (base_dx == NULL) { base_dx == name_objects[prefab_name]->body->base_dx; }
-        if (base_dy == NULL) { base_dy == name_objects[prefab_name]->body->base_dy; }
+    // Store it
+    EntityManager::GetInstance().total_objects.push_back(clone);
+    if (!clone->texture_filepath.empty()) {
+        EntityManager::GetInstance().visible_objects[pos_z].push_back(clone);
     }
-                        
-    if (has_body) {
-        clone->AddBody(name_objects[prefab_name]->body->mass, name_objects[prefab_name]->body->use_gravity);
+    if (clone->collider) {
+        EntityManager::GetInstance().collision_objects.push_back(clone);
     }
-
-    total_objects.push_back(clone);
-
-    if (clone->texture_filepath != "") {
-        visible_objects[pos_z].push_back(clone);
-    }
-
-    if (has_collider) {
-        collision_objects.push_back(clone);
-    }
-
-    if (has_body) {
-        body_objects.push_back(clone);
+    if (clone->body) {
+        EntityManager::GetInstance().body_objects.push_back(clone);
     }
 }
 

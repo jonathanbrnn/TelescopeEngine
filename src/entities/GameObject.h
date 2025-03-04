@@ -33,6 +33,8 @@ class GameObject {
         // The objects rotation.
         // (!) Currently not implemented.
         float rotation;
+
+        SDL_Renderer* renderer; 
     
         // Filepath to the image that should be used for the game objects texture, defines the appearance. 
         string texture_filepath; 
@@ -77,6 +79,10 @@ class GameObject {
 
         // Called during every frame update. 
         virtual void Update() {}
+
+        // Can be called at anytime, from anywhere. 
+        // Is passed a code to determine which specific function should be called. Only used in derived classes. 
+        virtual void Whisper(int code) {}
 
         // Called when the game object collides. 
         // Provides a collision object that contains information about: the contacts name, its impact velocity, the impact velocity of this object,

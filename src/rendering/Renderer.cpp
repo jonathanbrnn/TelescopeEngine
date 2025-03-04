@@ -53,7 +53,6 @@ void UpdateRenderer(SDL_Renderer* renderer, const int fps) {
 
     for (auto& [pos_z, gameObjects]: managerHub->entityManager->visible_objects) {
         for (auto* gameObject: gameObjects) {
-            gameObject->UpdateGameObject();
             SDL_RenderCopy(renderer, gameObject->texture, nullptr, &gameObject->rect);
         }
     }

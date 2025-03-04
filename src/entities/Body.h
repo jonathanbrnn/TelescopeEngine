@@ -22,7 +22,7 @@ class Body {
 
     // Wether or not gravity (a constant downward force on the y-axis) is applied to the body. 
     bool use_gravity = true;
-    float gravity_force = 1; 
+    float gravity_force = 5; 
 
     // Stores all active forces.
     vector<Force> forces; 
