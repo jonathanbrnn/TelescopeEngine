@@ -11,13 +11,13 @@ endif
 # Compiler and flags
 CXX = clang++
 CXXFLAGS = -std=c++17 -Wall \
-    -I$(BREW_PREFIX)/Cellar/sdl2/2.30.10/include/SDL2 \
-    -I$(BREW_PREFIX)/Cellar/sdl2_image/2.8.2_2/include/SDL2
+    -I$(BREW_PREFIX)/Cellar/sdl2/2.32.2/include/SDL2 \
+    -I$(BREW_PREFIX)/Cellar/sdl2_image/2.8.8/include/SDL2
 CFLAGS = -Wall \
-	-I$(BREW_PREFIX)/Cellar/sdl2/2.30.10/include/SDL2 \
-    -I$(BREW_PREFIX)/Cellar/sdl2_image/2.8.2_2/include/SDL2
-LDFLAGS = -L$(BREW_PREFIX)/Cellar/sdl2/2.30.10/lib \
-    -L$(BREW_PREFIX)/Cellar/sdl2_image/2.8.2_2/lib -lSDL2 -lSDL2_image
+	-I$(BREW_PREFIX)/Cellar/sdl2/2.32.2/include/SDL2 \
+    -I$(BREW_PREFIX)/Cellar/sdl2_image/2.8.8/include/SDL2
+LDFLAGS = -L$(BREW_PREFIX)/Cellar/sdl2/2.32.2/lib \
+    -L$(BREW_PREFIX)/Cellar/sdl2_image/2.8.8/lib -lSDL2 -lSDL2_image
 
 # Target executable
 TARGET = sdl
