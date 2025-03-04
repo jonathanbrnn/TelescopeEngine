@@ -1,13 +1,23 @@
+# Detect architecture
+ARCH := $(shell uname -m)
+
+# Set correct Homebrew prefix based on architecture
+ifeq ($(ARCH), arm64)
+    BREW_PREFIX = /opt/homebrew
+else
+    BREW_PREFIX = /usr/local
+endif
+
 # Compiler and flags
 CXX = clang++
 CXXFLAGS = -std=c++17 -Wall \
-    -I/opt/homebrew/Cellar/sdl2/2.32.2/include/SDL2 \
-    -I/opt/homebrew/Cellar/sdl2_image/2.8.8/include/SDL2
+    -I$(BREW_PREFIX)/Cellar/sdl2/2.30.10/include/SDL2 \
+    -I$(BREW_PREFIX)/Cellar/sdl2_image/2.8.2_2/include/SDL2
 CFLAGS = -Wall \
-	-I/opt/homebrew/Cellar/sdl2/2.32.2/include/SDL2 \
-    -I/opt/homebrew/Cellar/sdl2_image/2.8.8/include/SDL2
-LDFLAGS = -L/opt/homebrew/Cellar/sdl2/2.32.2/lib \
-    -L/opt/homebrew/Cellar/sdl2_image/2.8.8/lib -lSDL2 -lSDL2_image
+	-I$(BREW_PREFIX)/Cellar/sdl2/2.30.10/include/SDL2 \
+    -I$(BREW_PREFIX)/Cellar/sdl2_image/2.8.2_2/include/SDL2
+LDFLAGS = -L$(BREW_PREFIX)/Cellar/sdl2/2.30.10/lib \
+    -L$(BREW_PREFIX)/Cellar/sdl2_image/2.8.2_2/lib -lSDL2 -lSDL2_image
 
 # Target executable
 TARGET = sdl
@@ -30,22 +40,7 @@ SRCS = main.cpp \
        	rendering/Renderer.cpp \
 	   	input/InputManager.cpp
 
-OBJS = main.o \
-		demo/Player.o \
-		demo/Heart.o \
-		demo/Celestine.o \
-		core/EntityManager.o \
-		core/ManagerHub.o \
-		core/Runtime.o \
-		core/TimeManager.o \
-		entities/Body.o \
-		entities/Collider.o \
-		entities/CollisionManager.o \
-		entities/Force.o \
-	    entities/GameObject.o \
-	   	entities/TextureManager.o \
-		input/InputManager.o \
-       	rendering/Renderer.o 
+OBJS = $(SRCS:.cpp=.o)
 
 # Default rule to build the target
 $(TARGET): $(OBJS)
