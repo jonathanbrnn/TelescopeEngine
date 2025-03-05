@@ -23,6 +23,7 @@ class Player : public GameObject {
         void ResetPosition();
     
     private: 
+    ManagerHub* managerHub;
     int frame_delay = 0;
     int current_frame = -1; 
     vector<string> frames = {"/Users/jonathan/TelescopeEngine/media/images/PlayerRun1.png", "/Users/jonathan/TelescopeEngine/media/images/PlayerRun2.png", "/Users/jonathan/TelescopeEngine/media/images/PlayerRun3.png", "/Users/jonathan/TelescopeEngine/media/images/PlayerRun4.png",

@@ -12,6 +12,7 @@
 #include "entities/Force.h"
 #include "entities/GameObject.h"
 #include "entities/CollisionManager.h"
+#include "input/InputManager.h"
 #include <vector>
 #include <map>
 
@@ -24,11 +25,14 @@ void InitializeEngine(SDL_Window*& window, SDL_Renderer*& renderer) {
     
     TimeManager* timeManager = &TimeManager::GetInstance(); 
 
-    CollisionManager* collisionManager = &CollisionManager::GetInstance(); 
+    CollisionManager* collisionManager = &CollisionManager::GetInstance();
+    
+    InputManager* inputManager = &InputManager::GetInstance();
 
     ManagerHub* managerHub = &ManagerHub::GetInstance();
 
-    managerHub->OnStart(entityManager, timeManager, collisionManager);
+    managerHub->OnStart(entityManager, timeManager, collisionManager, inputManager);
+    
     collisionManager->OnStart(&ManagerHub::GetInstance());
 }
 

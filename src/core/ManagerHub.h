@@ -4,6 +4,7 @@
 #include "EntityManager.h"
 #include "TimeManager.h"
 #include "../entities/CollisionManager.h"
+#include "../input/InputManager.h"
 
 class ManagerHub {
 public:
@@ -17,11 +18,12 @@ public:
         return instance;
     }
 
-    void OnStart(EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager); 
+    void OnStart(EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, InputManager* inputManager); 
 
     EntityManager* entityManager; 
     TimeManager* timeManager; 
     CollisionManager* collisionManager; 
+    InputManager* inputManager; 
 
 private:
     // Private constructor ensures no external instantiation

@@ -8,7 +8,6 @@
 #include "../rendering/Renderer.h"
 #include "../entities/GameObject.h"
 
-void UpdateAll(SDL_Renderer* renderer); 
-void MovePlayer(GameObject* player, KeyPress key); 
+void UpdateAll(SDL_Renderer* renderer);  
 
 #endif

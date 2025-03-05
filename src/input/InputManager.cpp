@@ -1,76 +1,39 @@
-#include <SDL.h>
 #include "InputManager.h"
-#include <unordered_map>
 
 using namespace std; 
 
-/*
-
-InputManager& InputManager::GetInstance() {
-    static InputManager instance(); 
-    return instance;
-}
-*/
-
-KeyPress HandleKeyPress(SDL_Keycode key) {
-    switch (key) {
-        case SDLK_w:
-        case SDLK_UP: return KEY_PRESS_UP; 
-        case SDLK_s: 
-        case SDLK_DOWN: return KEY_PRESS_DOWN; 
-        case SDLK_a:
-        case SDLK_LEFT: return KEY_PRESS_LEFT; 
-        case SDLK_d:
-        case SDLK_RIGHT: return KEY_PRESS_RIGHT; 
-        case SDLK_SPACE: return KEY_PRESS_SPACE; 
-        case SDLK_1: return KEY_PRESS_ONE; 
-        case SDLK_2: return KEY_PRESS_TWO; 
-        case SDLK_3: return KEY_PRESS_THREE;
-        default: return KEY_PRESS_DEFAULT;  
+void InputManager::UpdateInput(SDL_Event& event) {
+    string key_name = SDL_GetKeyName(event.key.keysym.sym);
+    
+    if (event.type == SDL_KEYDOWN) {        
+        key_states[key_name] = true;
+    }
+    else if (event.type == SDL_KEYUP) {
+        key_states[key_name] = false;
     }
 }
 
-bool ListenForInput(SDL_Event event) {
-    if (event.type == SDL_KEYDOWN) {
-        return true; 
+int InputManager::IsPressedDown(string key) {
+    if (key == "Horizontal") {
+        if (key_states["A"] || key_states["Left"]) {
+            return -1; 
+        }
+        if (key_states["D"] || key_states["Right"]) {
+            return 1;
+        }
     }
-    return false; 
-}
-
-/*
-class InputManager {
-    public: 
-    static InputManager& GetInstance() {
-        static InputManager instance; 
-        return instance; 
-    }
-
-    KeyPress HandleKeyPress(SDL_Keycode key) {
-        switch (key) {
-            case SDLK_w:
-            case SDLK_UP: return KEY_PRESS_UP; 
-            case SDLK_s: 
-            case SDLK_DOWN: return KEY_PRESS_DOWN; 
-            case SDLK_a:
-            case SDLK_LEFT: return KEY_PRESS_LEFT; 
-            case SDLK_d:
-            case SDLK_RIGHT: return KEY_PRESS_RIGHT; 
-            case SDLK_SPACE: return KEY_PRESS_SPACE; 
-            default: return KEY_PRESS_DEFAULT;  
+    
+    if (key == "Vertical") {
+        if (key_states["W"] || key_states["Up"]) {
+            return -1; 
+        }
+        else if (key_states["S"] || key_states["Down"]) {
+            return 1; 
         }
     }
 
-    bool ListenForInput(SDL_Event event) {
-        if (event.type == SDL_KEYDOWN) {
-            return true; 
-        }
-        return false; 
+    if (key_states["key"]) {
+        return 1; 
     }
-
-    private: 
-    InputManager() {}
-    ~InputManager() {}
-
-    unordered_map<SDL_Keycode, bool> isPressed; 
-};
-*/
+    return 0;
+}

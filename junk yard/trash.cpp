@@ -492,3 +492,35 @@ Force::Force(float initial_force, float duration, ForceMode update_mode, ForceAx
     this->update_mode = update_mode; 
     this->axis = axis; 
 }
+
+// THE OLD PLAYER MOVE LOGIC USED IN RUNTIME FOR TESTING PURPOSES: 
+
+void MovePlayer(GameObject* player, KeyPress key) { 
+    switch(key) {
+        case KEY_PRESS_LEFT: 
+            player->body->base_dx = -3; 
+            break; 
+        case KEY_PRESS_RIGHT: 
+            player->body->base_dx = 3; 
+            break; 
+        case KEY_PRESS_UP: 
+            player->body->base_dy = -3; 
+            break; 
+        case KEY_PRESS_DOWN: 
+            player->body->base_dy = 3; 
+            break; 
+        case KEY_PRESS_SPACE: 
+            player->Whisper(1);
+            break; 
+        case KEY_PRESS_ONE: 
+            player->Whisper(2);
+        case KEY_PRESS_TWO:
+            break;
+        case KEY_PRESS_THREE: 
+            EntityManager::GetInstance().FindGameObjectByName("Celestine")->Whisper(1);
+        default: 
+            player->body->base_dx = 0; 
+            player->body->base_dy = 0;
+            break; 
+    }    
+}

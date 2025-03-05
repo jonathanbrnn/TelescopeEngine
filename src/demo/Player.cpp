@@ -5,6 +5,7 @@
 using namespace std; 
 
 void Player::Start() {
+    managerHub = &ManagerHub::GetInstance();
     AddBody(1, true);
     AddCollider();
 
@@ -31,6 +32,19 @@ void Player::Update() {
             Animate();
             frame_delay = 0;
         }
+    }
+
+    int horizontal = managerHub->inputManager->IsPressedDown("Horizontal"); 
+    
+    if (horizontal != 0) {
+        body->SetVelocity(horizontal, 0); 
+    }
+    else {
+        body->SetVelocity(0, 0);
+    }
+
+    if (managerHub->inputManager->IsPressedDown("Space") != 0) {
+        CreateHeart();
     }
 }
 

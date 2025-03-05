@@ -64,7 +64,7 @@ class EntityManager {
     SDL_Renderer* renderer = renderer; 
     
     //Lookup table for all game objects by name, only used for prefabs and lookup by name.  
-    unordered_map<string, GameObject*> name_objects;
+    unordered_map<string, GameObject*> name_objects; 
 };
 
 #endif
