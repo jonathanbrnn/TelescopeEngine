@@ -4,8 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/homebrew/Cellar/sdl2/2.30.10/include/SDL2",
-                "/opt/homebrew/Cellar/sdl2_image/2.8.2_2/include/SDL2"
+                "/opt/homebrew/Cellar/sdl2/2.32.2/include/SDL2",
+                "/opt/homebrew/Cellar/sdl2_image/2.8.8/include/SDL2"
             ],
             "defines": [],
             "macFrameworkPath": [
@@ -16,10 +16,10 @@
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-arm64",
             "compilerArgs": [
-                "-I/opt/homebrew/Cellar/sdl2/2.30.10/include",
-                "-I/opt/homebrew/Cellar/sdl2_image/2.8.2_2/include",
-                "-L/opt/homebrew/Cellar/sdl2/2.30.10/lib",
-                "-L/opt/homebrew/Cellar/sdl2_image/2.8.2_2/lib",
+                "-I/opt/homebrew/Cellar/sdl2/2.32.2/include",
+                "-I/opt/homebrew/Cellar/sdl2_image/2.8.8/include",
+                "-L/opt/homebrew/Cellar/sdl2/2.32.2/lib",
+                "-L/opt/homebrew/Cellar/sdl2_image/2.8.8/lib",
                 "-lSDL2",
                 "-lSDL2_image"
             ]
