@@ -11,14 +11,11 @@ Body::Body(float mass, bool use_gravity) {
 }
 
 void Body::SetVelocity(float dx, float dy) {
-    if (dx != NULL) {
-        base_dx = dx; 
-        this->dx = dy; 
-    }
-    if (dy != NULL) {
-        base_dy = dy; 
-        this->dy = dy; 
-    }
+    base_dx = dx; 
+    this->dx = dx; 
+    
+    base_dy = dy; 
+    this->dy = dy; 
 }
 
 void Body::UpdateVelocity(float delta_time) {

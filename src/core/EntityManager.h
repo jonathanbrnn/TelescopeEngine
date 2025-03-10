@@ -36,6 +36,13 @@ class EntityManager {
     // Used to instantiate new objects based on prefabs during runtime. 
     void Instantiate(string prefab_name, float pos_x = NULL, float pos_y = NULL, 
                     float pos_z = NULL, float base_dx = NULL, float base_dy = NULL);
+    
+    // Used to add a new game object during runtime. 
+    void AddNewObject(GameObject* game_object); 
+
+    // Called before all game objects are updated each frame.
+    // Pushes all game objects stored in the temporal_objects vector to the respective relevant vector.
+    void PushNewObjects();
 
     void Delete(); 
 
@@ -65,6 +72,10 @@ class EntityManager {
     
     //Lookup table for all game objects by name, only used for prefabs and lookup by name.  
     unordered_map<string, GameObject*> name_objects; 
+
+    // Vector that stores all game objects added in AddNewObject(). 
+    // Appends these objects to the relevant vectors and maps before all game objects are updated in the next frame. 
+    vector<GameObject*> temporal_objects; 
 };
 
 #endif

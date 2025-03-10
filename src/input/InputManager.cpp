@@ -4,7 +4,7 @@ using namespace std;
 
 void InputManager::UpdateInput(SDL_Event& event) {
     string key_name = SDL_GetKeyName(event.key.keysym.sym);
-    
+
     if (event.type == SDL_KEYDOWN) {        
         key_states[key_name] = true;
     }
@@ -32,7 +32,7 @@ int InputManager::IsPressedDown(string key) {
         }
     }
 
-    if (key_states["key"]) {
+    if (key_states[key]) {
         return 1; 
     }
     return 0;

@@ -70,6 +70,37 @@ void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, fl
     }
 }
 
+void EntityManager::AddNewObject(GameObject* game_object) {
+    temporal_objects.push_back(game_object); 
+}
+
+void EntityManager::PushNewObjects() {
+    if (temporal_objects.size() == 0) { return; }
+
+    for (auto game_object : temporal_objects) {
+        game_object->Start();
+        total_objects.push_back(game_object); 
+
+        if (game_object->texture != nullptr) {
+            visible_objects[game_object->pos_z].push_back(game_object); 
+        }
+
+        if (game_object->collider != nullptr) {
+            collision_objects.push_back(game_object);
+        }
+
+        if (game_object->body != nullptr) {
+            body_objects.push_back(game_object); 
+        }
+
+        if(name_objects.find(game_object->name) == name_objects.end()) {
+            name_objects[game_object->name] = game_object; 
+        }
+    }
+
+    temporal_objects.clear();
+}
+
 void EntityManager::Delete() {}
 
 void EntityManager::OnEnd() {

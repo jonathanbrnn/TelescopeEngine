@@ -5,6 +5,7 @@
 #include "../core/ManagerHub.h"
 #include "Heart.h"
 #include <iostream> 
+#include <random>
 
 using namespace std;
 
@@ -18,12 +19,15 @@ class Player : public GameObject {
         void OnCollision(Collision collision) override;
         void Whisper(int code) override; 
 
-        void Animate();
+        void Animate(); 
         void CreateHeart(); 
-        void ResetPosition();
+        void ResetPosition(); 
+        void Jump();
     
     private: 
-    ManagerHub* managerHub;
+    bool is_grounded;
+    bool is_jumping;
+
     int frame_delay = 0;
     int current_frame = -1; 
     vector<string> frames = {"/Users/jonathan/TelescopeEngine/media/images/PlayerRun1.png", "/Users/jonathan/TelescopeEngine/media/images/PlayerRun2.png", "/Users/jonathan/TelescopeEngine/media/images/PlayerRun3.png", "/Users/jonathan/TelescopeEngine/media/images/PlayerRun4.png",

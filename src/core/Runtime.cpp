@@ -17,9 +17,7 @@ void UpdateAll(SDL_Renderer* renderer) {
     bool quit = false; 
     SDL_Event event; 
 
-    ManagerHub& managerHub = ManagerHub::GetInstance(); 
-
-    GameObject* player = managerHub.entityManager->FindGameObjectByName("Jonathan");
+    ManagerHub* managerHub = &ManagerHub::GetInstance(); 
 
     while (!quit) {
         while (SDL_PollEvent(&event)) {
@@ -27,15 +25,18 @@ void UpdateAll(SDL_Renderer* renderer) {
                 quit = true; 
                 break;
             }
-            managerHub.inputManager->UpdateInput(event);
+            managerHub->inputManager->UpdateInput(event);
         }
 
-        for (auto gameObject : managerHub.entityManager->total_objects) {
+        managerHub->timeManager->UpdateTime();
+
+        managerHub->entityManager->PushNewObjects(); 
+
+        for (auto gameObject : managerHub->entityManager->total_objects) {
             gameObject->UpdateGameObject();
         }
 
-        managerHub.timeManager->UpdateTime();
-        managerHub.collisionManager->ProcessCollisions(); 
+        managerHub->collisionManager->ProcessCollisions(); 
         UpdateRenderer(renderer); 
     }
 }

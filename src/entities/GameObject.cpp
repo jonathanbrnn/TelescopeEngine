@@ -1,14 +1,4 @@
-#include <SDL_image.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <iostream>
-
-#include "../core/ManagerHub.h"
 #include "GameObject.h"
-#include "Force.h"
-#include "Body.h"
-#include "Collider.h"
-#include "TextureManager.h"
 
 using namespace std;
 
@@ -27,6 +17,8 @@ GameObject::GameObject(SDL_Renderer* renderer, string name, float pos_x, float p
     this->texture_filepath = texture_filepath;
 
     this->renderer = renderer; 
+
+    managerHub = &ManagerHub::GetInstance();
     
     // Set SDL_Rect's parameters
     rect.x = static_cast<int>(pos_x);
@@ -47,14 +39,14 @@ GameObject::GameObject(SDL_Renderer* renderer, string name, float pos_x, float p
 }
 
 void GameObject::UpdateGameObject() {
-    float delta_time = ManagerHub::GetInstance().timeManager->GetDeltaTime();
+    this->Update();
+    float delta_time = managerHub->timeManager->GetDeltaTime();
     
     if (body != nullptr) {
         body->UpdateVelocity(delta_time);
     }
 
     UpdatePosition(delta_time);
-    this->Update();
 }
 
 void GameObject::SetPosition(float pos_x, float pos_y, float pos_z) {

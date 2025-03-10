@@ -4,6 +4,7 @@
 #include "EntityManager.h"
 #include "TimeManager.h"
 #include "../entities/CollisionManager.h"
+#include "../entities/TextureManager.h"
 #include "../input/InputManager.h"
 
 class ManagerHub {
@@ -18,11 +19,12 @@ public:
         return instance;
     }
 
-    void OnStart(EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, InputManager* inputManager); 
+    void OnStart(EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager); 
 
     EntityManager* entityManager; 
     TimeManager* timeManager; 
     CollisionManager* collisionManager; 
+    TextureManager* textureManager;
     InputManager* inputManager; 
 
 private:

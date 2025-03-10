@@ -2,6 +2,7 @@
 #define INPUTMANAGER_H
 #include <SDL.h>
 #include <map>
+#include <iostream>
 
 using namespace std; 
 

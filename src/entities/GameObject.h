@@ -13,6 +13,7 @@
 using namespace std;
 
 struct Collision; 
+class ManagerHub;
 
 // GAME OBJECT: 
 
@@ -42,6 +43,9 @@ class GameObject {
         SDL_Texture* texture;
         // The area in which the texture is rendered. Defined by the pos_x, pos_y, width and height parameters. 
         SDL_Rect rect;
+
+        // Access to the ManagerHub. Used to access all Managers.
+        ManagerHub* managerHub;
 
         // POSITION: 
         // Set pos_x, pos_y and pos_z (pos_z DEFAULT=NULL).

@@ -23,5 +23,5 @@ void Heart::Animate() {
         current_frame = 0; 
     }
 
-    texture = TextureManager::GetInstance().LoadTexture(frames[current_frame], renderer);
+    texture = managerHub->textureManager->LoadTexture(frames[current_frame], renderer);
 }

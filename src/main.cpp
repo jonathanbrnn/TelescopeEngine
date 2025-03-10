@@ -12,6 +12,7 @@
 #include "entities/Force.h"
 #include "entities/GameObject.h"
 #include "entities/CollisionManager.h"
+#include "entities/TextureManager.h"
 #include "input/InputManager.h"
 #include <vector>
 #include <map>
@@ -26,12 +27,14 @@ void InitializeEngine(SDL_Window*& window, SDL_Renderer*& renderer) {
     TimeManager* timeManager = &TimeManager::GetInstance(); 
 
     CollisionManager* collisionManager = &CollisionManager::GetInstance();
+
+    TextureManager* textureManager = &TextureManager::GetInstance();
     
     InputManager* inputManager = &InputManager::GetInstance();
 
     ManagerHub* managerHub = &ManagerHub::GetInstance();
 
-    managerHub->OnStart(entityManager, timeManager, collisionManager, inputManager);
+    managerHub->OnStart(entityManager, timeManager, collisionManager, textureManager, inputManager);
     
     collisionManager->OnStart(&ManagerHub::GetInstance());
 }
@@ -50,9 +53,9 @@ int main() {
 
     InitializeEngine(window, renderer);  
 
-    Player player(renderer, "Jonathan", 200, 0, 0, 128, 128, 0, "/Users/jonathan/TelescopeEngine/media/images/PlayerRun-export.png");
+    Player player(renderer, "Jonathan", 200, 0, 0, 128, 128, 0, "/Users/jonathan/TelescopeEngine/media/images/PlayerRun1.png");
     GameObject ground(renderer, "Ground", 100, 984, -1, 2688, 96, 0, "/Users/jonathan/TelescopeEngine/media/images/ground.png");
-    Heart heart(renderer, "Heart", 3000, 3000, 2, 100, 100, 0, "/Users/jonathan/TelescopeEngine/media/images/Heart-1.png");
+    Heart heart(renderer, "Heart", 30, 30, 2, 100, 100, 0, "/Users/jonathan/TelescopeEngine/media/images/Heart-1.png");
     Celestine celestine(renderer, "Celestine", 700, 760, -2, 400, 266, 0, "/Users/jonathan/TelescopeEngine/media/images/Celestine.JPG");
 
     ground.AddCollider();
