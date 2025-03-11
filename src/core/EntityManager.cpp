@@ -8,20 +8,21 @@
 #include "EntityManager.h"
 
 EntityManager& EntityManager::GetInstance(SDL_Renderer* renderer) {
-    static EntityManager instance(renderer); 
-    return instance; 
+    static EntityManager instance(renderer);
+    return instance;
 }
 
 void EntityManager::OnStart(vector<GameObject*>& prefabs) {
     for (auto* game_object: prefabs) {
         game_object->Start();
+        game_object->CheckGameObject();
         total_objects.push_back(game_object);
 
         if (game_object->texture != nullptr) {
             visible_objects[game_object->pos_z].push_back(game_object);
         }
 
-        
+
         if (game_object->collider != nullptr) {
             collision_objects.push_back(game_object);
         }
@@ -46,7 +47,7 @@ void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, fl
     }
 
     GameObject* clone = new GameObject(renderer, prefab_name, pos_x, pos_y, pos_z, name_objects[prefab_name]->width, name_objects[prefab_name]->height, name_objects[prefab_name]->rotation, name_objects[prefab_name]->texture_filepath);
-    
+
     clone->Start();
 
     // Handle colliders and body
@@ -71,7 +72,7 @@ void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, fl
 }
 
 void EntityManager::AddNewObject(GameObject* game_object) {
-    temporal_objects.push_back(game_object); 
+    temporal_objects.push_back(game_object);
 }
 
 void EntityManager::PushNewObjects() {
@@ -79,10 +80,10 @@ void EntityManager::PushNewObjects() {
 
     for (auto game_object : temporal_objects) {
         game_object->Start();
-        total_objects.push_back(game_object); 
+        total_objects.push_back(game_object);
 
         if (game_object->texture != nullptr) {
-            visible_objects[game_object->pos_z].push_back(game_object); 
+            visible_objects[game_object->pos_z].push_back(game_object);
         }
 
         if (game_object->collider != nullptr) {
@@ -90,11 +91,11 @@ void EntityManager::PushNewObjects() {
         }
 
         if (game_object->body != nullptr) {
-            body_objects.push_back(game_object); 
+            body_objects.push_back(game_object);
         }
 
         if(name_objects.find(game_object->name) == name_objects.end()) {
-            name_objects[game_object->name] = game_object; 
+            name_objects[game_object->name] = game_object;
         }
     }
 
@@ -107,7 +108,7 @@ void EntityManager::OnEnd() {
     for (auto& game_object : total_objects) { delete game_object; }
     total_objects.clear();
 
-    for (auto& [pos_z, game_object_vector] : visible_objects) { 
+    for (auto& [pos_z, game_object_vector] : visible_objects) {
         for (auto& game_object : game_object_vector) {
             delete game_object;
         }
@@ -127,7 +128,7 @@ void EntityManager::OnEnd() {
 
 GameObject* EntityManager::FindGameObjectByName(string name) {
     if (name_objects.find(name) != name_objects.end()) {
-        return name_objects[name]; 
+        return name_objects[name];
     }
     else {
         cout << "ENTITYMANAGER: Warning game object with the name: '" << name << "' could not be found!" << endl;
@@ -136,6 +137,6 @@ GameObject* EntityManager::FindGameObjectByName(string name) {
 
 EntityManager::EntityManager (SDL_Renderer*& renderer) : renderer(renderer) {
     if (!renderer) {
-        throw runtime_error("ENTITYMANAGER: Renderer cannot be null when initializing EntityManager!"); 
+        throw runtime_error("ENTITYMANAGER: Renderer cannot be null when initializing EntityManager!");
     }
 }

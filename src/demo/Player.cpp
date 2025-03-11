@@ -1,34 +1,36 @@
 #include "Player.h"
 #include <iostream>
+#include <vector>
 
-using namespace std; 
+using namespace std;
 
 void Player::Start() {
     AddBody(1, true);
     AddCollider();
+    AddAnimator();
 
-    TextureManager* textureManager = &TextureManager::GetInstance(); 
 
-    for (string frame : frames) {
-        textureManager->LoadTexture(frame, renderer);
-    }
+    cout << animator->animation_state_count << endl;
+    // Add this objects animations.
+    animator->AddState("idle", idle, 5);
+    animator->AddState("walking", walking, 5);
+    cout << animator->animation_state_count << endl;
 }
 
 void Player::Update() {
-    bool is_walking = body->dx != 0; 
+    bool is_walking = body->dx != 0;
 
     if (is_walking) {
-        frame_delay += 1;
-        if (frame_delay % 5 == 0 ) {
-            Animate();
-            frame_delay = 0;
-        }
+        animator->SetState("walking");
+    }
+    else {
+        animator->SetState("idle");
     }
 
-    int horizontal = managerHub->inputManager->IsPressedDown("Horizontal"); 
-    
+    int horizontal = managerHub->inputManager->IsPressedDown("Horizontal");
+
     if (horizontal != 0) {
-        body->SetVelocity(horizontal * 3, 0); 
+        body->SetVelocity(horizontal * 3, 0);
     }
     else {
         body->SetVelocity(0, 0);
@@ -54,44 +56,32 @@ void Player::OnCollision(Collision collision) {
     }
 
     if (collision.collision_side == BOTTOM) {
-        is_grounded = true; 
-        is_jumping = false; 
+        is_grounded = true;
+        is_jumping = false;
     }
 }
 
 void Player::Whisper(int code) {
     switch (code) {
-        case 1: 
-        CreateHeart(); 
+        case 1:
+        CreateHeart();
         break;
-        case 2: 
+        case 2:
         ResetPosition();
         break;
     }
 }
 
-// This is a mockup animator not intended as an actual feature: 
-
-void Player::Animate() {
-    current_frame += 1;
-
-    if (current_frame >= frames.size()) {
-        current_frame = 0;
-    }
-
-    texture = TextureManager::GetInstance().LoadTexture(frames[current_frame], renderer); 
-}
-
 void Player::CreateHeart() {
-    random_device rd;  
-    mt19937 gen(rd()); 
+    random_device rd;
+    mt19937 gen(rd());
     uniform_int_distribution<int> dist(50, 200);
 
     int scale = dist(gen);
 
-    Heart* clone = new Heart(renderer, "Heart_clone", pos_x + (width / 2), pos_y, 2, scale, scale, 0, "/Users/jonathan/TelescopeEngine/media/images/Heart-1.png"); 
+    Heart* clone = new Heart(renderer, "Heart_clone", pos_x + (width / 2), pos_y, 2, scale, scale, 0, "/Users/jonathan/TelescopeEngine/media/images/Heart-1.png");
 
-    managerHub->entityManager->AddNewObject(clone); 
+    managerHub->entityManager->AddNewObject(clone);
 }
 
 void Player::ResetPosition() {

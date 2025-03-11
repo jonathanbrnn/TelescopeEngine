@@ -3,29 +3,29 @@
 using namespace std;
 
 GameObject::GameObject(SDL_Renderer* renderer, string name, float pos_x, float pos_y, float pos_z, float width, float height, float rotation, string texture_filepath) {
-    this->name = name; 
-    
-    this->pos_x = pos_x; 
-    this->pos_y = pos_y; 
+    this->name = name;
+
+    this->pos_x = pos_x;
+    this->pos_y = pos_y;
     this->pos_z = pos_z;
 
-    this->width = width; 
-    this->height = height; 
-    
+    this->width = width;
+    this->height = height;
+
     this->rotation = rotation;
 
     this->texture_filepath = texture_filepath;
 
-    this->renderer = renderer; 
+    this->renderer = renderer;
 
     managerHub = &ManagerHub::GetInstance();
-    
+
     // Set SDL_Rect's parameters
     rect.x = static_cast<int>(pos_x);
     rect.y = static_cast<int>(pos_y);
     rect.w = static_cast<int>(width);
     rect.h = static_cast<int>(height);
-    
+
     if (texture_filepath != "") {
         // Set texture of this instance
         texture = TextureManager::GetInstance().LoadTexture(texture_filepath, renderer);
@@ -34,27 +34,40 @@ GameObject::GameObject(SDL_Renderer* renderer, string name, float pos_x, float p
         }
     }
     else {
-        texture = nullptr; 
+        texture = nullptr;
+    }
+}
+
+void GameObject::CheckGameObject() {
+    if (animator != nullptr && animator->animation_state_count == 0) {
+        cout << "GAMEOBJECT: " << name << " has an animator attached to it but no animation states set." << endl;
+        cout << "Use animator->AddState(...) in this objects Start() method to add at least one state." << endl;
     }
 }
 
 void GameObject::UpdateGameObject() {
     this->Update();
     float delta_time = managerHub->timeManager->GetDeltaTime();
-    
+
     if (body != nullptr) {
         body->UpdateVelocity(delta_time);
     }
 
     UpdatePosition(delta_time);
+
+    if (animator != nullptr) {
+        if (animator->UpdateAnimator() != 0) {
+            texture = managerHub->textureManager->LoadTexture(animator->current_frame, renderer);
+        }
+    }
 }
 
 void GameObject::SetPosition(float pos_x, float pos_y, float pos_z) {
     rect.x = static_cast<int>(pos_x);
     rect.y = static_cast<int>(pos_y);
-    
-    this->pos_x = pos_x; 
-    this->pos_y = pos_y; 
+
+    this->pos_x = pos_x;
+    this->pos_y = pos_y;
     if (pos_z != NULL) {
         this->pos_z = pos_z;
     }
@@ -69,11 +82,11 @@ void GameObject::SetPosition(float pos_x, float pos_y, float pos_z) {
 
 void GameObject::UpdatePosition(float delta_time) {
     if (body != nullptr) {
-        rect.x += body->dx * delta_time * 100; 
-        rect.y += body->dy * delta_time * 100; 
+        rect.x += body->dx * delta_time * 100;
+        rect.y += body->dy * delta_time * 100;
 
-        pos_x = rect.x; 
-        pos_y = rect.y; 
+        pos_x = rect.x;
+        pos_y = rect.y;
 
         if (collider != nullptr) {
             collider->a = {pos_x, pos_y};
@@ -86,10 +99,10 @@ void GameObject::UpdatePosition(float delta_time) {
 
 void GameObject::AddCollider() {
     if (collider == nullptr) {
-        collider = new Collider({pos_x, pos_y}, {pos_x, pos_x + height}, {pos_x + width, pos_y + height}, {pos_x + width, pos_y}); 
+        collider = new Collider({pos_x, pos_y}, {pos_x, pos_x + height}, {pos_x + width, pos_y + height}, {pos_x + width, pos_y});
     }
     else {
-        cout << "GAMEOBJECT: The object " << name << " already has a collider attached to it!" << endl; 
+        cout << "GAMEOBJECT: The object " << name << " already has a collider attached to it!" << endl;
     }
 }
 
@@ -99,5 +112,14 @@ void GameObject::AddBody(float mass, bool use_gravity) {
     }
     else {
         cout << "GAMEOBJECT: The object " << name << " already has a body attached to it!" << endl;
+    }
+}
+
+void GameObject::AddAnimator() {
+    if (animator == nullptr) {
+        animator = new Animator();
+    }
+    else {
+        cout << "GAMEOBJECT: The object " << name << " already has an animator attached to it!" << endl;
     }
 }

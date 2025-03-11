@@ -4,41 +4,54 @@
 #include <map>
 #include <iostream>
 
-using namespace std; 
+using namespace std;
 
 class InputManager {
-    public: 
-    InputManager(const InputManager&) = delete; 
-    InputManager& operator=(const InputManager&) = delete; 
+    public:
+    InputManager(const InputManager&) = delete;
+    InputManager& operator=(const InputManager&) = delete;
     static InputManager& GetInstance() {
-        static InputManager instance; 
+        static InputManager instance;
         return instance;
-    }; 
+    };
 
-    void UpdateInput(SDL_Event& event); 
+    void ResetIsPressed();
+
+    void UpdateInputManager(SDL_Event& event);
 
     // Returns wether or not a key is currently being pressed or held down (0 = not pressed, !0 = pressed).
     //
     // Special case "Horizontal" and "Vertical"
-    // "Horizontal" ("A", "D", "Left", "Right") and "Vertical" ("W", "S", "Up", "Down"). 
+    // "Horizontal" ("A", "D", "Left", "Right") and "Vertical" ("W", "S", "Up", "Down").
     // Returns -1 for "Horizontal" ("A", "Left") and "Vertical" ("W", "Up") and 1 for "Horizontal" ("D", "Right") and "Vertical" ("S", "Down").
-    int IsPressedDown(string key); 
+    int IsPressedDown(string key);
 
-    private: 
-    explicit InputManager() {} 
+    // Returns wether or not a key is currently being pressed (0 = not pressed. !0 = pressed). Does not register again if the user is holding the key down.
+    //
+    // Special case "Horizontal" and "Vertical"
+    // "Horizontal" ("A", "D", "Left", "Right") and "Vertical" ("W", "S", "Up", "Down").
+    // Returns -1 for "Horizontal" ("A", "Left") and "Vertical" ("W", "Up") and 1 for "Horizontal" ("D", "Right") and "Vertical" ("S", "Down").
+    int IsPressed(string key);
 
+    private:
+    explicit InputManager() {}
+
+    // Keeps track of all key states. Returns true if a key is pressed or held down, false otherwise.
     map<string, bool> key_states = {
-        {"Escape", false}, {"^", false}, {"1", false}, {"2", false}, {"3", false}, {"4", false}, {"5", false}, 
-        {"6", false}, {"7", false}, {"8", false}, {"9", false}, {"0", false}, {"ß", false}, {"´", false}, 
-        {"Backspace", false}, {"Tab", false}, {"Q", false}, {"W", false}, {"E", false}, {"R", false}, {"T", false}, 
-        {"Z", false}, {"U", false}, {"I", false}, {"O", false}, {"P", false}, {"ü", false}, {"+", false}, 
-        {"Return", false}, {"CapsLock", false}, {"A", false}, {"S", false}, {"D", false}, {"F", false}, {"G", false}, 
-        {"H", false}, {"J", false}, {"K", false}, {"L", false}, {"ö", false}, {"ä", false}, {"#", false}, 
-        {"Left Shift", false}, {"<", false}, {"Y", false}, {"X", false}, {"C", false}, {"V", false}, {"B", false}, 
-        {"N", false}, {"M", false}, {",", false}, {".", false}, {"-", false}, {"Right Shift", false}, 
-        {"Left Ctrl", false}, {"Left Option", false}, {"Left Command", false}, {"Space", false}, 
+        {"Escape", false}, {"^", false}, {"1", false}, {"2", false}, {"3", false}, {"4", false}, {"5", false},
+        {"6", false}, {"7", false}, {"8", false}, {"9", false}, {"0", false}, {"ß", false}, {"´", false},
+        {"Backspace", false}, {"Tab", false}, {"Q", false}, {"W", false}, {"E", false}, {"R", false}, {"T", false},
+        {"Z", false}, {"U", false}, {"I", false}, {"O", false}, {"P", false}, {"ü", false}, {"+", false},
+        {"Return", false}, {"CapsLock", false}, {"A", false}, {"S", false}, {"D", false}, {"F", false}, {"G", false},
+        {"H", false}, {"J", false}, {"K", false}, {"L", false}, {"ö", false}, {"ä", false}, {"#", false},
+        {"Left Shift", false}, {"<", false}, {"Y", false}, {"X", false}, {"C", false}, {"V", false}, {"B", false},
+        {"N", false}, {"M", false}, {",", false}, {".", false}, {"-", false}, {"Right Shift", false},
+        {"Left Ctrl", false}, {"Left Option", false}, {"Left Command", false}, {"Space", false},
         {"Right Command", false}, {"Right Option", false}, {"Left", false}, {"Up", false}, {"Down", false}, {"Right", false}
     };
+
+    // Holds all keys that were pressed during the current frame. Is reset at the start of each frame.
+    map<string, bool> current_frame_keys;
 };
 
 #endif

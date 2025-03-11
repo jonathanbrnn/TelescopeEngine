@@ -11,32 +11,34 @@
 #include "../entities/GameObject.h"
 #include "../entities/CollisionManager.h"
 
-using namespace std; 
+using namespace std;
 
 void UpdateAll(SDL_Renderer* renderer) {
-    bool quit = false; 
-    SDL_Event event; 
+    bool quit = false;
+    SDL_Event event;
 
-    ManagerHub* managerHub = &ManagerHub::GetInstance(); 
+    ManagerHub* managerHub = &ManagerHub::GetInstance();
 
     while (!quit) {
+        managerHub->inputManager->ResetIsPressed();
+
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
-                quit = true; 
+                quit = true;
                 break;
             }
-            managerHub->inputManager->UpdateInput(event);
+            managerHub->inputManager->UpdateInputManager(event);
         }
 
         managerHub->timeManager->UpdateTime();
 
-        managerHub->entityManager->PushNewObjects(); 
+        managerHub->entityManager->PushNewObjects();
 
         for (auto gameObject : managerHub->entityManager->total_objects) {
             gameObject->UpdateGameObject();
         }
 
-        managerHub->collisionManager->ProcessCollisions(); 
-        UpdateRenderer(renderer); 
+        managerHub->collisionManager->ProcessCollisions();
+        UpdateRenderer(renderer);
     }
 }
