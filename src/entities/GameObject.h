@@ -16,6 +16,11 @@ using namespace std;
 struct Collision;
 class ManagerHub;
 
+enum FlipMode {
+    FLIP_HORIZONTAL,
+    FLIP_VERTICAL
+};
+
 // GAME OBJECT:
 
 class GameObject {
@@ -42,6 +47,16 @@ class GameObject {
         string texture_filepath;
         // The objects texture.
         SDL_Texture* texture;
+
+        // Wether or not the texture should be flipped.
+        bool flip_texture;
+
+        // How the texture should be flipped.
+        FlipMode flip_mode;
+
+        // STILL UNDER DEVELOPMENT - CURRENTLY ONLY ABLE TO FLIP EITHER (!) HORIZONTALLY OR VERTICALLY.
+        void FlipTexture(FlipMode flip_mode = FLIP_HORIZONTAL, bool flip_texture = false);
+
         // The area in which the texture is rendered. Defined by the pos_x, pos_y, width and height parameters.
         SDL_Rect rect;
 
@@ -79,7 +94,7 @@ class GameObject {
         // CONSTRUCTOR:
         // Set texture_filepath to "" to make it invisible.
         GameObject(SDL_Renderer* renderer, string name, float pos_x = 0, float pos_y = 0, float pos_z = 0, float width = 1,
-            float height = 1, float rotation = 0, string texture_filepath = "/Users/jonathan/TelescopeEngine/media/sample_640×426.bmp");
+            float height = 1, float rotation = 0, string texture_filepath = "/Users/admin/TelescopeEngine/media/sample_640×426.bmp");
 
         // Called before the first frame and after Start().
         // Checks if the game object is correctly configured.

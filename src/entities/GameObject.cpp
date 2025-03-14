@@ -62,6 +62,11 @@ void GameObject::UpdateGameObject() {
     }
 }
 
+void GameObject::FlipTexture(FlipMode flip_mode, bool flip_texture) {
+    this->flip_mode = flip_mode;
+    this->flip_texture = flip_texture;
+}
+
 void GameObject::SetPosition(float pos_x, float pos_y, float pos_z) {
     rect.x = static_cast<int>(pos_x);
     rect.y = static_cast<int>(pos_y);

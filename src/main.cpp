@@ -19,7 +19,7 @@
 
 
 void InitializeEngine(SDL_Window*& window, SDL_Renderer*& renderer) {
-    window = InitializeWindow(600, 600);
+    window = InitializeWindow(1440, 900);
     renderer = InitializeRenderer(window);
 
     EntityManager* entityManager = &EntityManager::GetInstance(renderer);
@@ -53,10 +53,10 @@ int main() {
 
     InitializeEngine(window, renderer);
 
-    Player player(renderer, "Jonathan", 200, 0, 0, 64, 64, 0, "/Users/admin/TelescopeEngine/media/images/PlayerRun1.png");
-    GameObject ground(renderer, "Ground", 0, 200, -1, 2688, 96, 0, "/Users/admin/TelescopeEngine/media/images/ground.png");
-    Heart heart(renderer, "Heart", 30, 30, 2, 100, 100, 0, "/Users/jonathan/admin/media/images/Heart-1.png");
-    Celestine celestine(renderer, "Celestine", 300, 300, -2, 200, 133, 0, "/Users/admin/TelescopeEngine/media/images/Celestine.JPG");
+    Player player(renderer, "Jonathan", 450, 0, 0, 128, 128, 0, "/Users/admin/TelescopeEngine/media/images/PlayerRun1.png");
+    GameObject ground(renderer, "Ground", -100, 804, -1, 2688, 96, 0, "/Users/admin/TelescopeEngine/media/images/ground.png");
+    GameObject background(renderer, "Background", 0, 0, -2, 1440, 900, 0, "/Users/admin/TelescopeEngine/media/images/clouds_background.png");
+    Celestine celestine(renderer, "Celestine", 620, 671, -2, 200, 133, 0, "/Users/admin/TelescopeEngine/media/images/Celestine.JPG");
 
     ground.AddCollider();
 
@@ -64,7 +64,7 @@ int main() {
 
     prefabs.push_back(&player);
     prefabs.push_back(&ground);
-    prefabs.push_back(&heart);
+    prefabs.push_back(&background);
     prefabs.push_back(&celestine);
 
     if (managerHub->entityManager != nullptr) {

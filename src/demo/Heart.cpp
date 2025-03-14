@@ -1,27 +1,22 @@
 #include "Heart.h"
 
 void Heart::Start() {
-    AddBody(1, false); 
-    body->ApplyForce(-2, 3, QUADRATIC_EASE_IN, AXIS_Y);
+    AddBody(1, false);
+    AddAnimator();
+    animator->AddState("default", default_anim, 5);
+    animator->AddState("break", breaking_anim, 5);
+    animator->SetState("default");
 }
 
 void Heart::Update() {
-    frame_delay += 1; 
-
-    if (frame_delay % 5 == 0) {
-        Animate(); 
-        frame_delay = 0; 
+    if (is_broken && animator->OnAnimationEnd() != 0) {
+        SetPosition(30000, 30000);
     }
+}
+
+void Heart::Break() {
+    is_broken = true;
+    animator->SetState("break");
 }
 
 void Heart::OnCollision(Collision collision) {}
-
-void Heart::Animate() {
-    current_frame += 1; 
-
-    if (current_frame >= frames.size()) {
-        current_frame = 0; 
-    }
-
-    texture = managerHub->textureManager->LoadTexture(frames[current_frame], renderer);
-}

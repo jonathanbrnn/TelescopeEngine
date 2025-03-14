@@ -55,7 +55,7 @@ void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, fl
     if (clone->body != nullptr) {
         if (base_dx == NULL) { base_dx = clone->body->base_dx; }
         if (base_dy == NULL) { base_dy = clone->body->base_dy; }
-        clone->body->SetVelocity(base_dx, base_dy);
+        clone->body->SetVelocityBothAxis(base_dx, base_dy);
     }
 
     // Store it
