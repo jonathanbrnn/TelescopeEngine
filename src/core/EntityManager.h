@@ -13,70 +13,76 @@
 #include <tuple>
 #include <map>
 
-using namespace std; 
+using namespace std;
 
 class GameObject;
-struct Collider; 
-class Body; 
+struct Collider;
+class Body;
 enum ForceMode;
-enum ForceAxis; 
-class Force; 
+enum ForceAxis;
+class Force;
 
 class EntityManager {
-    public: 
-    explicit EntityManager(SDL_Renderer*& renderer); 
+    public:
+    explicit EntityManager(SDL_Renderer*& renderer);
 
-    // Returns the EntityManager. 
+    // Returns the EntityManager.
     // EntityManager is implemented using the singleton pattern.
-    static EntityManager& GetInstance(SDL_Renderer* renderer = nullptr); 
-    
-    // Called before the first frame to collect all game objects.
-    void OnStart(vector<GameObject*>& prefabs); 
+    static EntityManager& GetInstance(SDL_Renderer* renderer = nullptr);
 
-    // Used to instantiate new objects based on prefabs during runtime. 
-    void Instantiate(string prefab_name, float pos_x = NULL, float pos_y = NULL, 
+    // Called before the first frame to collect all game objects.
+    void OnStart(vector<GameObject*>& prefabs);
+
+    // Used to instantiate new objects based on prefabs during runtime.
+    void Instantiate(string prefab_name, float pos_x = NULL, float pos_y = NULL,
                     float pos_z = NULL, float base_dx = NULL, float base_dy = NULL);
-    
-    // Used to add a new game object during runtime. 
-    void AddNewObject(GameObject* game_object); 
+
+    // Used to add a new game object during runtime.
+    void AddNewObject(GameObject* game_object);
 
     // Called before all game objects are updated each frame.
     // Pushes all game objects stored in the temporal_objects vector to the respective relevant vector.
     void PushNewObjects();
 
-    void Delete(); 
+    // Deletes a game object by name.
+    void Delete(string name);
 
-    void OnEnd(); 
+    // Deletes all game objects in the temporal_to_delete vector each frame.
+    void DeleteObjects();
 
-    GameObject* FindGameObjectByName(string name); 
+    void OnEnd();
 
-    // All objects in the game. 
-    vector<GameObject*> total_objects; 
+    GameObject* FindGameObjectByName(string name);
 
-    // All objects that are visible. 
-    // Passed to the renderer. Sorted by their z-coordinate. 
-    map<int, vector<GameObject*>> visible_objects; 
+    // All objects in the game.
+    vector<GameObject*> total_objects;
+
+    // All objects that are visible.
+    // Passed to the renderer. Sorted by their z-coordinate.
+    map<int, vector<GameObject*>> visible_objects;
 
     // all objects that hold a collider
-    vector<GameObject*> collision_objects; 
+    vector<GameObject*> collision_objects;
 
     // all objects that have a body
-    vector<GameObject*> body_objects; 
- 
-    private: 
+    vector<GameObject*> body_objects;
 
-    EntityManager(const EntityManager&) = delete; 
-    EntityManager& operator=(const EntityManager&) = delete; 
+    private:
 
-    SDL_Renderer* renderer = renderer; 
-    
-    //Lookup table for all game objects by name, only used for prefabs and lookup by name.  
-    unordered_map<string, GameObject*> name_objects; 
+    EntityManager(const EntityManager&) = delete;
+    EntityManager& operator=(const EntityManager&) = delete;
 
-    // Vector that stores all game objects added in AddNewObject(). 
-    // Appends these objects to the relevant vectors and maps before all game objects are updated in the next frame. 
-    vector<GameObject*> temporal_objects; 
+    SDL_Renderer* renderer = renderer;
+
+    //Lookup table for all game objects by name, only used for prefabs and lookup by name.
+    unordered_map<string, GameObject*> name_objects;
+
+    // Vector that stores all game objects added in AddNewObject().
+    // Appends these objects to the relevant vectors and maps before all game objects are updated in the next frame.
+    vector<GameObject*> temporal_objects;
+
+    // Vector that stores all game objects that were "deleted" this frame.
+    vector<string> temporal_to_delete;
 };
 
 #endif
- 

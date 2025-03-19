@@ -128,3 +128,11 @@ void GameObject::AddAnimator() {
         cout << "GAMEOBJECT: The object " << name << " already has an animator attached to it!" << endl;
     }
 }
+
+GameObject::~GameObject() {
+    OnDeletion();
+
+    if (animator != nullptr) {
+        delete animator;
+    }
+}

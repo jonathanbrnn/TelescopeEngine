@@ -10,7 +10,7 @@ void Heart::Start() {
 
 void Heart::Update() {
     if (is_broken && animator->OnAnimationEnd() != 0) {
-        SetPosition(30000, 30000);
+        managerHub->entityManager->Delete(name);
     }
 }
 

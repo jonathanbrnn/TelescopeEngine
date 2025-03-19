@@ -103,8 +103,6 @@ class GameObject {
         // Calls all relevant functions that need to be updated each frame.
         void UpdateGameObject();
 
-        virtual ~GameObject() {}
-
         // Called before the first frame update.
         virtual void Start() {}
 
@@ -119,6 +117,12 @@ class GameObject {
         // Provides a collision object that contains information about: the contacts name, its impact velocity, the impact velocity of this object,
         // the side the contact is located at (TOP, BOTTOM, LEFT, RIGHT) and an approximation of the collision point.
         virtual void OnCollision(Collision collison) {}
+
+        // Called upon deleting the game object from memory.
+        // Use this to clean up any added properties.
+        virtual void OnDeletion() {}
+
+        ~GameObject();
 };
 
 #endif

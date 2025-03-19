@@ -102,7 +102,59 @@ void EntityManager::PushNewObjects() {
     temporal_objects.clear();
 }
 
-void EntityManager::Delete() {}
+void EntityManager::Delete(string name) {
+    temporal_to_delete.push_back(name);
+}
+
+void EntityManager::DeleteObjects() {
+    for (auto name : temporal_to_delete) {
+        GameObject* to_delete = FindGameObjectByName(name);
+
+        if (to_delete) {
+            for (auto it = total_objects.begin(); it != total_objects.end(); ++it) {
+                if ((*it)->name == name) {
+                    total_objects.erase(it);
+                    break;
+                }
+            }
+
+            name_objects.erase(name);
+
+            auto& visible_list = visible_objects[to_delete->pos_z];
+            for (auto it = visible_list.begin(); it != visible_list.end(); ++it) {
+                if ((*it)->name == name) {
+                    visible_list.erase(it);
+                    break;
+                }
+            }
+
+            if (to_delete->collider) {
+                for (auto it = collision_objects.begin(); it != collision_objects.end(); ++it) {
+                    if ((*it)->name == name) {
+                        collision_objects.erase(it);
+                        break;
+                    }
+                }
+            }
+
+            if (to_delete->body) {
+                for (auto it = body_objects.begin(); it != body_objects.end(); ++it) {
+                    if ((*it)->name == name) {
+                        body_objects.erase(it);
+                        break;
+                    }
+                }
+            }
+
+            delete to_delete;
+        }
+        else {
+            cout << "ENTITYMANAGER: Warning! Object with name: " << name << " could not be deleted because it wasn't found. Did you enter the name in correctly?" << endl;
+        }
+    }
+
+    temporal_to_delete.clear();
+}
 
 void EntityManager::OnEnd() {
     for (auto& game_object : total_objects) { delete game_object; }

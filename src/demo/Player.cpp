@@ -80,7 +80,7 @@ void Player::Update() {
     }
 
     if (managerHub->inputManager->IsPressed("T") != 0) {
-        body->ApplyForce(1, 1.5);
+        body->ApplyForce(1, 0.5);
     }
 
     if (managerHub->inputManager->IsPressed("U") != 0) {

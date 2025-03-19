@@ -40,5 +40,7 @@ void UpdateAll(SDL_Renderer* renderer) {
 
         managerHub->collisionManager->ProcessCollisions();
         UpdateRenderer(renderer);
+
+        managerHub->entityManager->DeleteObjects();
     }
 }
