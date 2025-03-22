@@ -24,9 +24,6 @@ class Body {
     bool use_gravity = true;
     float gravity_force = 5;
 
-    // Stores all active forces.
-    vector<Force> forces;
-
     // VELOCITY:
     // Set's the dx, dy, base_dx and base_dy of the object.
     // dx DEFAULT=NULL
@@ -41,6 +38,9 @@ class Body {
     // (!) must be passed the current delta time.
     void UpdateVelocity(float delta_time);
 
+    // Deletes all expired forces at the end of each frame.
+    void DeleteForces();
+
     // FORCE'S:
     // Add's a new force to the forces vector. Used to apply a new force to the body.
     // update_mode determines the way the intensity of the force changes during it's lifetime (DEFAULT=LINEAR).
@@ -51,5 +51,13 @@ class Body {
     // mass DEFAULT=1
     // use_gravity DEFAULT=true
     Body(float mass = 1, bool use_gravity = true);
+
+    private:
+    // Stores all active forces.
+    vector<Force*> forces;
+
+    // Stores the indices of all forces that have expired this frame.
+    // Used to delete the forces at the end of the frame.
+    vector<int> expired_forces_indices;
 };
 #endif

@@ -4,6 +4,7 @@
 #include "demo/Player.h"
 #include "demo/Heart.h"
 #include "demo/Celestine.h"
+#include "demo/Spikes.h"
 #include "core/ManagerHub.h"
 #include "core/EntityManager.h"
 #include "core/TimeManager.h"
@@ -53,19 +54,25 @@ int main() {
 
     InitializeEngine(window, renderer);
 
-    Player player(renderer, "Jonathan", 450, 0, 0, 128, 128, 0, "/Users/admin/TelescopeEngine/media/images/PlayerRun1.png");
-    GameObject ground(renderer, "Ground", -100, 804, -1, 2688, 96, 0, "/Users/admin/TelescopeEngine/media/images/ground.png");
-    GameObject background(renderer, "Background", 0, 0, -2, 1440, 900, 0, "/Users/admin/TelescopeEngine/media/images/clouds_background.png");
-    Celestine celestine(renderer, "Celestine", 620, 671, -2, 200, 133, 0, "/Users/admin/TelescopeEngine/media/images/Celestine.JPG");
+    Player* player = new Player(renderer, "Jonathan", 450, 0, 0, 128, 128, 0, "/Users/admin/TelescopeEngine/media/images/PlayerRun1.png");
+    GameObject* ground_left = new GameObject(renderer, "ground_left", 0, 366, -1, 221, 534, 0, "/Users/admin/TelescopeEngine/media/images/ground_left.png");
+    GameObject* ground_right_bottom = new GameObject(renderer, "ground_right_bottom", 950, 717, -1, 187, 183, 0, "/Users/admin/TelescopeEngine/media/images/ground_right_bottom.png");
+    GameObject* ground_right_top = new GameObject(renderer, "ground_right_top", 977, 672, -1, 463, 228, 0, "/Users/admin/TelescopeEngine/media/images/ground_right_top.png");
+    GameObject* background = new GameObject(renderer, "background", 0, 0, -2, 1440, 900, 0, "/Users/admin/TelescopeEngine/media/images/background_white.png");
+    Spikes* spikes = new Spikes(renderer, "Spikes", 1200, 200, 0, 100, 55, 0, "/Users/admin/TelescopeEngine/media/images/spikes-walking-1.png");
 
-    ground.AddCollider();
+    ground_left->AddCollider();
+    ground_right_bottom->AddCollider();
+    ground_right_top->AddCollider();
 
     vector<GameObject*> prefabs;
 
-    prefabs.push_back(&player);
-    prefabs.push_back(&ground);
-    prefabs.push_back(&background);
-    prefabs.push_back(&celestine);
+    prefabs.push_back(player);
+    prefabs.push_back(ground_left);
+    prefabs.push_back(ground_right_bottom);
+    prefabs.push_back(ground_right_top);
+    prefabs.push_back(background);
+    prefabs.push_back(spikes);
 
     if (managerHub->entityManager != nullptr) {
         cout << "WOOOHOOO!" << endl;

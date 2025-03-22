@@ -31,6 +31,7 @@ SRCS = main.cpp \
 		demo/Player.cpp \
 		demo/Heart.cpp \
 		demo/Celestine.cpp \
+		demo/Spikes.cpp \
 		core/EntityManager.cpp \
 		core/ManagerHub.cpp \
 		core/Runtime.cpp \

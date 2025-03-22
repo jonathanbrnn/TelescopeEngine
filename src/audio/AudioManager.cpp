@@ -1,8 +1,10 @@
+#include "AudioManager.h"
 #include <SDL.h>
 #include <iostream>
 
-using namespace std; 
+using namespace std;
 
-void LoadAudio(string filepath) {
-    
+AudioManager& AudioManager::GetInstance() {
+    static AudioManager instance;
+    return instance;
 }

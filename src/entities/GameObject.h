@@ -54,8 +54,8 @@ class GameObject {
         // How the texture should be flipped.
         FlipMode flip_mode;
 
-        // STILL UNDER DEVELOPMENT - CURRENTLY ONLY ABLE TO FLIP EITHER (!) HORIZONTALLY OR VERTICALLY.
-        void FlipTexture(FlipMode flip_mode = FLIP_HORIZONTAL, bool flip_texture = false);
+        // STILL UNDER DEVELOPMENT - CURRENTLY ONLY ABLE TO FLIP EITHER (!) HORIZONTALLY OR VERTICALLY WITH ONE CALL.
+        void FlipTexture(FlipMode flip_mode = FLIP_HORIZONTAL, bool flip_texture = true);
 
         // The area in which the texture is rendered. Defined by the pos_x, pos_y, width and height parameters.
         SDL_Rect rect;

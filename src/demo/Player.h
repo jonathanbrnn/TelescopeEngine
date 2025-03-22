@@ -23,13 +23,15 @@ class Player : public GameObject {
         void CreateHeart();
         void ResetPosition();
         void Jump();
+        void Walk();
+        void TakeDamage();
 
     private:
     vector<Heart*> hearts;
     int current_heart;
 
     bool is_grounded;
-    bool is_jumping;
+    int jumps = 2;
 
     vector<string> idle = {"/Users/admin/TelescopeEngine/media/images/Heart-1.png", "/Users/admin/TelescopeEngine/media/images/Heart-2.png", "/Users/admin/TelescopeEngine/media/images/Heart-3.png", "/Users/admin/TelescopeEngine/media/images/Heart-4.png"};
     vector<string> walking = {"/Users/admin/TelescopeEngine/media/images/PlayerRun1.png", "/Users/admin/TelescopeEngine/media/images/PlayerRun2.png", "/Users/admin/TelescopeEngine/media/images/PlayerRun3.png", "/Users/admin/TelescopeEngine/media/images/PlayerRun4.png",

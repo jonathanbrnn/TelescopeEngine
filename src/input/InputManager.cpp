@@ -47,22 +47,29 @@ int InputManager::IsPressed(string key) {
     if (current_frame_keys[key]) {
         if (key == "Horizontal") {
             if (current_frame_keys["A"] || current_frame_keys["Left"]) {
+                current_frame_keys[key] = false;
                 return -1;
             }
             if (current_frame_keys["D"] || current_frame_keys["Right"]) {
+                current_frame_keys[key] = false;
                 return 1;
             }
         }
         else if (key == "Vertical") {
             if (current_frame_keys["W"] || current_frame_keys["Up"]) {
+                current_frame_keys[key] = false;
                 return -1;
             }
             if (current_frame_keys["S"] || current_frame_keys["Down"]) {
+                current_frame_keys[key] = false;
                 return 1;
             }
         }
 
+        current_frame_keys[key] = false;
         return 1;
     }
+
+    current_frame_keys[key] = false;
     return 0;
 }

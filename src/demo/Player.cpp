@@ -30,6 +30,32 @@ void Player::Start() {
 }
 
 void Player::Update() {
+
+    Walk();
+    Jump();
+
+
+    if (managerHub->inputManager->IsPressed("H") != 0) {
+        CreateHeart();
+    }
+
+    if (pos_y > 1100) {
+        TakeDamage();
+    }
+}
+
+void Player::TakeDamage() {
+    if (current_heart >= 0) {
+        hearts[current_heart]->Break();
+        current_heart -= 1 ;
+        ResetPosition();
+    }
+    else {
+        managerHub->entityManager->Delete("Jonathan");
+    }
+}
+
+void Player::Walk() {
     bool is_walking = body->dx != 0;
 
     if (body->dx < 0) {
@@ -54,57 +80,19 @@ void Player::Update() {
     else {
         body->SetDX(0);
     }
-
-    if (managerHub->inputManager->IsPressedDown("Space") != 0 && is_grounded && !is_jumping) {
-        Jump();
-    }
-
-    if (managerHub->inputManager->IsPressed("H") != 0) {
-        CreateHeart();
-    }
-
-    if (managerHub->inputManager->IsPressedDown("1") != 0) {
-        ResetPosition();
-    }
-
-    if (managerHub->inputManager->IsPressed("L") != 0) {
-        animator->Stop();
-    }
-
-    if (managerHub->inputManager->IsPressed("O") != 0) {
-        animator->Play();
-    }
-
-    if (managerHub->inputManager->IsPressed("P") != 0) {
-        animator->PlayFrom("wave", 2);
-    }
-
-    if (managerHub->inputManager->IsPressed("T") != 0) {
-        body->ApplyForce(1, 0.5);
-    }
-
-    if (managerHub->inputManager->IsPressed("U") != 0) {
-        if (current_heart >= 0) {
-            hearts[current_heart]->Break();
-            current_heart -= 1 ;
-        }
-    }
-}
-
-void TakeDamage() {
-
 }
 
 void Player::OnCollision(Collision collision) {
     // Prevent falling
-    if (collision.collision_side == BOTTOM && collision.this_dy > 0 && !is_jumping) {
+    if (collision.collision_side == BOTTOM && collision.this_dy > 0) {
         body->SetDY(0);
     }
 
-    if (collision.collision_side == BOTTOM) {
-        is_grounded = true;
-        is_jumping = false;
+    if (collision.contact_name == "Spikes") {
+        TakeDamage();
     }
+
+    is_grounded = collision.collision_side == BOTTOM;
 }
 
 void Player::Whisper(int code) {
@@ -135,8 +123,20 @@ void Player::ResetPosition() {
 }
 
 void Player::Jump() {
-    cout << "Trying to jump!" << endl;
-    is_jumping = true;
-    is_grounded = false;
-    body->ApplyForce(-7, 0.1, QUADRATIC_EASE_OUT, AXIS_Y);
+    if (is_grounded) { jumps = 2; }
+
+    if (managerHub->inputManager->IsPressed("Space") != 0 && jumps > 0) {
+
+        if (jumps == 1) {
+            // MAKE IT POSSIBLE TO DELETE A FORCE FROM THE BODY.
+            // F.E.: Double jump, left over dy force is carried over to the second jump, making it a bit stronger than the first.
+            //body->forces.clear();
+        }
+
+        jumps -= 1;
+        body->ApplyForce(-10, 1, LINEAR, AXIS_Y);
+        is_grounded = false;
+
+        cout << jumps << endl;
+    }
 }
