@@ -13,6 +13,7 @@ class Spikes : public GameObject {
     void Start() override;
     void Update() override;
     void OnCollision(Collision collision) override;
+    Spikes* Clone() const override { return new Spikes(*this); }
 
     private:
     int speed = 1;

@@ -16,6 +16,10 @@ class Heart : public GameObject {
         void Update() override;
         void OnCollision(Collision collision) override;
 
+        // You have to create a new body, animator & collider for the Clone method to work.
+        // Due to your current use of pointers, the clone will refer back to the original components.
+        Heart* Clone() const override { return new Heart(*this); }
+
         void Break();
 
     private:

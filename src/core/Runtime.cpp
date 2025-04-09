@@ -13,11 +13,13 @@
 
 using namespace std;
 
-void UpdateAll(SDL_Renderer* renderer) {
+void UpdateAll() {
     bool quit = false;
     SDL_Event event;
 
     ManagerHub* managerHub = &ManagerHub::GetInstance();
+
+    //managerHub->contextManager->OnStart();
 
     while (!quit) {
         managerHub->inputManager->ResetIsPressed();
@@ -39,7 +41,8 @@ void UpdateAll(SDL_Renderer* renderer) {
         }
 
         managerHub->collisionManager->ProcessCollisions();
-        UpdateRenderer(renderer);
+
+        UpdateRenderer();
 
         managerHub->entityManager->DeleteObjects();
     }

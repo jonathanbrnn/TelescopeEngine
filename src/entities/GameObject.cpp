@@ -26,9 +26,17 @@ GameObject::GameObject(SDL_Renderer* renderer, string name, float pos_x, float p
     rect.w = static_cast<int>(width);
     rect.h = static_cast<int>(height);
 
+    cout << name << endl;
+
+    collider = nullptr;
+
+    body = nullptr;
+
+    animator = nullptr;
+
     if (texture_filepath != "") {
         // Set texture of this instance
-        texture = TextureManager::GetInstance().LoadTexture(texture_filepath, renderer);
+        texture = managerHub->textureManager->LoadTexture(texture_filepath, renderer);
         if (!texture) {
             printf("GAMEOBJECT: Could not load associated texture! SDL_Error: %s\n", SDL_GetError());
         }
@@ -131,6 +139,14 @@ void GameObject::AddAnimator() {
 
 GameObject::~GameObject() {
     OnDeletion();
+
+    if (collider != nullptr) {
+        delete collider;
+    }
+
+    if (body != nullptr) {
+        delete body;
+    }
 
     if (animator != nullptr) {
         delete animator;

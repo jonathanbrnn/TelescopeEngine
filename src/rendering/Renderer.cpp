@@ -6,6 +6,7 @@
 #include "../entities/GameObject.h"
 #include "../core/ManagerHub.h"
 #include "SDL2/SDL_render.h"
+#include "SDL2/SDL_timer.h"
 
 using namespace std;
 
@@ -26,14 +27,15 @@ SDL_Window* InitializeWindow(int screenWidth, int screenHeight, int windowPositi
     return window;
 }
 
-SDL_Renderer* InitializeRenderer(SDL_Window* window) {
+SDL_Renderer* InitializeRenderer(SDL_Window* window, bool use_vsync) {
     SDL_Renderer* renderer = NULL;
 
     if (!window) {
         printf("Window was not created properly!");
     }
     else {
-        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+        if (use_vsync) { renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC); }
+        else { renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); }
 
         if (!renderer) {
             printf("Renderer could not not be created! SDL_Error: %s\n", SDL_GetError());
@@ -43,12 +45,13 @@ SDL_Renderer* InitializeRenderer(SDL_Window* window) {
     return renderer;
 }
 
-void UpdateRenderer(SDL_Renderer* renderer, const int fps) {
-    //Move to InitializeRenderer() to avoid unnecessary calculations
-    const int framedelay = 1000 / fps;
-
+void UpdateRenderer() {
     ManagerHub* managerHub = &ManagerHub::GetInstance();
     float delta_time = managerHub->timeManager->GetDeltaTime();
+
+    SDL_Renderer* renderer = managerHub->contextManager->GetRenderer();
+
+    int frame_delay = 1000 / managerHub->contextManager->GetTargetFramerate();
 
     SDL_RenderClear(renderer);
 
@@ -69,7 +72,10 @@ void UpdateRenderer(SDL_Renderer* renderer, const int fps) {
     }
 
     SDL_RenderPresent(renderer);
-    // SDL_Delay(framedelay); - Currently using VSYNC
+
+    if (!managerHub->contextManager->GetVsync()) {
+        SDL_Delay(frame_delay);
+    }
 }
 
 /*

@@ -36,7 +36,6 @@ void Spikes::Update() {
         speed = speed * -1;
         FlipTexture(FLIP_HORIZONTAL, true);
         animator->SetState("walking");
-
     }
 
     if (!is_idle) {

@@ -18,6 +18,7 @@ class Player : public GameObject {
         void Update() override;
         void OnCollision(Collision collision) override;
         void Whisper(int code) override;
+        Player* Clone() const override { return new Player(*this); }
 
         void Animate();
         void CreateHeart();

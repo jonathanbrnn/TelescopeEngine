@@ -47,7 +47,9 @@ class EntityManager {
     // Deletes a game object by name.
     void Delete(string name);
 
-    // Deletes all game objects in the temporal_to_delete vector each frame.
+    // Deletes all game objects in the temporal_to_delete vector from the scene.
+    // Append to the vector using Delete(string name).
+    // This does not delete the object itself, since it might be needed to Instantiate a new version.
     void DeleteObjects();
 
     void OnEnd();
@@ -74,7 +76,7 @@ class EntityManager {
 
     SDL_Renderer* renderer = renderer;
 
-    //Lookup table for all game objects by name, only used for prefabs and lookup by name.
+    // Lookup table for all game objects by name, only used for prefabs and lookup by name.
     unordered_map<string, GameObject*> name_objects;
 
     // Vector that stores all game objects added in AddNewObject().
@@ -83,6 +85,10 @@ class EntityManager {
 
     // Vector that stores all game objects that were "deleted" this frame.
     vector<string> temporal_to_delete;
+
+    // Stores the number of clones that have been created using Instantiate().
+    // Used to avoid duplicate naming.
+    unordered_map<string, int> clone_version;
 };
 
 #endif

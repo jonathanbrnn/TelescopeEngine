@@ -1,6 +1,7 @@
 #ifndef MANAGERHUB_H
 #define MANAGERHUB_H
 
+#include "ContextManager.h"
 #include "EntityManager.h"
 #include "TimeManager.h"
 #include "../entities/CollisionManager.h"
@@ -19,13 +20,14 @@ public:
         return instance;
     }
 
-    void OnStart(EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager); 
+    void OnStart(ContextManager* contextManager, EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager);
 
-    EntityManager* entityManager; 
-    TimeManager* timeManager; 
-    CollisionManager* collisionManager; 
+    ContextManager* contextManager;
+    EntityManager* entityManager;
+    TimeManager* timeManager;
+    CollisionManager* collisionManager;
     TextureManager* textureManager;
-    InputManager* inputManager; 
+    InputManager* inputManager;
 
 private:
     // Private constructor ensures no external instantiation

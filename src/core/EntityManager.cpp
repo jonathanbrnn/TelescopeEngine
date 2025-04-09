@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <string>
 #include <unordered_map>
 #include "../entities/GameObject.h"
 #include <tuple>
@@ -18,7 +19,7 @@ void EntityManager::OnStart(vector<GameObject*>& prefabs) {
         game_object->CheckGameObject();
         total_objects.push_back(game_object);
 
-        if (game_object->texture != nullptr) {
+        if (game_object->texture != nullptr || game_object->texture_filepath != "") {
             visible_objects[game_object->pos_z].push_back(game_object);
         }
 
@@ -46,17 +47,44 @@ void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, fl
         return;
     }
 
-    GameObject* clone = new GameObject(renderer, prefab_name, pos_x, pos_y, pos_z, name_objects[prefab_name]->width, name_objects[prefab_name]->height, name_objects[prefab_name]->rotation, name_objects[prefab_name]->texture_filepath);
+    //GameObject* clone = new GameObject(renderer, prefab_name, pos_x, pos_y, pos_z, name_objects[prefab_name]->width, name_objects[prefab_name]->height, name_objects[prefab_name]->rotation, name_objects[prefab_name]->texture_filepath);
+    GameObject* clone = name_objects[prefab_name]->Clone();
+
+    if (clone_version.find(prefab_name) == clone_version.end()) {
+        clone_version[prefab_name] = 0;
+    }
+    else {
+        clone_version[prefab_name] = clone_version[prefab_name] + 1;
+    }
+
+    clone->name = clone->name + "_" + to_string(clone_version[prefab_name]);
+
+    if (pos_x && pos_y) {
+        clone->SetPosition(pos_x, pos_y);
+    }
+    else if (pos_z) {
+        clone->SetPosition(pos_x, pos_y, pos_z);
+    }
+    else {
+        cout << "ENTITYMANAGER: Could not set the position of: " << clone->name << " because the values were not provided." << endl;
+        cout << "The position has been set to the prefabs." << endl;
+    }
 
     clone->Start();
 
-    // Handle colliders and body
-    if (clone->collider != nullptr) clone->AddCollider();
-    if (clone->body != nullptr) {
-        if (base_dx == NULL) { base_dx = clone->body->base_dx; }
-        if (base_dy == NULL) { base_dy = clone->body->base_dy; }
-        clone->body->SetVelocityBothAxis(base_dx, base_dy);
+    if ((base_dx && base_dy) && clone->body != nullptr) {
+        clone->body->SetVelocityBothAxis(base_dx,  base_dy);
     }
+    else if (base_dx) {
+        clone->body->SetDX(base_dx);
+    }
+    else if (base_dy) {
+        clone->body->SetDY(base_dy);
+    }
+    else if ((base_dx || base_dy) && clone->body == nullptr) {
+        cout << "ENTITYMANAGER: Could not apply velocity to: " << clone->name << " since the prefab has no body attached to it." << endl;
+    }
+
 
     // Store it
     EntityManager::GetInstance().total_objects.push_back(clone);
@@ -96,6 +124,9 @@ void EntityManager::PushNewObjects() {
 
         if(name_objects.find(game_object->name) == name_objects.end()) {
             name_objects[game_object->name] = game_object;
+        }
+        else {
+            cout << "ENTITYMANAGER: A game object with name: " << game_object->name << " already exist. Finding this object won't be possible using FindGameObjectByName()." << endl;
         }
     }
 
@@ -146,7 +177,7 @@ void EntityManager::DeleteObjects() {
                 }
             }
 
-            delete to_delete;
+            //delete to_delete;
         }
         else {
             cout << "ENTITYMANAGER: Warning! Object with name: " << name << " could not be deleted because it wasn't found. Did you enter the name in correctly?" << endl;
@@ -157,7 +188,7 @@ void EntityManager::DeleteObjects() {
 }
 
 void EntityManager::OnEnd() {
-    for (auto& game_object : total_objects) { delete game_object; }
+    for (auto& game_object : total_objects) { cout << game_object->name << endl; delete game_object; }
     total_objects.clear();
 
     for (auto& [pos_z, game_object_vector] : visible_objects) {

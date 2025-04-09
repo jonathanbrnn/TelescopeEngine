@@ -9,7 +9,6 @@
 #include "Force.h"
 #include "Body.h"
 #include "Collider.h"
-#include "TextureManager.h"
 
 using namespace std;
 
@@ -70,7 +69,7 @@ class GameObject {
         void UpdatePosition(float delta_time);
 
         // COLLISION:
-        Collider* collider = nullptr;
+        Collider* collider;
 
         // Adds a collider to the game object.
         // Currently a game object only supports one collider at a time.
@@ -78,14 +77,14 @@ class GameObject {
         void AddCollider();
 
         // BODY:
-        Body* body = nullptr;
+        Body* body;
 
         // Adds a body to the game object.
         // A game object can only have one body.
         void AddBody(float mass, bool use_gravity);
 
         // ANIMATOR:
-        Animator* animator = nullptr;
+        Animator* animator;
 
         // Adds am animator to the game object.
         // A game object can only have one animator.
@@ -122,7 +121,9 @@ class GameObject {
         // Use this to clean up any added properties.
         virtual void OnDeletion() {}
 
-        ~GameObject();
+        virtual GameObject* Clone() const = 0;
+
+        virtual ~GameObject();
 };
 
 #endif

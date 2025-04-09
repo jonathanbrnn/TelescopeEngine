@@ -34,6 +34,9 @@ void Player::Update() {
     Walk();
     Jump();
 
+    if(managerHub->inputManager->IsPressed("C")) {
+        managerHub->entityManager->Instantiate("Jonathan", 0, 0);
+    }
 
     if (managerHub->inputManager->IsPressed("H") != 0) {
         CreateHeart();
@@ -51,7 +54,7 @@ void Player::TakeDamage() {
         ResetPosition();
     }
     else {
-        managerHub->entityManager->Delete("Jonathan");
+        managerHub->entityManager->Delete(name);
     }
 }
 
@@ -107,6 +110,7 @@ void Player::Whisper(int code) {
 }
 
 void Player::CreateHeart() {
+    /*
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<int> dist(50, 200);
@@ -116,6 +120,9 @@ void Player::CreateHeart() {
     Heart* clone = new Heart(renderer, "Heart_clone", pos_x + (width / 2), pos_y, 2, scale, scale, 0, "/Users/admin/TelescopeEngine/media/images/Heart-1.png");
 
     managerHub->entityManager->AddNewObject(clone);
+    */
+
+    managerHub->entityManager->Instantiate("Heart1", pos_x, pos_y, 100, 0, -1);
 }
 
 void Player::ResetPosition() {

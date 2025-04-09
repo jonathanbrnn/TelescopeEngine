@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include "core/ContextManager.h"
 #include "demo/Player.h"
 #include "demo/Heart.h"
 #include "demo/Celestine.h"
@@ -15,13 +16,17 @@
 #include "entities/CollisionManager.h"
 #include "entities/TextureManager.h"
 #include "input/InputManager.h"
+#include "utilities/BaseObject.h"
+
 #include <vector>
 #include <map>
 
 
 void InitializeEngine(SDL_Window*& window, SDL_Renderer*& renderer) {
     window = InitializeWindow(1440, 900);
-    renderer = InitializeRenderer(window);
+    renderer = InitializeRenderer(window, true);
+
+    ContextManager* contextManager = &ContextManager::GetInstance();
 
     EntityManager* entityManager = &EntityManager::GetInstance(renderer);
 
@@ -35,7 +40,12 @@ void InitializeEngine(SDL_Window*& window, SDL_Renderer*& renderer) {
 
     ManagerHub* managerHub = &ManagerHub::GetInstance();
 
-    managerHub->OnStart(entityManager, timeManager, collisionManager, textureManager, inputManager);
+
+    managerHub->OnStart(contextManager, entityManager, timeManager, collisionManager, textureManager, inputManager);
+
+    contextManager->SetWindow(window);
+    contextManager->SetRenderer(renderer);
+    contextManager->OnStart();
 
     collisionManager->OnStart(&ManagerHub::GetInstance());
 }
@@ -55,10 +65,10 @@ int main() {
     InitializeEngine(window, renderer);
 
     Player* player = new Player(renderer, "Jonathan", 450, 0, 0, 128, 128, 0, "/Users/admin/TelescopeEngine/media/images/PlayerRun1.png");
-    GameObject* ground_left = new GameObject(renderer, "ground_left", 0, 366, -1, 221, 534, 0, "/Users/admin/TelescopeEngine/media/images/ground_left.png");
-    GameObject* ground_right_bottom = new GameObject(renderer, "ground_right_bottom", 950, 717, -1, 187, 183, 0, "/Users/admin/TelescopeEngine/media/images/ground_right_bottom.png");
-    GameObject* ground_right_top = new GameObject(renderer, "ground_right_top", 977, 672, -1, 463, 228, 0, "/Users/admin/TelescopeEngine/media/images/ground_right_top.png");
-    GameObject* background = new GameObject(renderer, "background", 0, 0, -2, 1440, 900, 0, "/Users/admin/TelescopeEngine/media/images/background_white.png");
+    BaseObject* ground_left = new BaseObject(renderer, "ground_left", 0, 366, -1, 221, 534, 0, "/Users/admin/TelescopeEngine/media/images/ground_left.png");
+    BaseObject* ground_right_bottom = new BaseObject(renderer, "ground_right_bottom", 950, 717, -1, 187, 183, 0, "/Users/admin/TelescopeEngine/media/images/ground_right_bottom.png");
+    BaseObject* ground_right_top = new BaseObject(renderer, "ground_right_top", 977, 672, -1, 463, 228, 0, "/Users/admin/TelescopeEngine/media/images/ground_right_top.png");
+    BaseObject* background = new BaseObject(renderer, "background", 0, 0, -2, 1440, 900, 0, "/Users/admin/TelescopeEngine/media/images/background_white.png");
     Spikes* spikes = new Spikes(renderer, "Spikes", 1200, 200, 0, 100, 55, 0, "/Users/admin/TelescopeEngine/media/images/spikes-walking-1.png");
 
     ground_left->AddCollider();
@@ -81,7 +91,7 @@ int main() {
     managerHub->entityManager->OnStart(prefabs);
 
     cout << "ENTERING UPDATE!" << endl;
-    UpdateAll(renderer);
+    UpdateAll();
 
     closeEngine(window, renderer);
 
