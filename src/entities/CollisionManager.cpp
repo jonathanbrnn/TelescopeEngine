@@ -4,7 +4,7 @@
 #include <tuple>
 #include <vector>
 
-using namespace std; 
+using namespace std;
 
 CollisionManager::CollisionManager() : managerHub(nullptr) {}
 
@@ -18,11 +18,17 @@ void CollisionManager::ProcessCollisions() {
             GameObject* a = this->managerHub->entityManager->collision_objects[i];
             GameObject* b = this->managerHub->entityManager->collision_objects[j];
 
-            if (a->pos_x < b->pos_x + b->width && a->pos_x + a->width > b->pos_x &&
-                a->pos_y < b->pos_y + b->height && a->pos_y + a->height > b->pos_y) {
+            float a_current_width = a->width * a->scale_x;
+            float a_current_height = a->height * a->scale_y;
 
-                float overlapX = min(a->pos_x + a->width - b->pos_x, b->pos_x + b->width - a->pos_x);
-                float overlapY = min(a->pos_y + a->height - b->pos_y, b->pos_y + b->height - a->pos_y);
+            float b_current_width = b->width * b->scale_x;
+            float b_current_height = b->height * b->scale_y;
+
+            if (a->pos_x < b->pos_x + b_current_width && a->pos_x + a_current_width > b->pos_x &&
+                a->pos_y < b->pos_y + b_current_height && a->pos_y + a_current_height > b->pos_y) {
+
+                float overlapX = min(a->pos_x + a_current_width - b->pos_x, b->pos_x + b_current_width - a->pos_x);
+                float overlapY = min(a->pos_y + a_current_height - b->pos_y, b->pos_y + b_current_height - a->pos_y);
 
                 CollisionSide a_collision_side;
                 CollisionSide b_collision_side;
@@ -104,11 +110,11 @@ void CollisionManager::ProcessCollisions() {
                 tuple<int, int> collision_point;
 
                 if (a->pos_x < b->pos_x) {
-                    collision_point = {a->pos_x + a->width, a->pos_y + a->height};
+                    collision_point = {a->pos_x + a_current_width, a->pos_y + a_current_height};
                 } else if (a->pos_x > b->pos_x) {
-                    collision_point = {a->pos_x, a->pos_y + a->height};
+                    collision_point = {a->pos_x, a->pos_y + a_current_height};
                 } else if (a->pos_y < b->pos_y) {
-                    collision_point = {a->pos_x + a->width, a->pos_y};
+                    collision_point = {a->pos_x + a_current_width, a->pos_y};
                 } else if (a->pos_y > b->pos_y) {
                     collision_point = {a->pos_x, a->pos_y};
                 }

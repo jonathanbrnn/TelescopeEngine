@@ -34,6 +34,27 @@ void Player::Update() {
     Walk();
     Jump();
 
+    if (managerHub->inputManager->IsPressed("Down")) {
+        SetScale(this->scale_x - 0.1, this->scale_y - 0.1);
+    }
+    if (managerHub->inputManager->IsPressed("Up")) {
+        SetScale(this->scale_x + 0.1, this->scale_y + 0.1);
+    }
+
+    if(managerHub->inputManager->IsPressed("F")) {
+        managerHub->camera->ToggleSmoothFollow(1, "Jonathan");
+    }
+    if(managerHub->inputManager->IsPressed("G")) {
+        managerHub->camera->ToggleSmoothFollow(1.4, "Spikes");
+    }
+    if(managerHub->inputManager->IsPressed("J")) {
+        managerHub->camera->ToggleSmoothFollow(3, "Heart1");
+    }
+
+    if(managerHub->inputManager->IsPressed("L")) {
+        SetPosition(10, -100);
+    }
+
     if(managerHub->inputManager->IsPressed("C")) {
         managerHub->entityManager->Instantiate("Jonathan", 0, 0);
     }

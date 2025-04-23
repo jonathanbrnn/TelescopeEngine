@@ -1,7 +1,6 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
-#include "core/ContextManager.h"
 #include "demo/Player.h"
 #include "demo/Heart.h"
 #include "demo/Celestine.h"
@@ -16,6 +15,7 @@
 #include "entities/CollisionManager.h"
 #include "entities/TextureManager.h"
 #include "input/InputManager.h"
+#include "rendering/Camera.h"
 #include "utilities/BaseObject.h"
 
 #include <vector>
@@ -26,7 +26,7 @@ void InitializeEngine(SDL_Window*& window, SDL_Renderer*& renderer) {
     window = InitializeWindow(1440, 900);
     renderer = InitializeRenderer(window, true);
 
-    ContextManager* contextManager = &ContextManager::GetInstance();
+    Camera* camera = new Camera(1440, 900);
 
     EntityManager* entityManager = &EntityManager::GetInstance(renderer);
 
@@ -41,11 +41,9 @@ void InitializeEngine(SDL_Window*& window, SDL_Renderer*& renderer) {
     ManagerHub* managerHub = &ManagerHub::GetInstance();
 
 
-    managerHub->OnStart(contextManager, entityManager, timeManager, collisionManager, textureManager, inputManager);
+    managerHub->OnStart(camera, entityManager, timeManager, collisionManager, textureManager, inputManager);
 
-    contextManager->SetWindow(window);
-    contextManager->SetRenderer(renderer);
-    contextManager->OnStart();
+    camera->StartCamera(&ManagerHub::GetInstance());
 
     collisionManager->OnStart(&ManagerHub::GetInstance());
 }
@@ -91,7 +89,7 @@ int main() {
     managerHub->entityManager->OnStart(prefabs);
 
     cout << "ENTERING UPDATE!" << endl;
-    UpdateAll();
+    UpdateAll(renderer);
 
     closeEngine(window, renderer);
 

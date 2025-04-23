@@ -32,7 +32,6 @@ SRCS = main.cpp \
 		demo/Heart.cpp \
 		demo/Celestine.cpp \
 		demo/Spikes.cpp \
-		core/ContextManager.cpp \
 		core/EntityManager.cpp \
 		core/ManagerHub.cpp \
 		core/Runtime.cpp \
@@ -43,6 +42,7 @@ SRCS = main.cpp \
        	entities/GameObject.cpp \
        	entities/TextureManager.cpp \
 		entities/CollisionManager.cpp \
+		rendering/Camera.cpp \
        	rendering/Renderer.cpp \
 	   	input/InputManager.cpp
 

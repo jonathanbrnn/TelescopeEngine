@@ -36,6 +36,8 @@ class GameObject {
         float pos_z;
         // The width and height of the object.
         float width, height;
+        // The scale of the object (default=1).
+        float scale_x, scale_y = 1;
         // The objects rotation.
         // (!) Currently not implemented.
         float rotation;
@@ -68,6 +70,14 @@ class GameObject {
         // Updates the game objects position every frame with its bodies velocity. Is only called if it has a body.
         void UpdatePosition(float delta_time);
 
+        // SCALE:
+        // Set both scale_x and scale_y:
+        void SetScale(float scale_x, float scale_y);
+        // Set scale_x.
+        void SetScaleX(float scale_x);
+        // Set scale_y.
+        void SetScaleY(float scale_y);
+
         // COLLISION:
         Collider* collider;
 
@@ -99,7 +109,7 @@ class GameObject {
         // Checks if the game object is correctly configured.
         void CheckGameObject();
 
-        // Calls all relevant functions that need to be updated each frame.
+        // Calls ll relevant functions that need to be updated each frame.
         void UpdateGameObject();
 
         // Called before the first frame update.

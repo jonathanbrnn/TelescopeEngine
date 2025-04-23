@@ -8,6 +8,6 @@
 #include "../rendering/Renderer.h"
 #include "../entities/GameObject.h"
 
-void UpdateAll();
+void UpdateAll(SDL_Renderer* renderer);
 
 #endif

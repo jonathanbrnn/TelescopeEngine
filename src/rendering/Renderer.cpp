@@ -5,6 +5,7 @@
 #include <map>
 #include "../entities/GameObject.h"
 #include "../core/ManagerHub.h"
+#include "SDL2/SDL_rect.h"
 #include "SDL2/SDL_render.h"
 #include "SDL2/SDL_timer.h"
 
@@ -45,37 +46,42 @@ SDL_Renderer* InitializeRenderer(SDL_Window* window, bool use_vsync) {
     return renderer;
 }
 
-void UpdateRenderer() {
+void UpdateRenderer(SDL_Renderer* renderer) {
     ManagerHub* managerHub = &ManagerHub::GetInstance();
     float delta_time = managerHub->timeManager->GetDeltaTime();
 
-    SDL_Renderer* renderer = managerHub->contextManager->GetRenderer();
+    Camera* camera = managerHub->camera;
+    camera->UpdateCamera(delta_time);
 
-    int frame_delay = 1000 / managerHub->contextManager->GetTargetFramerate();
+    //int frame_delay = 1000 / managerHub->contextManager->GetTargetFramerate();
 
     SDL_RenderClear(renderer);
 
-    for (auto& [pos_z, gameObjects]: managerHub->entityManager->visible_objects) {
-        for (auto* game_object: gameObjects) {
+    for (auto& [pos_z, gameObjects] : managerHub->entityManager->visible_objects) {
+        for (auto* game_object : gameObjects) {
+
+            SDL_Rect destination;
+
+            destination.x = static_cast<int>((game_object->pos_x - camera->x) * camera->zoom);
+            destination.y = static_cast<int>((game_object->pos_y - camera->y) * camera->zoom);
+            destination.w = static_cast<int>(game_object->width * game_object->scale_x * camera->zoom);
+            destination.h = static_cast<int>(game_object->height * game_object->scale_y * camera->zoom);
+
             if (!game_object->flip_texture) {
-                SDL_RenderCopy(renderer, game_object->texture, nullptr, &game_object->rect);
+                SDL_RenderCopy(renderer, game_object->texture, nullptr, &destination);
             }
             else {
                 if (game_object->flip_mode == FLIP_HORIZONTAL) {
-                    SDL_RenderCopyEx(renderer, game_object->texture, nullptr, &game_object->rect, 0, nullptr, SDL_FLIP_HORIZONTAL);
+                    SDL_RenderCopyEx(renderer, game_object->texture, nullptr, &destination, 0, nullptr, SDL_FLIP_HORIZONTAL);
                 }
                 else if (game_object->flip_mode == FLIP_VERTICAL) {
-                    SDL_RenderCopyEx(renderer, game_object->texture, nullptr, &game_object->rect, 0, nullptr, SDL_FLIP_VERTICAL);
+                    SDL_RenderCopyEx(renderer, game_object->texture, nullptr, &destination, 0, nullptr, SDL_FLIP_VERTICAL);
                 }
             }
         }
     }
 
     SDL_RenderPresent(renderer);
-
-    if (!managerHub->contextManager->GetVsync()) {
-        SDL_Delay(frame_delay);
-    }
 }
 
 /*

@@ -1,12 +1,14 @@
 #ifndef MANAGERHUB_H
 #define MANAGERHUB_H
 
-#include "ContextManager.h"
 #include "EntityManager.h"
 #include "TimeManager.h"
 #include "../entities/CollisionManager.h"
 #include "../entities/TextureManager.h"
 #include "../input/InputManager.h"
+#include "../rendering/Camera.h"
+
+class Camera;
 
 class ManagerHub {
 public:
@@ -20,9 +22,9 @@ public:
         return instance;
     }
 
-    void OnStart(ContextManager* contextManager, EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager);
+    void OnStart(Camera* camera, EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager);
 
-    ContextManager* contextManager;
+    Camera* camera;
     EntityManager* entityManager;
     TimeManager* timeManager;
     CollisionManager* collisionManager;

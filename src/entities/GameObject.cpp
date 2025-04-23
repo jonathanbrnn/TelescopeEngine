@@ -12,6 +12,9 @@ GameObject::GameObject(SDL_Renderer* renderer, string name, float pos_x, float p
     this->width = width;
     this->height = height;
 
+    this->scale_x = 1;
+    this->scale_y = 1;
+
     this->rotation = rotation;
 
     this->texture_filepath = texture_filepath;
@@ -63,6 +66,19 @@ void GameObject::UpdateGameObject() {
 
     UpdatePosition(delta_time);
 
+    float current_width = width * scale_x;
+    float current_height = height * scale_y;
+
+    rect.w = static_cast<int>(current_width);
+    rect.h = static_cast<int>(current_height);
+
+    if (collider != nullptr) {
+        collider->a = {pos_x, pos_y};
+        collider->b = {pos_x, pos_y + current_height};
+        collider->c = {pos_x + current_width, pos_y + current_height};
+        collider->d = {pos_x + current_width, pos_y};
+    }
+
     if (animator != nullptr) {
         if (animator->UpdateAnimator() != 0) {
             texture = managerHub->textureManager->LoadTexture(animator->current_frame, renderer);
@@ -85,11 +101,14 @@ void GameObject::SetPosition(float pos_x, float pos_y, float pos_z) {
         this->pos_z = pos_z;
     }
 
+    float current_width = width * scale_x;
+    float current_height = height * scale_y;
+
     if (collider != nullptr) {
-        collider->a = {pos_x, pos_x};
-        collider->b = {pos_x, pos_y + height};
-        collider->c = {pos_x + width, pos_y + height};
-        collider->d = {pos_x + width, pos_y};
+        collider->a = {pos_x, pos_y};
+        collider->b = {pos_x, pos_y + current_height};
+        collider->c = {pos_x + current_width, pos_y + current_height};
+        collider->d = {pos_x + current_width, pos_y};
     }
 }
 
@@ -108,6 +127,34 @@ void GameObject::UpdatePosition(float delta_time) {
             collider->d = {pos_x + width, pos_y};
         }
     }
+}
+
+void GameObject::SetScale(float scale_x, float scale_y) {
+    if (scale_x <= 0 || scale_y <= 0) {
+        cout << "GAMEOBJECT: (" << name << "). Cannot set scale <= 0. Original scale was kept!" << endl;
+        return;
+    }
+
+    this->scale_x = scale_x;
+    this->scale_y = scale_y;
+}
+
+void GameObject::SetScaleX(float scale_x) {
+    if (scale_x <= 0) {
+        cout << "GAMEOBJECT: (" << name << "). Cannot set scale <= 0. Original scale was kept!" << endl;
+        return;
+    }
+
+    this->scale_x = scale_x;
+}
+
+void GameObject::SetScaleY(float scale_y) {
+    if (scale_y <= 0) {
+        cout << "GAMEOBJECT: (" << name << "). Cannot set scale <= 0. Original scale was kept!" << endl;
+        return;
+    }
+
+    this->scale_y = scale_y;
 }
 
 void GameObject::AddCollider() {

@@ -13,7 +13,7 @@
 
 using namespace std;
 
-void UpdateAll() {
+void UpdateAll(SDL_Renderer* renderer) {
     bool quit = false;
     SDL_Event event;
 
@@ -42,7 +42,7 @@ void UpdateAll() {
 
         managerHub->collisionManager->ProcessCollisions();
 
-        UpdateRenderer();
+        UpdateRenderer(renderer);
 
         managerHub->entityManager->DeleteObjects();
     }

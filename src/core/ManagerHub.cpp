@@ -1,8 +1,7 @@
 #include "ManagerHub.h"
-#include "EntityManager.h"
 
-void ManagerHub::OnStart(ContextManager* contextManager, EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager) {
-    this->contextManager = contextManager;
+void ManagerHub::OnStart(Camera* camera, EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager) {
+    this->camera = camera;
     this->entityManager = entityManager;
     this->timeManager = timeManager;
     this->collisionManager = collisionManager;
