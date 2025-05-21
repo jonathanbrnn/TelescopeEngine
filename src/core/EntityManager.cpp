@@ -50,6 +50,7 @@ void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, fl
     //GameObject* clone = new GameObject(renderer, prefab_name, pos_x, pos_y, pos_z, name_objects[prefab_name]->width, name_objects[prefab_name]->height, name_objects[prefab_name]->rotation, name_objects[prefab_name]->texture_filepath);
     GameObject* clone = name_objects[prefab_name]->Clone();
 
+
     if (clone_version.find(prefab_name) == clone_version.end()) {
         clone_version[prefab_name] = 0;
     }
@@ -72,31 +73,25 @@ void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, fl
 
     clone->Start();
 
-    if ((base_dx && base_dy) && clone->body != nullptr) {
-        clone->body->SetVelocityBothAxis(base_dx,  base_dy);
-    }
-    else if (base_dx) {
-        clone->body->SetDX(base_dx);
-    }
-    else if (base_dy) {
-        clone->body->SetDY(base_dy);
-    }
-    else if ((base_dx || base_dy) && clone->body == nullptr) {
-        cout << "ENTITYMANAGER: Could not apply velocity to: " << clone->name << " since the prefab has no body attached to it." << endl;
+    // THIS MAKES NO SENSE AT ALL WHAT THE FUCK -> FIX IT!! if base_dx is the same as saying if base_dx != 0.
+    if (clone->body != nullptr) {
+        if ((base_dx && base_dy)) {
+            clone->body->SetVelocityBothAxis(base_dx, base_dy);
+        }
+        else if (base_dx) {
+            clone->body->SetDX(base_dx);
+        }
+        else if (base_dy) {
+            clone->body->SetDY(base_dy);
+        }
+        else if ((base_dx || base_dy) && clone->body == nullptr) {
+            cout << "ENTITYMANAGER: Could not apply velocity to: " << clone->name << " since the prefab has no body attached to it." << endl;
+        }
     }
 
 
     // Store it
-    EntityManager::GetInstance().total_objects.push_back(clone);
-    if (!clone->texture_filepath.empty()) {
-        EntityManager::GetInstance().visible_objects[pos_z].push_back(clone);
-    }
-    if (clone->collider) {
-        EntityManager::GetInstance().collision_objects.push_back(clone);
-    }
-    if (clone->body) {
-        EntityManager::GetInstance().body_objects.push_back(clone);
-    }
+    AddNewObject(clone);
 }
 
 void EntityManager::AddNewObject(GameObject* game_object) {

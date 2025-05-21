@@ -1,9 +1,9 @@
 #ifndef RENDERER_H
 #define RENDERER_H
-#include <SDL.h>
 #include <iostream>
 #include <vector>
 #include <map>
+#include "../dependencies.h"
 #include "../entities/GameObject.h"
 #include "../core/ManagerHub.h"
 #include "SDL2/SDL_render.h"

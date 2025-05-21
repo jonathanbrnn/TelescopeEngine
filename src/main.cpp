@@ -1,10 +1,9 @@
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
+#include "dependencies.h"
 #include "demo/Player.h"
 #include "demo/Heart.h"
 #include "demo/Celestine.h"
 #include "demo/Spikes.h"
+
 #include "core/ManagerHub.h"
 #include "core/EntityManager.h"
 #include "core/TimeManager.h"
@@ -17,6 +16,7 @@
 #include "input/InputManager.h"
 #include "rendering/Camera.h"
 #include "utilities/BaseObject.h"
+
 
 #include <vector>
 #include <map>

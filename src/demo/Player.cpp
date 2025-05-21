@@ -34,25 +34,31 @@ void Player::Update() {
     Walk();
     Jump();
 
-    if (managerHub->inputManager->IsPressed("Down")) {
+    InputManager* inp = managerHub->inputManager;
+
+    if (inp->IsPressed("Down")) {
         SetScale(this->scale_x - 0.1, this->scale_y - 0.1);
     }
-    if (managerHub->inputManager->IsPressed("Up")) {
+    if (inp->IsPressed("Up")) {
         SetScale(this->scale_x + 0.1, this->scale_y + 0.1);
     }
 
-    if(managerHub->inputManager->IsPressed("F")) {
+    if(inp->IsPressed("F")) {
         managerHub->camera->ToggleSmoothFollow(1, "Jonathan");
     }
-    if(managerHub->inputManager->IsPressed("G")) {
+    if(inp->IsPressed("G")) {
         managerHub->camera->ToggleSmoothFollow(1.4, "Spikes");
     }
-    if(managerHub->inputManager->IsPressed("J")) {
+    if(inp->IsPressed("J")) {
         managerHub->camera->ToggleSmoothFollow(3, "Heart1");
     }
 
-    if(managerHub->inputManager->IsPressed("L")) {
+    if(inp->IsPressed("L")) {
         SetPosition(10, -100);
+    }
+
+    if(inp->IsPressed("+")) {
+        rotation += 5.0f;
     }
 
     if(managerHub->inputManager->IsPressed("C")) {
@@ -61,6 +67,10 @@ void Player::Update() {
 
     if (managerHub->inputManager->IsPressed("H") != 0) {
         CreateHeart();
+    }
+
+    if(inp->IsPressed("K")) {
+        managerHub->entityManager->Instantiate("ground_left", pos_x, pos_y, 100, 0, -1);
     }
 
     if (pos_y > 1100) {

@@ -1,7 +1,6 @@
 #ifndef AUDIOMANAGER_h
 #define AUDIOMANAGER_h
-#include <SDL.h>
-#include <SDL2/SDL_audio.h>
+#include "../dependencies.h"
 #include <iostream>
 
 using namespace std;

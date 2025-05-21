@@ -1,6 +1,7 @@
 #ifndef MANAGERHUB_H
 #define MANAGERHUB_H
 
+#include "../dependencies.h"
 #include "EntityManager.h"
 #include "TimeManager.h"
 #include "../entities/CollisionManager.h"

@@ -59,6 +59,11 @@ int Animator::OnAnimationEnd() {
     return 0;
 }
 
+Animator::Animator(const Animator& other) {
+    current_state = nullptr;
+    animation_states.clear();
+}
+
 Animator::~Animator() {
     for (auto [animation_state_name, animation_state] : animation_states) {
         delete animation_state;

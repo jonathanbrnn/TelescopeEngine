@@ -24,8 +24,9 @@ LDFLAGS = $(ARCH_FLAGS) -L$(BREW_PREFIX)/Cellar/sdl2/2.32.2/lib \
 # Target executable
 TARGET = sdl
 
-# Source files (relative paths from the Makefile location)
+# Source files
 SRCS = main.cpp \
+		dependencies.cpp \
 		animation/AnimationState.cpp \
 		animation/Animator.cpp \
 		demo/Player.cpp \
@@ -46,19 +47,21 @@ SRCS = main.cpp \
        	rendering/Renderer.cpp \
 	   	input/InputManager.cpp
 
+# Object files under build/
 OBJS = $(SRCS:.cpp=.o)
+OBJ_FILES = $(patsubst %.o,build/%.o,$(OBJS))
 
-# Default rule to build the target
-$(TARGET): $(OBJS)
-	$(CXX) $(OBJS) $(LDFLAGS) -o $(TARGET)
+# Default rule
+$(TARGET): $(OBJ_FILES)
+	$(CXX) $(OBJ_FILES) $(LDFLAGS) -o $(TARGET)
 
-# Rule to compile source files into object files
-%.o: %.cpp
+# Create build dir if not existing and compile each source to build/*.o
+build/%.o: %.cpp
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Clean up build files
+# Clean rule
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -rf build $(TARGET)
 
-# Phony targets to prevent conflicts with filenames
 .PHONY: clean

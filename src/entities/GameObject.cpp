@@ -184,6 +184,52 @@ void GameObject::AddAnimator() {
     }
 }
 
+GameObject::GameObject(const GameObject& other) {
+    name = other.name;
+
+    pos_x = other.pos_x;
+    pos_y = other.pos_y;
+    pos_z = other.pos_z;
+
+    width = other.width;
+    height = other.height;
+
+    scale_x = other.scale_x;
+    scale_y = other.scale_y;
+
+    rotation = other.rotation;
+
+    texture_filepath = other.texture_filepath;
+
+    renderer = other.renderer;
+
+    managerHub = &ManagerHub::GetInstance();
+
+    // Recalculate SDL_Rect
+    rect.x = static_cast<int>(pos_x);
+    rect.y = static_cast<int>(pos_y);
+    rect.w = static_cast<int>(width);
+    rect.h = static_cast<int>(height);
+
+    // Deep clone components
+    collider = nullptr;
+
+    body = nullptr;
+
+    animator = nullptr;
+
+    if (!texture_filepath.empty()) {
+        texture = managerHub->textureManager->LoadTexture(texture_filepath, renderer);
+        if (!texture) {
+            printf("GAMEOBJECT (copy): Could not load texture! SDL_Error: %s\n", SDL_GetError());
+        }
+    } else {
+        texture = nullptr;
+    }
+
+    cout << "Hello from the copy constructor!" << name << endl;
+}
+
 GameObject::~GameObject() {
     OnDeletion();
 

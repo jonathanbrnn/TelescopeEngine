@@ -37,6 +37,8 @@ class Animator {
     int animation_state_count = 0;
     string current_state_name = "";
 
+    Animator(const Animator& other);
+
     ~Animator();
 
     private:

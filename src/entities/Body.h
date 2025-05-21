@@ -52,6 +52,10 @@ class Body {
     // use_gravity DEFAULT=true
     Body(float mass = 1, bool use_gravity = true);
 
+    Body(const Body& other);
+
+    ~Body();
+
     private:
     // Stores all active forces.
     vector<Force*> forces;

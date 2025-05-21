@@ -1,9 +1,8 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 #include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
 
+#include "../dependencies.h"
 #include "../core/ManagerHub.h"
 #include "../animation/Animator.h"
 #include "Force.h"
@@ -109,7 +108,7 @@ class GameObject {
         // Checks if the game object is correctly configured.
         void CheckGameObject();
 
-        // Calls ll relevant functions that need to be updated each frame.
+        // Calls all relevant functions that need to be updated each frame.
         void UpdateGameObject();
 
         // Called before the first frame update.
@@ -132,6 +131,9 @@ class GameObject {
         virtual void OnDeletion() {}
 
         virtual GameObject* Clone() const = 0;
+
+        // COPY CONSTRUCTOR:
+        GameObject(const GameObject& other);
 
         virtual ~GameObject();
 };

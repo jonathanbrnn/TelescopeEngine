@@ -3,9 +3,8 @@
 
 #include <iostream>
 #include <functional>
-#include <SDL.h>
-#include <SDL_image.h>
 #include <unordered_map>
+#include "../dependencies.h"
 #include "../entities/GameObject.h"
 #include "../entities/Force.h"
 #include "../entities/Body.h"
@@ -61,7 +60,7 @@ class EntityManager {
 
     // All objects that are visible.
     // Passed to the renderer. Sorted by their z-coordinate.
-    map<int, vector<GameObject*>> visible_objects;
+    map<int, vector<GameObject*> > visible_objects;
 
     // all objects that hold a collider
     vector<GameObject*> collision_objects;

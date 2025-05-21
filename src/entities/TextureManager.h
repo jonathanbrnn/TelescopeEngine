@@ -4,10 +4,9 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
-#include <SDL.h>
-#include <SDL_image.h>
+#include "../dependencies.h"
 
-using namespace std; 
+using namespace std;
 
 class TextureManager {
 public:

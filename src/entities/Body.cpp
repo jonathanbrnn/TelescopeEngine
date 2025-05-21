@@ -70,3 +70,13 @@ void Body::ApplyForce(float initial_force, float duration, ForceMode update_mode
     Force* new_force = new Force(initial_force, duration, update_mode, axis);
     forces.push_back(new_force);
 }
+
+Body::Body(const Body& other) {
+    forces.clear();
+    expired_forces_indices.clear();
+}
+
+Body::~Body() {
+    forces.clear();
+    expired_forces_indices.clear();
+}
