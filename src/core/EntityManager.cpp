@@ -92,6 +92,13 @@ void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, fl
 
     // Store it
     AddNewObject(clone);
+
+    /*
+    An earlier "solution" kept crashing because it was adding the objects directly to the relevant vectors within this method.
+    This caused a curious bug where the first eight objects added using Instantiate() worked perfectly fine, the ninth however, caused the game to crash.
+    This is due to the buffer of each vector holding up to eight objects before allocating new memory.
+    Since Instantiate() was called from an Update() method, the vector (total_objects) was trying to reallocate new memory while being iterated over.
+    */
 }
 
 void EntityManager::AddNewObject(GameObject* game_object) {

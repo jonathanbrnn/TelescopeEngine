@@ -82,6 +82,7 @@ class EntityManager {
     // Appends these objects to the relevant vectors and maps before all game objects are updated in the next frame.
     vector<GameObject*> temporal_objects;
 
+
     // Vector that stores all game objects that were "deleted" this frame.
     vector<string> temporal_to_delete;
 

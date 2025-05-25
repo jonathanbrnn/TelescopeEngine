@@ -67,6 +67,15 @@ void Player::Update() {
 
     if (managerHub->inputManager->IsPressed("H") != 0) {
         CreateHeart();
+        CreateHeart();
+        CreateHeart();
+        CreateHeart();
+        CreateHeart();
+        CreateHeart();
+        CreateHeart();
+        CreateHeart();
+        CreateHeart();
+        CreateHeart();
     }
 
     if(inp->IsPressed("K")) {
