@@ -102,7 +102,7 @@ class GameObject {
         // CONSTRUCTOR:
         // Set texture_filepath to "" to make it invisible.
         GameObject(SDL_Renderer* renderer, string name, float pos_x = 0, float pos_y = 0, float pos_z = 0, float width = 1,
-            float height = 1, float rotation = 0, string texture_filepath = "/Users/admin/TelescopeEngine/media/sample_640×426.bmp");
+            float height = 1, float rotation = 0, string texture_filepath = "../media/sample_640×426.bmp");
 
         // Called before the first frame and after Start().
         // Checks if the game object is correctly configured.

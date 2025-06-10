@@ -6,7 +6,7 @@
 #include "../dependencies.h"
 #include "../entities/GameObject.h"
 #include "../core/ManagerHub.h"
-#include "SDL2/SDL_render.h"
+#include <SDL_render.h>
 
 using namespace std;
 

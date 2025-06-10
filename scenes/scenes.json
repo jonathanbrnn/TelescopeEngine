@@ -1,0 +1,21 @@
+{
+    "id": "test_scene",
+    "objects": [
+        {
+            "name": "Player",
+            "position": [
+                100,
+                100,
+                0
+            ]
+        },
+        {
+            "name": "ground",
+            "position": [
+                0,
+                0,
+                0
+            ]
+        }
+    ]
+}

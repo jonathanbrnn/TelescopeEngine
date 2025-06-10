@@ -29,7 +29,8 @@ void UpdateAll(SDL_Renderer* renderer) {
                 quit = true;
                 break;
             }
-            managerHub->inputManager->UpdateInputManager(event);
+            
+            managerHub->inputManager->UpdateInputManager(event); 
         }
 
         managerHub->timeManager->UpdateTime();

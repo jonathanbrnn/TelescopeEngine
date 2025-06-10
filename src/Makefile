@@ -14,12 +14,15 @@ endif
 CXX = clang++
 CXXFLAGS = $(ARCH_FLAGS) -std=c++17 -Wall \
     -I$(BREW_PREFIX)/Cellar/sdl2/2.32.2/include/SDL2 \
-    -I$(BREW_PREFIX)/Cellar/sdl2_image/2.8.8/include/SDL2
+    -I$(BREW_PREFIX)/Cellar/sdl2_image/2.8.8/include/SDL2 \
+	-I$(BREW_PREFIX)/Cellar/nlohmann-json/3.12.0/include
 CFLAGS = $(ARCH_FLAGS) -Wall \
 	-I$(BREW_PREFIX)/Cellar/sdl2/2.32.2/include/SDL2 \
-    -I$(BREW_PREFIX)/Cellar/sdl2_image/2.8.8/include/SDL2
+    -I$(BREW_PREFIX)/Cellar/sdl2_image/2.8.8/include/SDL2 \
+	-I$(BREW_PREFIX)/Cellar/nlohmann-json/3.12.0/include
 LDFLAGS = $(ARCH_FLAGS) -L$(BREW_PREFIX)/Cellar/sdl2/2.32.2/lib \
-    -L$(BREW_PREFIX)/Cellar/sdl2_image/2.8.8/lib -lSDL2 -lSDL2_image
+    -L$(BREW_PREFIX)/Cellar/sdl2_image/2.8.8/lib -lSDL2 -lSDL2_image \
+	-I$(BREW_PREFIX)/Cellar/nlohmann-json/3.12.0/include
 
 # Target executable
 TARGET = sdl

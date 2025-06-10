@@ -29,8 +29,6 @@ GameObject::GameObject(SDL_Renderer* renderer, string name, float pos_x, float p
     rect.w = static_cast<int>(width);
     rect.h = static_cast<int>(height);
 
-    cout << name << endl;
-
     collider = nullptr;
 
     body = nullptr;
@@ -226,8 +224,6 @@ GameObject::GameObject(const GameObject& other) {
     } else {
         texture = nullptr;
     }
-
-    cout << "Hello from the copy constructor!" << name << endl;
 }
 
 GameObject::~GameObject() {

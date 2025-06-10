@@ -17,6 +17,13 @@
 #include "rendering/Camera.h"
 #include "utilities/BaseObject.h"
 
+#include <iostream>
+#include <fstream>
+
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
+
 
 #include <vector>
 #include <map>
@@ -54,7 +61,45 @@ void closeEngine(SDL_Window* window, SDL_Renderer* renderer) {
     SDL_Quit();
 }
 
+/*
+void json_test() {
+    using json = nlohmann::json;
+    std::string scene_name = "test_scene";
+
+    json scene = {
+        {"id", "test_scene"},
+        {"objects", json::array({
+            {
+                {"name", "Player"},
+                {"position", {100, 100, 0}}
+            },
+            {
+                {"name", "ground"},
+                {"position", {0, 0, 0}}
+            }
+        })}
+    };
+
+    ofstream out("../scenes/scenes.json");
+    if (out.is_open()) {
+        out << scene.dump(4); 
+        out.close();
+    }
+
+    ifstream in("../scenes/scenes.json"); 
+    if (in.is_open()) {
+        json data;
+        in >> data; 
+        in.close(); 
+        cout << "This is a test" << endl; 
+        cout << data["objects"]["Player"]["position"][0];
+    }
+}
+*/
+
 int main() {
+    //json_test(); 
+
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
 
@@ -62,12 +107,12 @@ int main() {
 
     InitializeEngine(window, renderer);
 
-    Player* player = new Player(renderer, "Jonathan", 450, 0, 0, 128, 128, 0, "/Users/admin/TelescopeEngine/media/images/PlayerRun1.png");
-    BaseObject* ground_left = new BaseObject(renderer, "ground_left", 0, 366, -1, 221, 534, 0, "/Users/admin/TelescopeEngine/media/images/ground_left.png");
-    BaseObject* ground_right_bottom = new BaseObject(renderer, "ground_right_bottom", 950, 717, -1, 187, 183, 0, "/Users/admin/TelescopeEngine/media/images/ground_right_bottom.png");
-    BaseObject* ground_right_top = new BaseObject(renderer, "ground_right_top", 977, 672, -1, 463, 228, 0, "/Users/admin/TelescopeEngine/media/images/ground_right_top.png");
-    BaseObject* background = new BaseObject(renderer, "background", 0, 0, -2, 1440, 900, 0, "/Users/admin/TelescopeEngine/media/images/background_white.png");
-    Spikes* spikes = new Spikes(renderer, "Spikes", 1200, 200, 0, 100, 55, 0, "/Users/admin/TelescopeEngine/media/images/spikes-walking-1.png");
+    Player* player = new Player(renderer, "Jonathan", 450, 0, 0, 128, 128, 0, "../media/images/PlayerRun1.png");
+    BaseObject* ground_left = new BaseObject(renderer, "ground_left", 0, 366, -1, 221, 534, 0, "../media/images/ground_left.png");
+    BaseObject* ground_right_bottom = new BaseObject(renderer, "ground_right_bottom", 950, 717, -1, 187, 183, 0, "../media/images/ground_right_bottom.png");
+    BaseObject* ground_right_top = new BaseObject(renderer, "ground_right_top", 977, 672, -1, 463, 228, 0, "../media/images/ground_right_top.png");
+    BaseObject* background = new BaseObject(renderer, "background", 0, 0, -2, 1440, 900, 0, "../media/images/background_white.png");
+    Spikes* spikes = new Spikes(renderer, "Spikes", 1200, 200, 0, 100, 55, 0, "../media/images/spikes-walking-1.png");
 
     ground_left->AddCollider();
     ground_right_bottom->AddCollider();

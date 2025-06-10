@@ -5,9 +5,6 @@
 #include <map>
 #include "../entities/GameObject.h"
 #include "../core/ManagerHub.h"
-#include "SDL2/SDL_rect.h"
-#include "SDL2/SDL_render.h"
-#include "SDL2/SDL_timer.h"
 
 using namespace std;
 

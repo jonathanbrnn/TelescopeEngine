@@ -33,9 +33,13 @@ class InputManager {
     // Returns -1 for "Horizontal" ("A", "Left") and "Vertical" ("W", "Up") and 1 for "Horizontal" ("D", "Right") and "Vertical" ("S", "Down").
     int IsPressed(string key);
 
+    // Copies the current mouse position. 
+    void GetMousePosition(int& mouse_pos_x, int& mouse_pos_y);
+
     private:
     explicit InputManager() {}
 
+    // KEYBOARD & MOUSE 
     // Keeps track of all key states. Returns true if a key is pressed or held down, false otherwise.
     map<string, bool> key_states = {
         {"Escape", false}, {"^", false}, {"1", false}, {"2", false}, {"3", false}, {"4", false}, {"5", false},
@@ -47,11 +51,16 @@ class InputManager {
         {"Left Shift", false}, {"<", false}, {"Y", false}, {"X", false}, {"C", false}, {"V", false}, {"B", false},
         {"N", false}, {"M", false}, {",", false}, {".", false}, {"-", false}, {"Right Shift", false},
         {"Left Ctrl", false}, {"Left Option", false}, {"Left Command", false}, {"Space", false},
-        {"Right Command", false}, {"Right Option", false}, {"Left", false}, {"Up", false}, {"Down", false}, {"Right", false}
+        {"Right Command", false}, {"Right Option", false}, {"Left", false}, {"Up", false}, {"Down", false}, {"Right", false},
+        {"Mouse Left", false}, {"Mouse Middle", false}, {"Mouse Right", false}
     };
 
     // Holds all keys that were pressed during the current frame. Is reset at the start of each frame.
     map<string, bool> current_frame_keys;
+
+    // Keeps track of the mouse position. 
+    int mouse_pos_x; 
+    int mouse_pos_y; 
 };
 
 #endif

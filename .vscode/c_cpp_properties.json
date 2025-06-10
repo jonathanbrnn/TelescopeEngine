@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/opt/homebrew/Cellar/sdl2/2.32.2/include/SDL2",
-                "/opt/homebrew/Cellar/sdl2_image/2.8.8/include/SDL2"
+                "/opt/homebrew/Cellar/sdl2_image/2.8.8/include/SDL2",
+                "/opt/homebrew/Cellar/nlohmann-json/3.12.0/include/nlohmann"
             ],
             "defines": [],
             "macFrameworkPath": [

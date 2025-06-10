@@ -49,7 +49,10 @@ class Camera {
     void ToggleSmoothFollow(float speed = 0.1, string name = "");
 
     // Translates a point on screen to the respective world position.
-    tuple<float, float> CameraToWorld() { return {x + screenWidth / zoom, y + screenHeight / zoom}; }
+    void CameraToWorld(int& x, int& y) { 
+        x = x + screenWidth / zoom;
+        y = y + screenHeight / zoom; 
+    }
 
     // Called upon engine initialization.
     void StartCamera(ManagerHub* managerHub);

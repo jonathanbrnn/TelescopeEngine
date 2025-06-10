@@ -5,8 +5,7 @@ void Heart::Start() {
     AddAnimator();
     animator->AddState("default", default_anim, 5);
     animator->AddState("break", breaking_anim, 5);
-    animator->SetState("default");
-    cout << name << " " << &animator << endl;
+    animator->SetState("default");  
 }
 
 void Heart::Update() {

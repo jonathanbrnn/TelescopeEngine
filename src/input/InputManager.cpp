@@ -7,16 +7,34 @@ void InputManager::ResetIsPressed() {
 }
 
 void InputManager::UpdateInputManager(SDL_Event& event) {
-    string key_name = SDL_GetKeyName(event.key.keysym.sym);
+    Uint32 mouse_state = SDL_GetMouseState(&mouse_pos_x, &mouse_pos_y); 
 
-    if (event.type == SDL_KEYDOWN) {
-        key_states[key_name] = true;
-        current_frame_keys[key_name] = true;
+    key_states["Mouse Left"] = mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT);
+    key_states["Mouse Middle"] = mouse_state & SDL_BUTTON(SDL_BUTTON_MIDDLE);
+    key_states["Mouse Right"] = mouse_state & SDL_BUTTON(SDL_BUTTON_RIGHT);
+
+    if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
+        string key_name = SDL_GetKeyName(event.key.keysym.sym);
+
+        if (event.type == SDL_KEYDOWN) {
+            key_states[key_name] = true;
+            current_frame_keys[key_name] = true;
+        }
+        else if (event.type == SDL_KEYUP) {
+            key_states[key_name] = false;
+        }
     }
-    else if (event.type == SDL_KEYUP) {
-        key_states[key_name] = false;
+
+    if (event.type == SDL_MOUSEBUTTONDOWN) {
+        if (event.button.button == SDL_BUTTON_LEFT)
+            current_frame_keys["Mouse Left"] = true;
+        else if (event.button.button == SDL_BUTTON_MIDDLE)
+            current_frame_keys["Mouse Middle"] = true;
+        else if (event.button.button == SDL_BUTTON_RIGHT)
+            current_frame_keys["Mouse Right"] = true;
     }
 }
+
 
 int InputManager::IsPressedDown(string key) {
     if (key == "Horizontal") {
@@ -72,4 +90,9 @@ int InputManager::IsPressed(string key) {
 
     current_frame_keys[key] = false;
     return 0;
+}
+
+void InputManager::GetMousePosition(int& mouse_pos_x, int& mouse_pos_y) {
+    mouse_pos_x = this->mouse_pos_x; 
+    mouse_pos_y = this->mouse_pos_y; 
 }

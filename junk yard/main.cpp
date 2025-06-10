@@ -138,7 +138,7 @@ int main(int argc, char* args[]) {
     SDL_Renderer* renderer = NULL;
     SDL_Window* window = createWindow(renderer, 640, 426);
 
-    loadImage(renderer, "/Users/jonathan/TelescopeEngine/media/sample_640×426.bmp");
+    loadImage(renderer, "../media/sample_640×426.bmp");
 
     runtime(window, renderer);
 

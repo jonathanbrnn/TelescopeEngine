@@ -232,7 +232,7 @@ public:
     //Constructor
     GameObject(SDL_Renderer* renderer, string name, float pos_x = 0.0f, float pos_y = 0.0f, float pos_z = 0.0f, 
                 float width = 100.0f, float height = 100.0f, float rotation = 0.0f, 
-                string texture_filepath = "/Users/jonathan/TelescopeEngine/media/sample_640×426.bmp", bool hasBody = true); 
+                string texture_filepath = "../media/sample_640×426.bmp", bool hasBody = true); 
 };
 */
 

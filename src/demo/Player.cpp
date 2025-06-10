@@ -4,14 +4,16 @@
 
 using namespace std;
 
+InputManager* inp; 
+
 void Player::Start() {
     AddBody(1, true);
     AddCollider();
     AddAnimator();
 
-    Heart* heart1 = new Heart(renderer, "Heart1", 30, 30, 2, 100, 100, 0, "/Users/admin/TelescopeEngine/media/images/Heart-1.png");
-    Heart* heart2 = new Heart(renderer, "Heart2", 160, 30, 2, 100, 100, 0, "/Users/admin/TelescopeEngine/media/images/Heart-1.png");
-    Heart* heart3 = new Heart(renderer, "Heart3", 290, 30, 2, 100, 100, 0, "/Users/admin/TelescopeEngine/media/images/Heart-1.png");
+    Heart* heart1 = new Heart(renderer, "Heart1", 30, 30, 2, 100, 100, 0, "../media/images/Heart-1.png");
+    Heart* heart2 = new Heart(renderer, "Heart2", 160, 30, 2, 100, 100, 0, "../media/images/Heart-1.png");
+    Heart* heart3 = new Heart(renderer, "Heart3", 290, 30, 2, 100, 100, 0, "../media/images/Heart-1.png");
 
     managerHub->entityManager->AddNewObject(heart1);
     managerHub->entityManager->AddNewObject(heart2);
@@ -27,14 +29,14 @@ void Player::Start() {
     animator->AddState("idle", idle, 5);
     animator->AddState("walking", walking, 5);
     animator->AddState("wave", wave, 10);
+
+    inp = managerHub->inputManager;
 }
 
 void Player::Update() {
 
     Walk();
     Jump();
-
-    InputManager* inp = managerHub->inputManager;
 
     if (inp->IsPressed("Down")) {
         SetScale(this->scale_x - 0.1, this->scale_y - 0.1);
@@ -67,19 +69,27 @@ void Player::Update() {
 
     if (managerHub->inputManager->IsPressed("H") != 0) {
         CreateHeart();
-        CreateHeart();
-        CreateHeart();
-        CreateHeart();
-        CreateHeart();
-        CreateHeart();
-        CreateHeart();
-        CreateHeart();
-        CreateHeart();
-        CreateHeart();
     }
 
     if(inp->IsPressed("K")) {
         managerHub->entityManager->Instantiate("ground_left", pos_x, pos_y, 100, 0, -1);
+    }
+
+    if (inp->IsPressed("Mouse Left")) {
+        int mouse_pos_x, mouse_pos_y; 
+        inp->GetMousePosition(mouse_pos_x, mouse_pos_y);
+
+        cout << mouse_pos_x << " " << mouse_pos_y << endl;
+
+        managerHub->camera->CameraToWorld(mouse_pos_x, mouse_pos_y); 
+
+        managerHub->entityManager->Instantiate("Heart1", mouse_pos_x, mouse_pos_y, 0, 0, -2);   
+
+        cout << mouse_pos_x << " " << mouse_pos_y << endl;
+    }
+
+    if (inp->IsPressedDown("Mouse Left")) {
+        cout << "MOUSE TEST 2 : ISPRESSEDDOWN" << endl; 
     }
 
     if (pos_y > 1100) {
@@ -157,7 +167,7 @@ void Player::CreateHeart() {
 
     int scale = dist(gen);
 
-    Heart* clone = new Heart(renderer, "Heart_clone", pos_x + (width / 2), pos_y, 2, scale, scale, 0, "/Users/admin/TelescopeEngine/media/images/Heart-1.png");
+    Heart* clone = new Heart(renderer, "Heart_clone", pos_x + (width / 2), pos_y, 2, scale, scale, 0, "../media/images/Heart-1.png");
 
     managerHub->entityManager->AddNewObject(clone);
     */
@@ -177,13 +187,11 @@ void Player::Jump() {
         if (jumps == 1) {
             // MAKE IT POSSIBLE TO DELETE A FORCE FROM THE BODY.
             // F.E.: Double jump, left over dy force is carried over to the second jump, making it a bit stronger than the first.
-            //body->forces.clear();
+            // body->forces.clear();
         }
 
         jumps -= 1;
         body->ApplyForce(-10, 1, LINEAR, AXIS_Y);
         is_grounded = false;
-
-        cout << jumps << endl;
     }
 }

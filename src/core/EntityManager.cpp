@@ -50,7 +50,6 @@ void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, fl
     //GameObject* clone = new GameObject(renderer, prefab_name, pos_x, pos_y, pos_z, name_objects[prefab_name]->width, name_objects[prefab_name]->height, name_objects[prefab_name]->rotation, name_objects[prefab_name]->texture_filepath);
     GameObject* clone = name_objects[prefab_name]->Clone();
 
-
     if (clone_version.find(prefab_name) == clone_version.end()) {
         clone_version[prefab_name] = 0;
     }
@@ -71,9 +70,10 @@ void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, fl
         cout << "The position has been set to the prefabs." << endl;
     }
 
-    clone->Start();
+    clone->Start(); 
 
     // THIS MAKES NO SENSE AT ALL WHAT THE FUCK -> FIX IT!! if base_dx is the same as saying if base_dx != 0.
+    // This obviously goes for everything above too. 
     if (clone->body != nullptr) {
         if ((base_dx && base_dy)) {
             clone->body->SetVelocityBothAxis(base_dx, base_dy);
@@ -109,10 +109,9 @@ void EntityManager::PushNewObjects() {
     if (temporal_objects.size() == 0) { return; }
 
     for (auto game_object : temporal_objects) {
-        game_object->Start();
         total_objects.push_back(game_object);
 
-        if (game_object->texture != nullptr) {
+        if (game_object->texture != nullptr || game_object->texture_filepath != "") {
             visible_objects[game_object->pos_z].push_back(game_object);
         }
 
