@@ -4,6 +4,10 @@
 #include <map>
 #include <iostream>
 
+#include "../core/ManagerHub.h"
+
+class ManagerHub; 
+
 using namespace std;
 
 class InputManager {
@@ -14,6 +18,8 @@ class InputManager {
         static InputManager instance;
         return instance;
     };
+
+    void OnStart(ManagerHub* managerHub); 
 
     void ResetIsPressed();
 
@@ -33,7 +39,7 @@ class InputManager {
     // Returns -1 for "Horizontal" ("A", "Left") and "Vertical" ("W", "Up") and 1 for "Horizontal" ("D", "Right") and "Vertical" ("S", "Down").
     int IsPressed(string key);
 
-    // Copies the current mouse position. 
+    // Copies the current mouse position in world space. 
     void GetMousePosition(int& mouse_pos_x, int& mouse_pos_y);
 
     private:
@@ -61,6 +67,8 @@ class InputManager {
     // Keeps track of the mouse position. 
     int mouse_pos_x; 
     int mouse_pos_y; 
+
+    ManagerHub* managerHub; 
 };
 
 #endif

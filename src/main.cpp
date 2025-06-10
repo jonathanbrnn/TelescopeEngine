@@ -53,6 +53,8 @@ void InitializeEngine(SDL_Window*& window, SDL_Renderer*& renderer) {
     camera->StartCamera(&ManagerHub::GetInstance());
 
     collisionManager->OnStart(&ManagerHub::GetInstance());
+
+    inputManager->OnStart(&ManagerHub::GetInstance()); 
 }
 
 void closeEngine(SDL_Window* window, SDL_Renderer* renderer) {

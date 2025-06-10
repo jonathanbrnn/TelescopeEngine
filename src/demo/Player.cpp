@@ -81,15 +81,7 @@ void Player::Update() {
 
         cout << mouse_pos_x << " " << mouse_pos_y << endl;
 
-        managerHub->camera->CameraToWorld(mouse_pos_x, mouse_pos_y); 
-
         managerHub->entityManager->Instantiate("Heart1", mouse_pos_x, mouse_pos_y, 0, 0, -2);   
-
-        cout << mouse_pos_x << " " << mouse_pos_y << endl;
-    }
-
-    if (inp->IsPressedDown("Mouse Left")) {
-        cout << "MOUSE TEST 2 : ISPRESSEDDOWN" << endl; 
     }
 
     if (pos_y > 1100) {

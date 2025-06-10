@@ -10,6 +10,7 @@
 #include "../rendering/Camera.h"
 
 class Camera;
+class InputManager; 
 
 class ManagerHub {
 public:

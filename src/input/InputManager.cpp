@@ -2,6 +2,10 @@
 
 using namespace std;
 
+void InputManager::OnStart(ManagerHub* managerHub) {
+    this->managerHub = managerHub; 
+}
+
 void InputManager::ResetIsPressed() {
     current_frame_keys.clear();
 }
@@ -93,6 +97,6 @@ int InputManager::IsPressed(string key) {
 }
 
 void InputManager::GetMousePosition(int& mouse_pos_x, int& mouse_pos_y) {
-    mouse_pos_x = this->mouse_pos_x; 
-    mouse_pos_y = this->mouse_pos_y; 
+    mouse_pos_x = this->mouse_pos_x + managerHub->camera->x; 
+    mouse_pos_y = this->mouse_pos_y + managerHub->camera->y; 
 }
