@@ -92,7 +92,6 @@ int InputManager::IsPressed(string key) {
         return 1;
     }
 
-    current_frame_keys[key] = false;
     return 0;
 }
 

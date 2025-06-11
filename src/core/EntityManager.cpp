@@ -110,6 +110,7 @@ void EntityManager::PushNewObjects() {
 
     for (auto game_object : temporal_objects) {
         total_objects.push_back(game_object);
+        game_object->Start(); 
 
         if (game_object->texture != nullptr || game_object->texture_filepath != "") {
             visible_objects[game_object->pos_z].push_back(game_object);
