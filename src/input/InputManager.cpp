@@ -95,7 +95,18 @@ int InputManager::IsPressed(string key) {
     return 0;
 }
 
-void InputManager::GetMousePosition(int& mouse_pos_x, int& mouse_pos_y) {
+void InputManager::GetMousePosition(int& mouse_pos_x, int& mouse_pos_y, bool clamp) {
     mouse_pos_x = this->mouse_pos_x + managerHub->camera->x; 
     mouse_pos_y = this->mouse_pos_y + managerHub->camera->y; 
+
+    const int screen_width = managerHub->Get_Screen_Width(); 
+    const int screen_height = managerHub->Get_Screen_Height(); 
+
+    if (clamp) {
+        if (mouse_pos_x < 0) { mouse_pos_x = 0; }
+        else if (mouse_pos_x >= screen_width) { mouse_pos_x = screen_width - 1; }
+
+        if (mouse_pos_y < 0) { mouse_pos_y = 0; }
+        else if (mouse_pos_y >= screen_height) { mouse_pos_y = screen_height - 1; }
+    }
 }

@@ -39,8 +39,8 @@ class InputManager {
     // Returns -1 for "Horizontal" ("A", "Left") and "Vertical" ("W", "Up") and 1 for "Horizontal" ("D", "Right") and "Vertical" ("S", "Down").
     int IsPressed(string key);
 
-    // Copies the current mouse position in world space. 
-    void GetMousePosition(int& mouse_pos_x, int& mouse_pos_y);
+    // Copies the current mouse position in world space. Set clamp = false to receive coordinates outside the application window.  
+    void GetMousePosition(int& mouse_pos_x, int& mouse_pos_y, bool clamp = true);
 
     private:
     explicit InputManager() {}

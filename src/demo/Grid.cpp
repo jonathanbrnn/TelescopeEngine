@@ -78,7 +78,7 @@ void Grid::Update() {
         current_frame += 1;
         if (current_frame > frame_delay) { current_frame = 0; }
 
-        if (current_frame % frame_delay == 0) {
+        if (current_frame >= frame_delay) {
             vector<vector<int>> bin_copy = cells_bin; 
 
             for (int i = 0; i < rows; i++) {
@@ -108,24 +108,20 @@ void Grid::Update() {
                         cells_bin[i][j] = 1; 
                         cells[i][j]->SetState(1); 
                     }
-                    else {
-                        cells_bin[i][j] = 0; 
-                        cells[i][j]->SetState(0); 
-                    }
                 }
             }
         }
     }
-    else if (input->IsPressed("Mouse Left") || input->IsPressedDown("Mouse Left")) {
+    else if (input->IsPressedDown("Mouse Left") || input->IsPressedDown("Mouse Right")) {
         int mouse_x; 
         int mouse_y; 
 
         input->GetMousePosition(mouse_x, mouse_y); 
 
         int i = static_cast<int>(mouse_y / common_divisor); 
-        int j = static_cast<int>(mouse_x / common_divisor); 
+        int j = static_cast<int>(mouse_x / common_divisor);
 
-        // Either remove FlipState() or make it return the new state to instantly do both (example: cells_bin[i][j] = cells[i][j]->FlipState(); )
+        // Either remove FlipState() or make it return the new state to instantly do both (could be: cells_bin[i][j] = cells[i][j]->FlipState(); )
         if (cells_bin[i][j] == 1) { 
             cells_bin[i][j] = 0; 
             cells[i][j]->FlipState(); 

@@ -34,7 +34,7 @@ class Grid : public GameObject {
 
     bool is_paused = false; 
 
-    int frame_delay = 50; 
+    int frame_delay = 20; 
     int current_frame = 0; 
 }; 
 
