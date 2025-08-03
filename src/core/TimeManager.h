@@ -2,6 +2,7 @@
 #define TIMEMANAGER_H
 
 #include <chrono>
+#include <iostream>
 
 class TimeManager {
 public: 

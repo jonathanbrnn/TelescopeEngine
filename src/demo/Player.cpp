@@ -183,7 +183,7 @@ void Player::Jump() {
         }
 
         jumps -= 1;
-        body->ApplyForce(-10, 1, LINEAR, AXIS_Y);
+        body->SetDY(-10); 
         is_grounded = false;
     }
 }

@@ -68,7 +68,7 @@ class Camera {
     int screenHeight;
 
     float target_zoom = 1.0f;
-    float zoom_speed = 0.3f;
+    float zoom_speed = 0.0f;
     bool zoom_out = false;
     bool zoom_in = false;
 

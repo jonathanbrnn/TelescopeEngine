@@ -4,6 +4,8 @@
 #include "demo/Celestine.h"
 #include "demo/Spikes.h"
 
+#include "demo/Grid.h"
+
 #include "core/ManagerHub.h"
 #include "core/EntityManager.h"
 #include "core/TimeManager.h"
@@ -20,20 +22,20 @@
 #include <iostream>
 #include <fstream>
 
-#include <nlohmann/json.hpp>
+//#include <nlohmann/json.hpp>
 
-using json = nlohmann::json;
+//using json = nlohmann::json;
 
 
 #include <vector>
 #include <map>
 
 
-void InitializeEngine(SDL_Window*& window, SDL_Renderer*& renderer) {
-    window = InitializeWindow(1440, 900);
+void InitializeEngine(SDL_Window*& window, SDL_Renderer*& renderer, int screen_width = 1440, int screen_height = 900) {
+    window = InitializeWindow(screen_width, screen_height);
     renderer = InitializeRenderer(window, true);
 
-    Camera* camera = new Camera(1440, 900);
+    Camera* camera = new Camera(screen_width, screen_height);
 
     EntityManager* entityManager = &EntityManager::GetInstance(renderer);
 
@@ -49,6 +51,8 @@ void InitializeEngine(SDL_Window*& window, SDL_Renderer*& renderer) {
 
 
     managerHub->OnStart(camera, entityManager, timeManager, collisionManager, textureManager, inputManager);
+
+    managerHub->SetStorage(screen_width, screen_height, renderer);
 
     camera->StartCamera(&ManagerHub::GetInstance());
 
@@ -107,8 +111,10 @@ int main() {
 
     ManagerHub* managerHub = &ManagerHub::GetInstance();
 
-    InitializeEngine(window, renderer);
+    InitializeEngine(window, renderer, 1440, 900);
 
+
+    /*
     Player* player = new Player(renderer, "Jonathan", 450, 0, 0, 128, 128, 0, "../media/images/PlayerRun1.png");
     BaseObject* ground_left = new BaseObject(renderer, "ground_left", 0, 366, -1, 221, 534, 0, "../media/images/ground_left.png");
     BaseObject* ground_right_bottom = new BaseObject(renderer, "ground_right_bottom", 950, 717, -1, 187, 183, 0, "../media/images/ground_right_bottom.png");
@@ -128,6 +134,15 @@ int main() {
     prefabs.push_back(ground_right_top);
     prefabs.push_back(background);
     prefabs.push_back(spikes);
+    
+    */
+
+    Grid* grid = new Grid(renderer, "Grid", 10000, 10000); 
+    grid->SetCellThreshold(16); 
+
+    vector<GameObject*> prefabs; 
+
+    prefabs.push_back(grid); 
 
     if (managerHub->entityManager != nullptr) {
         cout << "WOOOHOOO!" << endl;

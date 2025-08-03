@@ -54,7 +54,7 @@ void Camera::UpdateCamera(float deltaTime) {
         float desired_x = target_x - (screenWidth / 2.0f) / zoom;
         float desired_y = target_y - (screenHeight / 2.0f) / zoom;
 
-        x += (desired_x - x) * (1.0f - std::exp(-lerp_speed * deltaTime));
-        y += (desired_y - y) * (1.0f - std::exp(-lerp_speed * deltaTime));
+        x += (desired_x - x) * (1.0f - exp(-lerp_speed * deltaTime));
+        y += (desired_y - y) * (1.0f - exp(-lerp_speed * deltaTime));
     }
 }
