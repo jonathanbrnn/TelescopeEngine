@@ -1,6 +1,7 @@
 #include "ManagerHub.h"
 
-void ManagerHub::OnStart(Camera* camera, EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager) {
+void ManagerHub::OnStart(Renderer* renderer, Camera* camera, EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager) {
+    this->renderer = renderer; 
     this->camera = camera;
     this->entityManager = entityManager;
     this->timeManager = timeManager;
@@ -9,10 +10,9 @@ void ManagerHub::OnStart(Camera* camera, EntityManager* entityManager, TimeManag
     this->inputManager = inputManager;
 }
 
-void ManagerHub::SetStorage(int screen_width, int screen_height, SDL_Renderer* renderer) {
+void ManagerHub::SetStorage(int screen_width, int screen_height) {
     this->screen_width = screen_width; 
     this->screen_height = screen_height; 
-    this->renderer = renderer; 
 
     this->storage_set = true; 
 }
@@ -33,10 +33,5 @@ int ManagerHub::Get_Screen_Height() {
     } 
 }
 
-SDL_Renderer* ManagerHub::Get_Renderer() {
-    if (storage_set && renderer != nullptr) { return renderer; } 
-    else {
-        cout << "MANAGERHUB: WARNING! Returning nullptr from Get_Renderer()" << endl; 
-        return nullptr; 
-    }
+ManagerHub::~ManagerHub() { 
 }

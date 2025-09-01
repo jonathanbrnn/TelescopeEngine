@@ -8,11 +8,6 @@
 #include <map>
 #include "EntityManager.h"
 
-EntityManager& EntityManager::GetInstance(SDL_Renderer* renderer) {
-    static EntityManager instance(renderer);
-    return instance;
-}
-
 void EntityManager::OnStart(vector<GameObject*>& prefabs) {
     for (auto* game_object: prefabs) {
         game_object->Start();
@@ -47,7 +42,6 @@ void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, fl
         return;
     }
 
-    //GameObject* clone = new GameObject(renderer, prefab_name, pos_x, pos_y, pos_z, name_objects[prefab_name]->width, name_objects[prefab_name]->height, name_objects[prefab_name]->rotation, name_objects[prefab_name]->texture_filepath);
     GameObject* clone = name_objects[prefab_name]->Clone();
 
     if (clone_version.find(prefab_name) == clone_version.end()) {
@@ -217,11 +211,5 @@ GameObject* EntityManager::FindGameObjectByName(string name) {
     }
     else {
         cout << "ENTITYMANAGER: Warning game object with the name: '" << name << "' could not be found!" << endl;
-    }
-}
-
-EntityManager::EntityManager (SDL_Renderer*& renderer) : renderer(renderer) {
-    if (!renderer) {
-        throw runtime_error("ENTITYMANAGER: Renderer cannot be null when initializing EntityManager!");
     }
 }

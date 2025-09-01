@@ -41,8 +41,6 @@ class GameObject {
         // (!) Currently not implemented.
         float rotation;
 
-        SDL_Renderer* renderer;
-
         // Filepath to the image that should be used for the game objects texture, defines the appearance.
         string texture_filepath;
         // The objects texture.
@@ -101,7 +99,7 @@ class GameObject {
 
         // CONSTRUCTOR:
         // Set texture_filepath to "" to make it invisible.
-        GameObject(SDL_Renderer* renderer, string name, float pos_x = 0, float pos_y = 0, float pos_z = 0, float width = 1,
+        GameObject(string name, float pos_x = 0, float pos_y = 0, float pos_z = 0, float width = 1,
             float height = 1, float rotation = 0, string texture_filepath = "../media/sample_640×426.bmp");
 
         // Called before the first frame and after Start().

@@ -1,17 +1,38 @@
-#ifndef RENDERER_H
+#ifndef RENDERER_H 
 #define RENDERER_H
-#include <iostream>
-#include <vector>
-#include <map>
-#include "../dependencies.h"
-#include "../entities/GameObject.h"
-#include "../core/ManagerHub.h"
+
+#include <SDL.h>
 #include <SDL_render.h>
+#include <SDL_image.h>
+#include <SDL_audio.h>
 
-using namespace std;
+#include "../core/ManagerHub.h"
 
-SDL_Window* InitializeWindow(int screenWidth = 600, int screenHeight = 400, int windowPositionX = 0, int windowPositionY = 0, const string& windowTitle = "Telescope Engine");
-SDL_Renderer* InitializeRenderer(SDL_Window* window, bool use_vsync = true);
-void UpdateRenderer(SDL_Renderer* renderer);
+#include <iostream>
+
+using namespace std; 
+
+class Renderer {
+    public: 
+    int InitializeRenderer(const int screen_width = 1440, const int screen_height = 900, const int window_pos_x = 0, const int window_pos_y = 0, const string window_title = "TELESCOPEENGINE", const bool use_vsync = true); 
+
+    virtual void UpdateRenderer() = 0; 
+    
+    SDL_Renderer* Get_Renderer(); 
+
+    SDL_Window* Get_Window(); 
+ 
+    SDL_Window* window = nullptr; 
+    SDL_Renderer* renderer = nullptr; 
+
+    ManagerHub* managerHub = nullptr; 
+
+    Renderer() {}
+
+    ~Renderer() {} 
+    
+    Renderer(const Renderer&) = delete; 
+    Renderer& operator=(const Renderer&) = delete; 
+};
 
 #endif

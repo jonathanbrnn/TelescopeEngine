@@ -8,9 +8,12 @@
 #include "../entities/TextureManager.h"
 #include "../input/InputManager.h"
 #include "../rendering/Camera.h"
+#include "../rendering/Renderer.h"
 
+class Renderer; 
 class Camera;
 class InputManager; 
+class TextureManager; 
 
 class ManagerHub {
 public:
@@ -24,9 +27,10 @@ public:
         return instance;
     }
 
-    void OnStart(Camera* camera, EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager);
-    void SetStorage(int screen_width, int screen_height, SDL_Renderer* renderer); 
+    void OnStart(Renderer* renderer, Camera* camera, EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager);
+    void SetStorage(int screen_width, int screen_height); 
 
+    Renderer* renderer; 
     Camera* camera;
     EntityManager* entityManager;
     TimeManager* timeManager;
@@ -37,14 +41,12 @@ public:
     // Returns the screen width, returns -1 if the screen width is not available.
     int Get_Screen_Width(); 
     int Get_Screen_Height();
-    
-    SDL_Renderer* Get_Renderer(); 
 
+    ~ManagerHub(); 
+    
 private:
     int screen_width; 
     int screen_height; 
-
-    SDL_Renderer* renderer; 
 
     // Is set to true once the SetStore() function executed. 
     bool storage_set = false; 

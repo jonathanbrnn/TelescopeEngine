@@ -2,7 +2,7 @@
 
 using namespace std;
 
-GameObject::GameObject(SDL_Renderer* renderer, string name, float pos_x, float pos_y, float pos_z, float width, float height, float rotation, string texture_filepath) {
+GameObject::GameObject(string name, float pos_x, float pos_y, float pos_z, float width, float height, float rotation, string texture_filepath) {
     this->name = name;
 
     this->pos_x = pos_x;
@@ -18,8 +18,6 @@ GameObject::GameObject(SDL_Renderer* renderer, string name, float pos_x, float p
     this->rotation = rotation;
 
     this->texture_filepath = texture_filepath;
-
-    this->renderer = renderer;
 
     managerHub = &ManagerHub::GetInstance();
 
@@ -37,7 +35,7 @@ GameObject::GameObject(SDL_Renderer* renderer, string name, float pos_x, float p
 
     if (texture_filepath != "") {
         // Set texture of this instance
-        texture = managerHub->textureManager->LoadTexture(texture_filepath, renderer);
+        texture = managerHub->textureManager->LoadTexture(texture_filepath);
         if (!texture) {
             printf("GAMEOBJECT: Could not load associated texture! SDL_Error: %s\n", SDL_GetError());
         }
@@ -79,7 +77,7 @@ void GameObject::UpdateGameObject() {
 
     if (animator != nullptr) {
         if (animator->UpdateAnimator() != 0) {
-            texture = managerHub->textureManager->LoadTexture(animator->current_frame, renderer);
+            texture = managerHub->textureManager->LoadTexture(animator->current_frame);
         }
     }
 }
@@ -199,8 +197,6 @@ GameObject::GameObject(const GameObject& other) {
 
     texture_filepath = other.texture_filepath;
 
-    renderer = other.renderer;
-
     managerHub = &ManagerHub::GetInstance();
 
     // Recalculate SDL_Rect
@@ -217,7 +213,7 @@ GameObject::GameObject(const GameObject& other) {
     animator = nullptr;
 
     if (!texture_filepath.empty()) {
-        texture = managerHub->textureManager->LoadTexture(texture_filepath, renderer);
+        texture = managerHub->textureManager->LoadTexture(texture_filepath);
         if (!texture) {
             printf("GAMEOBJECT (copy): Could not load texture! SDL_Error: %s\n", SDL_GetError());
         }

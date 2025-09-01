@@ -23,11 +23,15 @@ class Force;
 
 class EntityManager {
     public:
-    explicit EntityManager(SDL_Renderer*& renderer);
+    EntityManager(const EntityManager&) = delete;
+    EntityManager& operator=(const EntityManager&) = delete;
 
     // Returns the EntityManager.
     // EntityManager is implemented using the singleton pattern.
-    static EntityManager& GetInstance(SDL_Renderer* renderer = nullptr);
+    static EntityManager& GetInstance() {
+        static EntityManager instance;
+        return instance;
+    };
 
     // Called before the first frame to collect all game objects.
     void OnStart(vector<GameObject*>& prefabs);
@@ -60,7 +64,7 @@ class EntityManager {
 
     // All objects that are visible.
     // Passed to the renderer. Sorted by their z-coordinate.
-    map<int, vector<GameObject*> > visible_objects;
+    map<float, vector<GameObject*> > visible_objects;
 
     // all objects that hold a collider
     vector<GameObject*> collision_objects;
@@ -69,12 +73,6 @@ class EntityManager {
     vector<GameObject*> body_objects;
 
     private:
-
-    EntityManager(const EntityManager&) = delete;
-    EntityManager& operator=(const EntityManager&) = delete;
-
-    SDL_Renderer* renderer = renderer;
-
     // Lookup table for all game objects by name, only used for prefabs and lookup by name.
     unordered_map<string, GameObject*> name_objects;
 
@@ -89,6 +87,8 @@ class EntityManager {
     // Stores the number of clones that have been created using Instantiate().
     // Used to avoid duplicate naming.
     unordered_map<string, int> clone_version;
+
+    explicit EntityManager() {};
 };
 
 #endif
