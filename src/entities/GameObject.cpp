@@ -32,17 +32,6 @@ GameObject::GameObject(string name, float pos_x, float pos_y, float pos_z, float
     body = nullptr;
 
     animator = nullptr;
-
-    if (texture_filepath != "") {
-        // Set texture of this instance
-        texture = managerHub->textureManager->LoadTexture(texture_filepath);
-        if (!texture) {
-            printf("GAMEOBJECT: Could not load associated texture! SDL_Error: %s\n", SDL_GetError());
-        }
-    }
-    else {
-        texture = nullptr;
-    }
 }
 
 void GameObject::CheckGameObject() {

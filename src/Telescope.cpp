@@ -1,14 +1,37 @@
 #include "Telescope.h"
 
 void Engine::Entry(vector<GameObject*> prefabs) {
-    // ADD JSON CONFIG READOUT TO DETERMINE
-    // EDITOR | GAME 
-    // screen_width | screen_height 
-    // window_pos_x | window_pos_y
-    // window_title
-    // full_screen 
-    // VSYNC ON | OFF 
+
+    ifstream in_file("/Users/jonathan/TelescopeEngine/settings/config.json"); 
+    nlohmann::json config_in; 
+    in_file >> config_in; 
+    in_file.close(); 
+
+    if (config_in["mode"] == 0) {
+        mode = GAME; 
+    }
+    else {
+        mode = EDITOR; 
+    }
+
+    use_vsync = config_in["use_vsync"]; 
+    fullscreen = config_in["fullscreen"]; 
+
+    window_title = config_in["window_title"]; 
+
+    screen_width = config_in["screen_dimensions"][0]; 
+    screen_height = config_in["screen_dimensions"][1]; 
+
+    window_pos_x = config_in["window_pos"][0]; 
+    window_pos_y = config_in["window_pos"][1]; 
+
+    if (mode == EDITOR) {
+        bool boot_fullscreen = config_in["boot_editor_in_fullscreen"]; 
+        fullscreen = boot_fullscreen; 
+    }
+
     // ... 
+
 
     Renderer* renderer = nullptr;
 
@@ -21,7 +44,7 @@ void Engine::Entry(vector<GameObject*> prefabs) {
         loop = &EditorLoop::GetInstance(); 
     }
     
-    renderer->InitializeRenderer(screen_width, screen_height, window_pos_x, window_pos_y, window_title, use_vsync);
+    renderer->InitializeRenderer(screen_width, screen_height, window_pos_x, window_pos_y, window_title, use_vsync, fullscreen);
 
     Camera* camera = new Camera(screen_width, screen_height);
 
@@ -39,9 +62,7 @@ void Engine::Entry(vector<GameObject*> prefabs) {
 
     managerHub->OnStart(renderer, camera, entityManager, timeManager, collisionManager, textureManager, inputManager);
 
-    managerHub->SetStorage(screen_width, screen_height);
-
-    this->managerHub = managerHub; 
+    managerHub->SetStorage(screen_width, screen_height); 
 
     camera->StartCamera(managerHub);
 
@@ -52,6 +73,8 @@ void Engine::Entry(vector<GameObject*> prefabs) {
     inputManager->OnStart(managerHub); 
 
     entityManager->OnStart(prefabs); 
+
+    this->managerHub = managerHub;
 
     cout << "ENGINE: Entry complete." << endl; 
 }

@@ -8,7 +8,7 @@ int main() {
 
     // GAMEOBJECTS: 
 
-    Heart* heart = new Heart("heart"); 
+    Heart* heart = new Heart("heart", 100, 100, 0, 100, 100); 
     prefabs.push_back(heart); 
 
     // ...

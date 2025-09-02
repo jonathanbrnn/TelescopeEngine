@@ -1,0 +1,9 @@
+{
+    "mode" : 0,
+    "use_vsync" : true, 
+    "fullscreen" : false,
+    "window_title" : "TelescopeEngine", 
+    "screen_dimensions" : [1440, 900],
+    "window_pos" : [0,0], 
+    "boot_editor_in_fullscreen" : false
+}

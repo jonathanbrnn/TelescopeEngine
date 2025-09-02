@@ -1,7 +1,3 @@
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <unordered_map>
 #include "TextureManager.h"
 
 using namespace std; 
@@ -50,6 +46,7 @@ TextureManager& TextureManager::GetInstance() {
 }
 
 void TextureManager::OnStart(ManagerHub* managerHub) {
+    cout << "is this being called?" << endl; 
     this->managerHub = managerHub; 
     if (managerHub->renderer != nullptr) {
         this->renderer = managerHub->renderer->Get_Renderer(); 
@@ -63,19 +60,26 @@ void TextureManager::OnStart(ManagerHub* managerHub) {
 // improvement would be to just specify a folder for each objects animation which stores the frames. (?) 
 SDL_Texture* TextureManager::LoadTexture(string filepath) {
     if (textures.find(filepath) == textures.end()) {
-        SDL_Texture* texture = IMG_LoadTexture(renderer, filepath.c_str()); 
+        if (!fs::exists(filepath)) {
+            cout << "WARNING: No media found at filepath: " << filepath << ". Filepath was replaced with the default texture!" << endl; 
+            filepath = "/Users/jonathan/TelescopeEngine/media/default/default_grid.png"; 
+        }
 
+        cout << filepath << endl; 
+
+        SDL_Texture* texture = IMG_LoadTexture(renderer, filepath.c_str()); 
+        
         if (!texture) {
             printf("TEXTUREMANAGER: Could not load texture! %s\n", SDL_GetError());
         }
 
-        textures[filepath] = texture; 
+        textures[filepath] = texture;
     }
 
     return textures[filepath]; 
 }
 
-TextureManager::TextureManager() {}
+TextureManager::TextureManager() {} 
 
 TextureManager::~TextureManager() {
     Cleanup();

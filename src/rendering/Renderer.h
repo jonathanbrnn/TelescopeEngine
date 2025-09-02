@@ -14,7 +14,7 @@ using namespace std;
 
 class Renderer {
     public: 
-    int InitializeRenderer(const int screen_width = 1440, const int screen_height = 900, const int window_pos_x = 0, const int window_pos_y = 0, const string window_title = "TELESCOPEENGINE", const bool use_vsync = true); 
+    int InitializeRenderer(const int screen_width = 1440, const int screen_height = 900, const int window_pos_x = 0, const int window_pos_y = 0, const string window_title = "TELESCOPEENGINE", const bool use_vsync = true, const bool fullscreen = false); 
 
     virtual void UpdateRenderer() = 0; 
     

@@ -9,7 +9,10 @@
 #include "EntityManager.h"
 
 void EntityManager::OnStart(vector<GameObject*>& prefabs) {
+    ManagerHub* managerHub = &ManagerHub::GetInstance(); 
+
     for (auto* game_object: prefabs) {
+        game_object->texture = managerHub->textureManager->LoadTexture(game_object->texture_filepath); 
         game_object->Start();
         game_object->CheckGameObject();
         total_objects.push_back(game_object);

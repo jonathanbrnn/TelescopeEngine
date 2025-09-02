@@ -1,13 +1,19 @@
 #include "Renderer.h"
 
-int Renderer::InitializeRenderer(const int screen_width, const int screen_height, const int window_pos_x, const int window_pos_y, const string window_title, const bool use_vsync) {
+int Renderer::InitializeRenderer(const int screen_width, const int screen_height, const int window_pos_x, const int window_pos_y, const string window_title, const bool use_vsync, const bool fullscreen) {
     window = nullptr;  
 
     if (SDL_INIT_VIDEO < 0) {
         printf("SDL could not initilize! SDL_Error: %s\n", SDL_GetError());
     }
     else {
-        window = SDL_CreateWindow(window_title.c_str(), window_pos_x, window_pos_y, screen_width, screen_height, SDL_WINDOW_SHOWN);
+        if (fullscreen) {
+            window = SDL_CreateWindow(window_title.c_str(), window_pos_x, window_pos_y, screen_width, screen_height, SDL_WINDOW_FULLSCREEN_DESKTOP);
+            SDL_ShowWindow(window); 
+        } 
+        else {
+            window = SDL_CreateWindow(window_title.c_str(), window_pos_x, window_pos_y, screen_width, screen_height, SDL_WINDOW_SHOWN);
+        }
 
         if(!window) {
             printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());

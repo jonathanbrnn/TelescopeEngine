@@ -6,13 +6,13 @@
                 "${workspaceFolder}/**",
                 "/opt/homebrew/Cellar/sdl2/2.32.2/include/SDL2",
                 "/opt/homebrew/Cellar/sdl2_image/2.8.8/include/SDL2",
-                "/opt/homebrew/Cellar/nlohmann-json/3.12.0/include/nlohmann"
+                "/opt/homebrew/Cellar/nlohmann-json/3.12.0/include/nlohmann",
+                "/opt/homebrew/Cellar/nlohmann-json/3.12.0/include"
             ],
             "defines": [],
             "macFrameworkPath": [
                 "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
             ],
-            "compilerPath": null,
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-arm64",

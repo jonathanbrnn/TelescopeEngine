@@ -23,6 +23,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <nlohmann/json.hpp>
 
 //#include <nlohmann/json.hpp>
 //using json = nlohmann::json; 
@@ -56,14 +57,18 @@ class Engine {
     Loop* loop = nullptr; 
 
     Mode mode = GAME; 
+
+
+    bool use_vsync = true; 
+    bool fullscreen = false; 
     
+    string window_title = "TelescopeEngine"; 
+
     int screen_width = 1440; 
     int screen_height = 900; 
-    string window_title = "TelescopeEngine"; 
+
     int window_pos_x = 0; 
     int window_pos_y = 0; 
-    bool full_screen = false; 
-    bool use_vsync = true; 
 
     bool running = false; 
 

@@ -151,7 +151,7 @@ int main() {
     managerHub->entityManager->OnStart(prefabs);
 
     cout << "ENTERING UPDATE!" << endl;
-    UpdateAll(renderer);
+    UpdateAll(renderer);    
 
     closeEngine(window, renderer);
 
