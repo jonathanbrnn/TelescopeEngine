@@ -15,12 +15,14 @@ CXXFLAGS = $(ARCH_FLAGS) -std=c++17 -Wall \
     -I. \
     -I$(BREW_PREFIX)/Cellar/sdl2/2.32.2/include/SDL2 \
     -I$(BREW_PREFIX)/Cellar/sdl2_image/2.8.8/include/SDL2 \
-    -I$(BREW_PREFIX)/Cellar/nlohmann-json/3.12.0/include
+    -I$(BREW_PREFIX)/Cellar/nlohmann-json/3.12.0/include \
+    -Iextern/imgui \
+    -Iextern/imgui/backends
 
 LDFLAGS = $(ARCH_FLAGS) \
     -L$(BREW_PREFIX)/Cellar/sdl2/2.32.2/lib \
     -L$(BREW_PREFIX)/Cellar/sdl2_image/2.8.8/lib \
-    -lSDL2 -lSDL2_image
+    -lSDL2 -lSDL2_image -framework OpenGL
 
 TARGET = game
 
@@ -29,6 +31,7 @@ SRCS = main.cpp \
         demo/platformer/Heart.cpp \
         src/Telescope.cpp \
         src/dependencies.cpp \
+        src/core/Editor.cpp \
 		src/core/ManagerHub.cpp \
 		src/core/EntityManager.cpp \
         src/core/Loop.cpp \
@@ -48,7 +51,14 @@ SRCS = main.cpp \
         src/rendering/GameRenderer.cpp \
         src/rendering/EditorRenderer.cpp \
         src/input/InputManager.cpp \
-        src/utilities/BaseObject.cpp 
+        src/utilities/BaseObject.cpp \
+        extern/imgui/imgui.cpp \
+        extern/imgui/imgui_draw.cpp \
+        extern/imgui/imgui_tables.cpp \
+        extern/imgui/imgui_widgets.cpp \
+        extern/imgui/backends/imgui_impl_sdl2.cpp \
+        extern/imgui/backends/imgui_impl_sdlrenderer2.cpp
+
 
 # Convert .cpp to build/*.o
 OBJ_FILES = $(SRCS:.cpp=.o)
@@ -87,6 +97,3 @@ archive:
 	mkdir -p build/archive/$(TARGET)_$$i; \
 	cp -r build/* build/archive/$(TARGET)_$$i/; \
 	echo "Archived current build to build/archive/$(TARGET)_$$i"
-
-
-

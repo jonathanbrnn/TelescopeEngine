@@ -7,7 +7,8 @@
                 "/opt/homebrew/Cellar/sdl2/2.32.2/include/SDL2",
                 "/opt/homebrew/Cellar/sdl2_image/2.8.8/include/SDL2",
                 "/opt/homebrew/Cellar/nlohmann-json/3.12.0/include/nlohmann",
-                "/opt/homebrew/Cellar/nlohmann-json/3.12.0/include"
+                "/opt/homebrew/Cellar/nlohmann-json/3.12.0/include",
+                "${workspaceFolder}/extern/imgui"
             ],
             "defines": [],
             "macFrameworkPath": [
@@ -21,8 +22,9 @@
                 "-I/opt/homebrew/Cellar/sdl2_image/2.8.8/include",
                 "-L/opt/homebrew/Cellar/sdl2/2.32.2/lib",
                 "-L/opt/homebrew/Cellar/sdl2_image/2.8.8/lib",
-                "-lSDL2",
-                "-lSDL2_image"
+                "extern/imgui/imgui.cpp",
+                "-Iextern/imgui \\",
+                "-Iextern/imgui/backends"
             ]
         }
     ],

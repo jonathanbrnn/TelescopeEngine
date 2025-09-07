@@ -27,6 +27,9 @@ class GameObject {
         // Must be unique. Used in the EntityManagers look up by name table and its Instantiate() method.
         string name;
 
+        // If the game object is not a prefab, this will be set to the prefabs name. 
+        string heritage; 
+
         // POSITION:
         // The objects position in 2D space.
         float pos_x, pos_y;
@@ -126,6 +129,7 @@ class GameObject {
 
         // Called upon deleting the game object from memory.
         // Use this to clean up any added properties.
+        // Use to implement features such as saving, as this is currently being called on scene end aswell. 
         virtual void OnDeletion() {}
 
         virtual GameObject* Clone() const = 0;

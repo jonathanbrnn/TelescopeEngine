@@ -46,7 +46,6 @@ TextureManager& TextureManager::GetInstance() {
 }
 
 void TextureManager::OnStart(ManagerHub* managerHub) {
-    cout << "is this being called?" << endl; 
     this->managerHub = managerHub; 
     if (managerHub->renderer != nullptr) {
         this->renderer = managerHub->renderer->Get_Renderer(); 
@@ -56,8 +55,6 @@ void TextureManager::OnStart(ManagerHub* managerHub) {
     }
 }
 
-// DAS HIER IST DER WIRT WEIL ES NICHT ÜBERPRÜFT OB ES DEN FILEPATH ÜBERHAUPT GIBT SONDERN EINFACH VERSUCHT ZU LADEN
-// improvement would be to just specify a folder for each objects animation which stores the frames. (?) 
 SDL_Texture* TextureManager::LoadTexture(string filepath) {
     if (textures.find(filepath) == textures.end()) {
         if (!fs::exists(filepath)) {

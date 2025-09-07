@@ -8,44 +8,35 @@
 #include <map>
 #include "EntityManager.h"
 
-void EntityManager::OnStart(vector<GameObject*>& prefabs) {
-    ManagerHub* managerHub = &ManagerHub::GetInstance(); 
+void EntityManager::OnStart(vector<GameObject*>& prefabs_to_load) {
+    managerHub = &ManagerHub::GetInstance(); 
 
-    for (auto* game_object: prefabs) {
-        game_object->texture = managerHub->textureManager->LoadTexture(game_object->texture_filepath); 
-        game_object->Start();
-        game_object->CheckGameObject();
-        total_objects.push_back(game_object);
+    LoadPrefabs(prefabs_to_load); 
+}
 
-        if (game_object->texture != nullptr || game_object->texture_filepath != "") {
-            visible_objects[game_object->pos_z].push_back(game_object);
-        }
-
-
-        if (game_object->collider != nullptr) {
-            collision_objects.push_back(game_object);
-        }
-
-        if (game_object->body != nullptr) {
-            body_objects.push_back(game_object);
-        }
-
-        if (name_objects.find(game_object->name) == name_objects.end()) {
-            name_objects[game_object->name] = game_object;
+void EntityManager::LoadPrefabs(vector<GameObject*>& prefabs_to_load) {
+    for (auto* game_object : prefabs_to_load) {
+        game_object->texture = managerHub->textureManager->LoadTexture(game_object->texture_filepath);
+        game_object->CheckGameObject(); 
+        
+        if (prefabs.find(game_object->name) == prefabs.end()) {
+            prefabs[game_object->name] = game_object;
         }
         else {
-            cout << "ENTITYMANAGER: Two separate game objects cannot share the same name. Choose a different name for '" + game_object->name + "', or use Instantiate() to create a clone of the game object if they are the same." << endl;
+            cout << "ENTITYMANAGER: Two separate prefabs cannot share the same name. Choose a different name for '" + game_object->name << endl;
         }
     }
 }
 
-void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, float pos_z, float base_dx, float base_dy) {
-    if (name_objects.find(prefab_name) == name_objects.end()) {
+void EntityManager::Instantiate(string prefab_name, string name, float pos_x, float pos_y, float pos_z, float rotation, float width, float height) {
+    if (prefabs.find(prefab_name) == prefabs.end()) {
         cout << "ENTITYMANAGER: No prefab with the name: " << prefab_name << " could be found!" << endl;
         return;
     }
 
-    GameObject* clone = name_objects[prefab_name]->Clone();
+    GameObject* clone = prefabs[prefab_name]->Clone();
+
+    clone->heritage = prefab_name; 
 
     if (clone_version.find(prefab_name) == clone_version.end()) {
         clone_version[prefab_name] = 0;
@@ -68,24 +59,6 @@ void EntityManager::Instantiate(string prefab_name, float pos_x, float pos_y, fl
     }
 
     clone->Start(); 
-
-    // THIS MAKES NO SENSE AT ALL WHAT THE FUCK -> FIX IT!! if base_dx is the same as saying if base_dx != 0.
-    // This obviously goes for everything above too. 
-    if (clone->body != nullptr) {
-        if ((base_dx && base_dy)) {
-            clone->body->SetVelocityBothAxis(base_dx, base_dy);
-        }
-        else if (base_dx) {
-            clone->body->SetDX(base_dx);
-        }
-        else if (base_dy) {
-            clone->body->SetDY(base_dy);
-        }
-        else if ((base_dx || base_dy) && clone->body == nullptr) {
-            cout << "ENTITYMANAGER: Could not apply velocity to: " << clone->name << " since the prefab has no body attached to it." << endl;
-        }
-    }
-
 
     // Store it
     AddNewObject(clone);
@@ -187,6 +160,9 @@ void EntityManager::DeleteObjects() {
 }
 
 void EntityManager::OnEnd() {
+    for (auto& [name, game_objects] : prefabs) { delete game_objects; }
+    prefabs.clear(); 
+
     for (auto& game_object : total_objects) { cout << game_object->name << endl; delete game_object; }
     total_objects.clear();
 

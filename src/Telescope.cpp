@@ -2,32 +2,37 @@
 
 void Engine::Entry(vector<GameObject*> prefabs) {
 
-    ifstream in_file("/Users/jonathan/TelescopeEngine/settings/config.json"); 
-    nlohmann::json config_in; 
-    in_file >> config_in; 
-    in_file.close(); 
+    if (fs::exists(config_filepath)) {
+        ifstream in_file(config_filepath); 
+        nlohmann::json config_in;  
+        in_file >> config_in; 
+        in_file.close(); 
 
-    if (config_in["mode"] == 0) {
-        mode = GAME; 
+        if (config_in["mode"] == 0) {
+            mode = GAME; 
+        }
+        else {
+            mode = EDITOR; 
+        }
+
+        use_vsync = config_in["use_vsync"]; 
+        fullscreen = config_in["fullscreen"]; 
+
+        window_title = config_in["window_title"]; 
+
+        screen_width = config_in["screen_dimensions"][0]; 
+        screen_height = config_in["screen_dimensions"][1]; 
+
+        window_pos_x = config_in["window_pos"][0]; 
+        window_pos_y = config_in["window_pos"][1]; 
+
+        if (mode == EDITOR) {
+            bool boot_fullscreen = config_in["boot_editor_in_fullscreen"]; 
+            fullscreen = boot_fullscreen; 
+        }
     }
     else {
-        mode = EDITOR; 
-    }
-
-    use_vsync = config_in["use_vsync"]; 
-    fullscreen = config_in["fullscreen"]; 
-
-    window_title = config_in["window_title"]; 
-
-    screen_width = config_in["screen_dimensions"][0]; 
-    screen_height = config_in["screen_dimensions"][1]; 
-
-    window_pos_x = config_in["window_pos"][0]; 
-    window_pos_y = config_in["window_pos"][1]; 
-
-    if (mode == EDITOR) {
-        bool boot_fullscreen = config_in["boot_editor_in_fullscreen"]; 
-        fullscreen = boot_fullscreen; 
+        cout << "ENGINE: WARNING! The config file could not be read. The engine was booted using default parameter." << endl; 
     }
 
     // ... 
@@ -85,6 +90,12 @@ void Engine::Runtime() {
 }
 
 void Engine::Exit() {
+    if (mode == EDITOR) {
+        ImGui_ImplSDLRenderer2_Shutdown();
+        ImGui_ImplSDL2_Shutdown();
+        ImGui::DestroyContext();
+    }
+
     SDL_DestroyRenderer(managerHub->renderer->Get_Renderer()); 
     SDL_DestroyWindow(managerHub->renderer->Get_Window()); 
     SDL_Quit(); 

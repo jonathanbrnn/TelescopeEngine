@@ -2,7 +2,11 @@
 #define EDITORLOOP_H
 
 #include "Loop.h"
-#include "ManagerHub.h"
+#include "Editor.h"
+
+#include "imgui.h"
+#include "backends/imgui_impl_sdl2.h"
+#include "backends/imgui_impl_sdlrenderer2.h"
 
 class EditorLoop : public Loop {
     public: 
@@ -15,6 +19,8 @@ class EditorLoop : public Loop {
 
     private: 
     EditorLoop() : Loop() {} 
+
+    Editor* editor = nullptr; 
 
     EditorLoop(const EditorLoop&) = delete; 
     EditorLoop& operator=(const EditorLoop&) = delete; 

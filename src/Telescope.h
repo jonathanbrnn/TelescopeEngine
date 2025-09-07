@@ -21,6 +21,9 @@
 #include "rendering/EditorRenderer.h"
 #include "utilities/BaseObject.h"
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
 #include <iostream>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -71,6 +74,9 @@ class Engine {
     int window_pos_y = 0; 
 
     bool running = false; 
+
+
+    const string config_filepath = "/Users/jonathan/TelescopeEngine/settings/config.json"; 
 
     Engine(const Engine&) = delete; 
     Engine& operator=(const Engine&) = delete; 

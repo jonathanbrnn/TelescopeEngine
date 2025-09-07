@@ -21,6 +21,8 @@ enum ForceMode;
 enum ForceAxis;
 class Force;
 
+class ManagerHub; 
+
 class EntityManager {
     public:
     EntityManager(const EntityManager&) = delete;
@@ -36,9 +38,13 @@ class EntityManager {
     // Called before the first frame to collect all game objects.
     void OnStart(vector<GameObject*>& prefabs);
 
+    void LoadPrefabs(vector<GameObject*>& prefabs); 
+
+    void LoadScene(string name); 
+
     // Used to instantiate new objects based on prefabs during runtime.
-    void Instantiate(string prefab_name, float pos_x = NULL, float pos_y = NULL,
-                    float pos_z = NULL, float base_dx = NULL, float base_dy = NULL);
+    void Instantiate(string prefab_name, string name, float pos_x, float pos_y,
+                    float pos_z, float rotation, float width, float height);
 
     // Used to add a new game object during runtime.
     void AddNewObject(GameObject* game_object);
@@ -49,6 +55,15 @@ class EntityManager {
 
     // Deletes a game object by name.
     void Delete(string name);
+
+    // Deletes all active game objects. 
+    void DeleteAll(string name); 
+
+    // Call to determine wether an object is a prefab (was not created using instantiate)
+    bool IsPrefab(string name); 
+
+    // Add an object to the list of prefabs. 
+    void AddPrefab(GameObject* game_object); 
 
     // Deletes all game objects in the temporal_to_delete vector from the scene.
     // Append to the vector using Delete(string name).
@@ -66,14 +81,19 @@ class EntityManager {
     // Passed to the renderer. Sorted by their z-coordinate.
     map<float, vector<GameObject*> > visible_objects;
 
-    // all objects that hold a collider
+    // all objects that hold a collider.
     vector<GameObject*> collision_objects;
 
-    // all objects that have a body
+    // all objects that have a body.
     vector<GameObject*> body_objects;
 
     private:
-    // Lookup table for all game objects by name, only used for prefabs and lookup by name.
+    ManagerHub* managerHub = nullptr; 
+
+    // Prefabs.
+    unordered_map<string, GameObject*> prefabs;  
+
+    // Lookup table for all game objects by name.
     unordered_map<string, GameObject*> name_objects;
 
     // Vector that stores all game objects added in AddNewObject().
