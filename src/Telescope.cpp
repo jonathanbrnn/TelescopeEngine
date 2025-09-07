@@ -57,6 +57,8 @@ void Engine::Entry(vector<GameObject*> prefabs) {
 
     TimeManager* timeManager = &TimeManager::GetInstance();
 
+    SceneManager* sceneManager = &SceneManager::GetInstance(); 
+
     CollisionManager* collisionManager = &CollisionManager::GetInstance();
 
     TextureManager* textureManager = &TextureManager::GetInstance();
@@ -65,7 +67,7 @@ void Engine::Entry(vector<GameObject*> prefabs) {
 
     ManagerHub* managerHub = &ManagerHub::GetInstance(); 
 
-    managerHub->OnStart(renderer, camera, entityManager, timeManager, collisionManager, textureManager, inputManager);
+    managerHub->OnStart(renderer, camera, entityManager, timeManager, sceneManager, collisionManager, textureManager, inputManager);
 
     managerHub->SetStorage(screen_width, screen_height); 
 
@@ -78,6 +80,8 @@ void Engine::Entry(vector<GameObject*> prefabs) {
     inputManager->OnStart(managerHub); 
 
     entityManager->OnStart(prefabs); 
+
+    sceneManager->OnStart(mode == GAME ? 0 : 1); 
 
     this->managerHub = managerHub;
 

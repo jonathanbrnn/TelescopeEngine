@@ -5,6 +5,7 @@
 
 #include "core/ManagerHub.h"
 #include "core/EntityManager.h"
+#include "core/SceneManager.h"
 #include "core/Loop.h"
 #include "core/GameLoop.h"
 #include "core/EditorLoop.h"

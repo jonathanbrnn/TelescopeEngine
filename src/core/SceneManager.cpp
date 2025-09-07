@@ -1,16 +1,23 @@
 #include "SceneManager.h"
 
+void SceneManager::OnStart(int mode) {
+    managerHub = &ManagerHub::GetInstance(); 
+
+    this->mode = mode; 
+}
+
 void SceneManager::LoadScene(string scene_name) {
     string scene_filepath = scenes_filepath + scene_name + ".json"; 
-
+    
     if (known_scenes.find(scene_name) != known_scenes.end()) {
         EntityManager* entityManager = managerHub->entityManager; 
+
         for (auto game_object : entityManager->total_objects) {
             entityManager->Delete(game_object->name); 
         }
 
         for (auto blueprint : known_scenes[scene_name]) {
-            entityManager->Instantiate(blueprint->heritage, blueprint->name, blueprint->pos_x, blueprint->pos_y, blueprint->pos_z, blueprint->width, blueprint->height); 
+            entityManager->Instantiate(blueprint->heritage, blueprint->name, blueprint->pos_x, blueprint->pos_y, blueprint->pos_z, blueprint->rotation, blueprint->width, blueprint->height); 
         }
     }
     else if (fs::exists(scenes_filepath)) {
@@ -56,7 +63,7 @@ void SceneManager::SaveScene(string scene_name) {
         nlohmann::json json; 
         
         for (auto game_object : active_objects) {
-            json["objects"] = {
+            json["objects"][game_object->name] = {
                 {"name" , game_object->name}, 
                 {"heritage" , game_object->heritage},
                 {"pos_x" , game_object->pos_x},

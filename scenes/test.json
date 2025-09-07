@@ -1,0 +1,24 @@
+{
+    "objects" : {
+        "Heart" : {
+            "name" : "Heart", 
+            "heritage" : "heart", 
+            "pos_x" : 800, 
+            "pos_y" : 100, 
+            "pos_z" : 0, 
+            "rotation" : 0, 
+            "width" : 100, 
+            "height" : 100
+        }, 
+        "Heart1" : {
+            "name" : "tpp", 
+            "heritage" : "heart", 
+            "pos_x" : 100, 
+            "pos_y" : 100, 
+            "pos_z" : 0, 
+            "rotation" : 0, 
+            "width" : 100, 
+            "height" : 100
+        }
+    }
+}

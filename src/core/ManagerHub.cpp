@@ -1,10 +1,11 @@
 #include "ManagerHub.h"
 
-void ManagerHub::OnStart(Renderer* renderer, Camera* camera, EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager) {
+void ManagerHub::OnStart(Renderer* renderer, Camera* camera, EntityManager* entityManager, TimeManager* timeManager, SceneManager* sceneManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager) {
     this->renderer = renderer; 
     this->camera = camera;
     this->entityManager = entityManager;
     this->timeManager = timeManager;
+    this->sceneManager = sceneManager; 
     this->collisionManager = collisionManager;
     this->textureManager = textureManager;
     this->inputManager = inputManager;

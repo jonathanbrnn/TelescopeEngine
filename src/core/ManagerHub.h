@@ -2,8 +2,10 @@
 #define MANAGERHUB_H
 
 #include "../dependencies.h"
+
 #include "EntityManager.h"
 #include "TimeManager.h"
+#include "SceneManager.h"
 #include "../entities/CollisionManager.h"
 #include "../entities/TextureManager.h"
 #include "../input/InputManager.h"
@@ -13,7 +15,8 @@
 class Renderer; 
 class Camera;
 class InputManager; 
-class TextureManager; 
+class TextureManager;
+class SceneManager;  
 
 class ManagerHub {
 public:
@@ -27,13 +30,14 @@ public:
         return instance;
     }
 
-    void OnStart(Renderer* renderer, Camera* camera, EntityManager* entityManager, TimeManager* timeManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager);
+    void OnStart(Renderer* renderer, Camera* camera, EntityManager* entityManager, TimeManager* timeManager, SceneManager* sceneManager, CollisionManager* collisionManager, TextureManager* textureManager, InputManager* inputManager);
     void SetStorage(int screen_width, int screen_height); 
 
     Renderer* renderer; 
     Camera* camera;
     EntityManager* entityManager;
     TimeManager* timeManager;
+    SceneManager* sceneManager; 
     CollisionManager* collisionManager;
     TextureManager* textureManager;
     InputManager* inputManager;

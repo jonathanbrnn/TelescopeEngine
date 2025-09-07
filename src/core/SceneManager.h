@@ -41,9 +41,7 @@ class SceneManager {
         return instance; 
     }
 
-    void OnStart(int mode) {
-        managerHub = &ManagerHub::GetInstance(); 
-    }
+    void OnStart(int mode);
 
     void LoadScene(string scene_name); 
 
@@ -61,7 +59,7 @@ class SceneManager {
     private: 
     unordered_map<string, vector<Blueprint*>> known_scenes; 
 
-    const string scenes_filepath = "../../scenes/"; 
+    const string scenes_filepath = "/Users/jonathan/TelescopeEngine/scenes/"; 
 
     ManagerHub* managerHub = nullptr; 
 

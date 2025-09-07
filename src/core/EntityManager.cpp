@@ -47,17 +47,9 @@ void EntityManager::Instantiate(string prefab_name, string name, float pos_x, fl
 
     clone->name = clone->name + "_" + to_string(clone_version[prefab_name]);
 
-    if (pos_x && pos_y) {
-        clone->SetPosition(pos_x, pos_y);
-    }
-    else if (pos_z) {
-        clone->SetPosition(pos_x, pos_y, pos_z);
-    }
-    else {
-        cout << "ENTITYMANAGER: Could not set the position of: " << clone->name << " because the values were not provided." << endl;
-        cout << "The position has been set to the prefabs." << endl;
-    }
+    clone->SetPosition(pos_x, pos_y, pos_z);
 
+    clone->texture = managerHub->textureManager->LoadTexture(clone->texture_filepath); 
     clone->Start(); 
 
     // Store it
@@ -80,9 +72,8 @@ void EntityManager::PushNewObjects() {
 
     for (auto game_object : temporal_objects) {
         total_objects.push_back(game_object);
-        game_object->Start(); 
 
-        if (game_object->texture != nullptr || game_object->texture_filepath != "") {
+        if (game_object->texture_filepath != "") {
             visible_objects[game_object->pos_z].push_back(game_object);
         }
 
